@@ -15,7 +15,7 @@ body{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;background:#F5F7FA;
 #login-screen .inner{text-align:center;color:var(--white);padding:40px}
 #login-screen .inner h1{font-size:22px;font-weight:700;margin-bottom:4px}
 #login-screen .inner .sub{font-size:13px;opacity:0.7;margin-bottom:28px}
-#login-screen input{padding:12px 20px;border-radius:12px;border:2px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.1);color:white;font-size:16px;width:220px;text-align:center;outline:none}
+#login-screen input[type="password"]{padding:12px 20px;border-radius:12px;border:2px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.1);color:white;font-size:16px;width:220px;text-align:center;outline:none}
 #login-screen input::placeholder{color:rgba(255,255,255,0.5)}
 #login-screen button{margin-top:14px;padding:12px 36px;border-radius:12px;border:none;background:var(--accent);color:white;font-size:15px;font-weight:600;cursor:pointer}
 #pw-error{color:#FF5252;font-size:13px;margin-top:12px;display:none}
@@ -41,8 +41,8 @@ body{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;background:#F5F7FA;
 .stitle{font-size:20px;font-weight:700;margin:28px 0 14px;color:var(--navy)}
 
 /* TEAM BOXES */
-.team-grid{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:24px}
-.team-box{flex:1 1 140px;min-width:140px;max-width:200px;border-radius:12px;overflow:hidden;background:var(--white);box-shadow:0 1px 4px rgba(0,0,0,0.08)}
+.team-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:24px}
+.team-box{border-radius:12px;overflow:hidden;background:var(--white);box-shadow:0 1px 4px rgba(0,0,0,0.08)}
 .team-box .tb-hdr{padding:8px 12px;color:var(--white);font-weight:700;font-size:14px;text-align:center}
 .tb-blau{background:#1565C0}.tb-rot{background:#C62828}.tb-orange{background:#FF8F00}.tb-gelb{background:#F9A825}.tb-gruen{background:#2E7D32}
 .team-box .tb-list{padding:8px 12px}
@@ -97,8 +97,7 @@ body{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;background:#F5F7FA;
   .hdr-right h1{font-size:20px}
   .hdr-left img{width:40px;height:40px}
   .hdr-left span{font-size:14px}
-  .team-grid{gap:8px}
-  .team-box{flex:1 1 calc(50% - 8px);min-width:calc(50% - 8px);max-width:none}
+  .team-grid{grid-template-columns:repeat(2,1fr);gap:8px}
   .team-box .tb-hdr{font-size:13px;padding:6px 10px}
   .team-box .tb-player{font-size:11.5px}
   .rot-tbl{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch}
@@ -129,9 +128,12 @@ body{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;background:#F5F7FA;
     <div style="font-size:48px;margin-bottom:12px">⚽</div>
     <h1>Germania Bambini</h1>
     <p class="sub">Trainingsplan</p>
-    <input id="pw-input" type="password" placeholder="Passwort" autocomplete="off">
-    <br>
-    <button onclick="checkPw()">Öffnen</button>
+    <form id="pw-form" onsubmit="return checkPw()" action="javascript:void(0)" method="post">
+      <input type="text" name="username" value="germania" autocomplete="username" style="position:absolute;opacity:0;height:0;width:0;pointer-events:none" tabindex="-1">
+      <input id="pw-input" name="password" type="password" placeholder="Passwort" autocomplete="current-password">
+      <br>
+      <button type="submit">Öffnen</button>
+    </form>
     <p id="pw-error">Falsches Passwort</p>
   </div>
 </div>
