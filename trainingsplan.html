@@ -40,13 +40,15 @@ body{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;background:#F5F7FA;
 /* SECTION TITLES */
 .stitle{font-size:20px;font-weight:700;margin:28px 0 14px;color:var(--navy)}
 
-/* TEAM TABLE */
-.team-tbl{width:100%;border-collapse:collapse;font-size:13px;margin-bottom:24px}
-.team-tbl th{padding:8px 10px;color:var(--white);font-weight:600;text-align:center}
-.team-tbl td{padding:6px 10px;border-bottom:1px solid #ECEFF1;font-size:12.5px}
-.team-tbl tr:nth-child(even) td{background:#F8FAFC}
-.th-blau{background:#1565C0}.th-rot{background:#C62828}.th-orange{background:#FF8F00}.th-gelb{background:#F9A825}.th-gruen{background:#2E7D32}
-.dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;vertical-align:middle}
+/* TEAM BOXES */
+.team-grid{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:24px}
+.team-box{flex:1 1 140px;min-width:140px;border-radius:12px;overflow:hidden;background:var(--white);box-shadow:0 1px 4px rgba(0,0,0,0.08)}
+.team-box .tb-hdr{padding:8px 12px;color:var(--white);font-weight:700;font-size:14px;text-align:center}
+.tb-blau{background:#1565C0}.tb-rot{background:#C62828}.tb-orange{background:#FF8F00}.tb-gelb{background:#F9A825}.tb-gruen{background:#2E7D32}
+.team-box .tb-list{padding:8px 12px}
+.team-box .tb-player{padding:4px 0;font-size:12.5px;border-bottom:1px solid #F0F0F0;display:flex;align-items:center;gap:6px}
+.team-box .tb-player:last-child{border-bottom:none}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;flex-shrink:0}
 .dot-b{background:#1565C0}.dot-y{background:#F9A825}.dot-g{background:#2E7D32}
 
 /* ROTATION TABLE */
@@ -56,7 +58,6 @@ body{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;background:#F5F7FA;
 .rot-tbl .rnum{font-weight:700;color:var(--blue)}
 .rot-tbl .pause td{background:#F0F0F0;font-size:11px;color:var(--gray);padding:3px 10px}
 .rot-tbl .team-col{font-weight:600}
-.chk{width:16px;height:16px;background:#ECEFF1;border-radius:3px;display:inline-block}
 
 /* STATIONS OVERVIEW TABLE */
 .stat-tbl{width:100%;border-collapse:collapse;font-size:13px;margin-bottom:8px}
@@ -68,8 +69,8 @@ body{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;background:#F5F7FA;
 
 /* STATION DETAIL CARD */
 .scard{border:1px solid #E0E0E0;border-radius:8px;overflow:hidden;margin-bottom:0}
-.scard-hdr{background:var(--navy);padding:16px 24px;color:var(--white);display:flex;justify-content:space-between;align-items:flex-start}
-.scard-hdr .lbl{font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;opacity:0.85}
+.scard-hdr{background:#ECEFF1;padding:16px 24px;color:var(--navy);display:flex;justify-content:space-between;align-items:flex-start}
+.scard-hdr .lbl{font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;opacity:0.65}
 .scard-hdr .num{font-size:32px;font-weight:900;line-height:1}
 .scard-hdr .sname{font-size:15px;font-weight:700;color:var(--blue);margin-top:2px}
 .scard-hdr .trainer{font-size:13px;color:var(--blue);text-align:right;margin-top:auto}
@@ -96,8 +97,10 @@ body{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;background:#F5F7FA;
   .hdr-right h1{font-size:20px}
   .hdr-left img{width:40px;height:40px}
   .hdr-left span{font-size:14px}
-  .team-tbl{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch}
-  .team-tbl th,.team-tbl td{white-space:nowrap;font-size:11px;padding:5px 6px}
+  .team-grid{gap:8px}
+  .team-box{flex:1 1 calc(50% - 8px);min-width:calc(50% - 8px)}
+  .team-box .tb-hdr{font-size:13px;padding:6px 10px}
+  .team-box .tb-player{font-size:11.5px}
   .rot-tbl{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch}
   .rot-tbl th,.rot-tbl td{white-space:nowrap;font-size:11px;padding:5px 6px}
   .stat-tbl{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch}
@@ -155,55 +158,52 @@ body{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;background:#F5F7FA;
   </div>
 
   <div class="stitle">Teamaufstellung</div>
-  <table class="team-tbl">
-    <thead><tr>
-      <th class="th-blau">Blau</th><th class="th-rot">Rot</th><th class="th-orange">Orange</th><th class="th-gelb">Gelb</th><th class="th-gruen">Grün</th>
-    </tr></thead>
-    <tbody>
-      <tr>
-        <td><span class="dot dot-b"></span>Azariah Liel Moses</td>
-        <td><span class="dot dot-b"></span>Taio Fees</td>
-        <td><span class="dot dot-b"></span>Lorik Pllana</td>
-        <td><span class="dot dot-y"></span>Emil Wachtler</td>
-        <td><span class="dot dot-g"></span>Ioannis Papanikolaou</td>
-      </tr>
-      <tr>
-        <td><span class="dot dot-b"></span>Rafael Schmitz</td>
-        <td><span class="dot dot-b"></span>Damiano Rughöft</td>
-        <td><span class="dot dot-y"></span>Carlos Baitinger</td>
-        <td><span class="dot dot-y"></span>Mats Wilsser</td>
-        <td><span class="dot dot-y"></span>Jesaja Cello</td>
-      </tr>
-      <tr>
-        <td><span class="dot dot-b"></span>Emil Roßbach</td>
-        <td><span class="dot dot-b"></span>Linus Würth</td>
-        <td><span class="dot dot-y"></span>Mattheo Lowasser</td>
-        <td><span class="dot dot-g"></span>Harshiv Rajesh Kumar</td>
-        <td><span class="dot dot-y"></span>Yusa Ergen</td>
-      </tr>
-      <tr>
-        <td><span class="dot dot-b"></span>Luca Scherz</td>
-        <td><span class="dot dot-y"></span>Ejdin Beganovic</td>
-        <td><span class="dot dot-y"></span>Unik Demiri</td>
-        <td><span class="dot dot-y"></span>Dejvi Paja</td>
-        <td><span class="dot dot-y"></span>Samuel Adam</td>
-      </tr>
-    </tbody>
-  </table>
+  <div class="team-grid">
+    <div class="team-box"><div class="tb-hdr tb-blau">Blau</div><div class="tb-list">
+      <div class="tb-player"><span class="dot dot-b"></span>Azariah Liel Moses</div>
+      <div class="tb-player"><span class="dot dot-b"></span>Rafael Schmitz</div>
+      <div class="tb-player"><span class="dot dot-b"></span>Emil Roßbach</div>
+      <div class="tb-player"><span class="dot dot-b"></span>Luca Scherz</div>
+    </div></div>
+    <div class="team-box"><div class="tb-hdr tb-rot">Rot</div><div class="tb-list">
+      <div class="tb-player"><span class="dot dot-b"></span>Taio Fees</div>
+      <div class="tb-player"><span class="dot dot-b"></span>Damiano Rughöft</div>
+      <div class="tb-player"><span class="dot dot-b"></span>Linus Würth</div>
+      <div class="tb-player"><span class="dot dot-y"></span>Ejdin Beganovic</div>
+    </div></div>
+    <div class="team-box"><div class="tb-hdr tb-orange">Orange</div><div class="tb-list">
+      <div class="tb-player"><span class="dot dot-b"></span>Lorik Pllana</div>
+      <div class="tb-player"><span class="dot dot-y"></span>Carlos Baitinger</div>
+      <div class="tb-player"><span class="dot dot-y"></span>Mattheo Lowasser</div>
+      <div class="tb-player"><span class="dot dot-y"></span>Unik Demiri</div>
+    </div></div>
+    <div class="team-box"><div class="tb-hdr tb-gelb">Gelb</div><div class="tb-list">
+      <div class="tb-player"><span class="dot dot-y"></span>Emil Wachtler</div>
+      <div class="tb-player"><span class="dot dot-y"></span>Mats Wilsser</div>
+      <div class="tb-player"><span class="dot dot-g"></span>Harshiv Rajesh Kumar</div>
+      <div class="tb-player"><span class="dot dot-y"></span>Dejvi Paja</div>
+    </div></div>
+    <div class="team-box"><div class="tb-hdr tb-gruen">Grün</div><div class="tb-list">
+      <div class="tb-player"><span class="dot dot-g"></span>Ioannis Papanikolaou</div>
+      <div class="tb-player"><span class="dot dot-y"></span>Jesaja Cello</div>
+      <div class="tb-player"><span class="dot dot-y"></span>Yusa Ergen</div>
+      <div class="tb-player"><span class="dot dot-y"></span>Samuel Adam</div>
+    </div></div>
+  </div>
 
   <div class="stitle">Rotationsplan · 5 × 13 Min · 2 Min Trinkpause</div>
   <table class="rot-tbl">
-    <thead><tr><th></th><th>Zeit</th><th>Station 1</th><th>Station 2</th><th>Station 3</th><th>✓</th></tr></thead>
+    <thead><tr><th></th><th>Zeit</th><th>Station 1</th><th>Station 2</th><th>Station 3</th></tr></thead>
     <tbody>
-      <tr><td class="rnum">R1</td><td>16:45–16:58</td><td class="team-col">Blau vs Rot</td><td class="team-col">Orange vs Gelb</td><td style="color:var(--green);font-weight:700">Grün</td><td><span class="chk"></span></td></tr>
-      <tr class="pause"><td></td><td>2'</td><td colspan="3">■ Trinkpause</td><td></td></tr>
-      <tr><td class="rnum">R2</td><td>17:00–17:13</td><td class="team-col">Blau vs Orange</td><td class="team-col">Grün vs Gelb</td><td style="color:var(--red);font-weight:700">Rot</td><td><span class="chk"></span></td></tr>
-      <tr class="pause"><td></td><td>2'</td><td colspan="3">■ Trinkpause</td><td></td></tr>
-      <tr><td class="rnum">R3</td><td>17:15–17:28</td><td class="team-col">Rot vs Gelb</td><td class="team-col">Grün vs Orange</td><td style="color:var(--blue);font-weight:700">Blau</td><td><span class="chk"></span></td></tr>
-      <tr class="pause"><td></td><td>2'</td><td colspan="3">■ Trinkpause</td><td></td></tr>
-      <tr><td class="rnum">R4</td><td>17:30–17:43</td><td class="team-col">Blau vs Gelb</td><td class="team-col">Rot vs Grün</td><td style="color:var(--accent);font-weight:700">Orange</td><td><span class="chk"></span></td></tr>
-      <tr class="pause"><td></td><td>2'</td><td colspan="3">■ Trinkpause</td><td></td></tr>
-      <tr><td class="rnum">R5</td><td>17:45–17:58</td><td class="team-col">Rot vs Orange</td><td class="team-col">Blau vs Grün</td><td style="color:#F9A825;font-weight:700">Gelb</td><td><span class="chk"></span></td></tr>
+      <tr><td class="rnum">R1</td><td>16:45–16:58</td><td class="team-col">Blau vs Rot</td><td class="team-col">Orange vs Gelb</td><td style="color:var(--green);font-weight:700">Grün</td></tr>
+      <tr class="pause"><td></td><td>2'</td><td colspan="3">■ Trinkpause</td></tr>
+      <tr><td class="rnum">R2</td><td>17:00–17:13</td><td class="team-col">Blau vs Orange</td><td class="team-col">Grün vs Gelb</td><td style="color:var(--red);font-weight:700">Rot</td></tr>
+      <tr class="pause"><td></td><td>2'</td><td colspan="3">■ Trinkpause</td></tr>
+      <tr><td class="rnum">R3</td><td>17:15–17:28</td><td class="team-col">Rot vs Gelb</td><td class="team-col">Grün vs Orange</td><td style="color:var(--blue);font-weight:700">Blau</td></tr>
+      <tr class="pause"><td></td><td>2'</td><td colspan="3">■ Trinkpause</td></tr>
+      <tr><td class="rnum">R4</td><td>17:30–17:43</td><td class="team-col">Blau vs Gelb</td><td class="team-col">Rot vs Grün</td><td style="color:var(--accent);font-weight:700">Orange</td></tr>
+      <tr class="pause"><td></td><td>2'</td><td colspan="3">■ Trinkpause</td></tr>
+      <tr><td class="rnum">R5</td><td>17:45–17:58</td><td class="team-col">Rot vs Orange</td><td class="team-col">Blau vs Grün</td><td style="color:#F9A825;font-weight:700">Gelb</td></tr>
     </tbody>
   </table>
   <p class="hint">Round-Robin: Jedes Team spielt gegen jedes andere (10 Paarungen in 5 Runden). Jedes Team genau 1× an Station 3. Aufbau vor 16:45, Abbau nach 18:00.</p>
