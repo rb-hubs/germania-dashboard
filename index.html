@@ -431,10 +431,12 @@ function renderUebungen(){
 }
 
 function renderTrainings(){
-  document.getElementById('tab-trainings').innerHTML=trainings.map(t=>`
+  document.getElementById('tab-trainings').innerHTML=trainings.map(t=>{
+    var dd=t.datum.split('.'),dfn=dd[0]+'-'+dd[1]+'-'+dd[2];
+    return `
     <div class="tc" style="margin-top:24px">
       <div class="flex-between">
-        <div><div class="training-date">${t.datum}</div><div class="training-title">${t.name}</div></div>
+        <div><div class="training-date">${t.datum} <a href="trainingsplan_${dfn}.html" target="_blank" style="font-size:12px;color:var(--blue);margin-left:8px;text-decoration:none;font-weight:600">📋 Trainingsplan</a></div><div class="training-title">${t.name}</div></div>
         <div class="kpi-row"><div class="kpi-box"><div class="num">${t.anwesendeKinder}</div><div class="lbl">Kinder</div></div><div class="kpi-box"><div class="num">${t.trainer.length}</div><div class="lbl">Trainer</div></div></div>
       </div>
       <div class="info-row"><div class="info-block"><div class="lbl">Coaching</div><div class="val">${t.coaching}</div></div><div class="info-block"><div class="lbl">Besonderheiten</div><div class="val">${t.besonderheiten||'—'}</div></div></div>
@@ -444,7 +446,7 @@ function renderTrainings(){
         <div class="tags-group"><div class="lbl">Trainer</div>${t.trainer.map(tr=>bg(tr,'#2E7D32')).join('')}</div>
       </div>
       ${t.abwesend.length?`<div style="margin-top:12px"><div style="font-size:12px;font-weight:600;color:var(--red);margin-bottom:6px;text-transform:uppercase">Abwesend (${t.abwesend.length})</div>${t.abwesend.map(a=>bg(a,'#C62828')).join('')}</div>`:''}
-    </div>`).join('');
+    </div>`;}).join('');
 }
 
 // ── CHARTS ──────────────────────────────────────────────────────────────
