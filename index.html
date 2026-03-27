@@ -206,6 +206,19 @@ tbody tr{border-bottom:1px solid #ECEFF1} tbody tr:nth-child(even){background:#F
 </head>
 <body>
 
+<div id="login-screen" style="display:flex;align-items:center;justify-content:center;min-height:100vh;background:var(--navy);font-family:'Helvetica Neue',Helvetica,Arial,sans-serif">
+  <div style="text-align:center;color:var(--white);padding:40px">
+    <div style="font-size:48px;margin-bottom:12px">⚽</div>
+    <h1 style="font-size:22px;font-weight:700;margin-bottom:4px">Germania Bambini</h1>
+    <p style="font-size:13px;opacity:0.7;margin-bottom:28px">Training Dashboard</p>
+    <input id="pw-input" type="password" placeholder="Passwort" style="padding:12px 20px;border-radius:12px;border:2px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.1);color:white;font-size:16px;width:220px;text-align:center;outline:none" autocomplete="off">
+    <br>
+    <button onclick="checkPw()" style="margin-top:14px;padding:12px 36px;border-radius:12px;border:none;background:var(--accent);color:white;font-size:15px;font-weight:600;cursor:pointer">Öffnen</button>
+    <p id="pw-error" style="color:#FF5252;font-size:13px;margin-top:12px;display:none">Falsches Passwort</p>
+  </div>
+</div>
+
+<div id="app-content" style="display:none">
 <div class="header">
   <div class="header-top">
     <div>
@@ -458,6 +471,23 @@ document.addEventListener('DOMContentLoaded', function() {
     document.body.innerHTML = '<div style="padding:20px;color:red;font-family:sans-serif"><h2>Fehler</h2><pre>' + e.message + '\n' + e.stack + '</pre></div>';
   }
 });
+</script>
+
+</div><!-- /app-content -->
+
+<script>
+function checkPw(){
+  var p=document.getElementById('pw-input').value;
+  if(p==='superstars'){
+    document.getElementById('login-screen').style.display='none';
+    document.getElementById('app-content').style.display='block';
+  } else {
+    document.getElementById('pw-error').style.display='block';
+    document.getElementById('pw-input').value='';
+    document.getElementById('pw-input').focus();
+  }
+}
+document.getElementById('pw-input').addEventListener('keydown',function(e){if(e.key==='Enter')checkPw()});
 </script>
 </body>
 </html>
