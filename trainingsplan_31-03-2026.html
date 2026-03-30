@@ -3,65 +3,76 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Training 31.03.2026</title>
+<title>Trainingsplan 31.03.2026</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { font-family: Arial, sans-serif; background: #f5f5f5; padding: 20px; color: #222; }
+  body { font-family: 'Helvetica Neue', Arial, sans-serif; background: #f5f7fa; padding: 20px; color: #222; max-width: 800px; margin: 0 auto; }
 
-  .header { background: #1a1a2e; color: white; padding: 20px 24px; border-radius: 12px; margin-bottom: 20px; }
+  .header { background: #0A1F3F; color: white; padding: 20px 24px; border-radius: 12px; margin-bottom: 20px; }
   .header h1 { font-size: 22px; margin-bottom: 4px; }
-  .header .meta { font-size: 14px; opacity: 0.8; }
+  .header .meta { font-size: 14px; opacity: 0.85; }
 
-  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+  .section-title { font-size: 16px; font-weight: 700; color: #0A1F3F; margin: 20px 0 10px; }
 
-  .team-card { background: white; border-radius: 10px; padding: 16px; box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
-  .team-card h3 { font-size: 15px; margin-bottom: 8px; padding-bottom: 6px; border-bottom: 2px solid; }
-  .team-card.t1 h3 { border-color: #e74c3c; color: #e74c3c; }
-  .team-card.t2 h3 { border-color: #3498db; color: #3498db; }
-  .team-card.t3 h3 { border-color: #2ecc71; color: #2ecc71; }
-  .team-card.t4 h3 { border-color: #f39c12; color: #f39c12; }
-  .team-card ul { list-style: none; font-size: 14px; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 20px; }
+
+  .team-card { background: white; border-radius: 10px; padding: 16px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+  .team-card h3 { font-size: 14px; margin-bottom: 8px; padding-bottom: 6px; border-bottom: 3px solid; font-weight: 700; }
+  .team-card.t1 h3 { border-color: #C62828; color: #C62828; }
+  .team-card.t2 h3 { border-color: #1565C0; color: #1565C0; }
+  .team-card.t3 h3 { border-color: #2E7D32; color: #2E7D32; }
+  .team-card.t4 h3 { border-color: #F9A825; color: #F9A825; }
+  .team-card ul { list-style: none; font-size: 13px; }
   .team-card li { padding: 3px 0; }
 
-  .stations { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 20px; }
-  .station { background: white; border-radius: 10px; padding: 16px; box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
-  .station h3 { font-size: 15px; margin-bottom: 4px; }
-  .station .trainer { font-size: 13px; color: #666; margin-bottom: 10px; }
-  .station .desc { font-size: 13px; line-height: 1.5; }
-  .station .desc strong { color: #333; }
+  .stations { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin-bottom: 20px; }
+  .station { background: white; border-radius: 10px; padding: 16px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+  .station h3 { font-size: 14px; margin-bottom: 4px; color: #0A1F3F; }
+  .station .trainer { font-size: 12px; color: #78909C; margin-bottom: 10px; }
+  .station .desc { font-size: 13px; line-height: 1.5; color: #444; }
 
-  .rotation { background: white; border-radius: 10px; padding: 16px; box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
-  .rotation h3 { font-size: 15px; margin-bottom: 10px; }
+  .rotation { background: white; border-radius: 10px; padding: 16px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); margin-bottom: 20px; }
+  .rotation h3 { font-size: 15px; margin-bottom: 10px; color: #0A1F3F; }
   .rotation table { width: 100%; border-collapse: collapse; font-size: 13px; }
-  .rotation th, .rotation td { padding: 6px 10px; text-align: center; border: 1px solid #ddd; }
-  .rotation th { background: #1a1a2e; color: white; font-weight: 600; }
+  .rotation th, .rotation td { padding: 8px 10px; text-align: center; border: 1px solid #e0e0e0; }
+  .rotation th { background: #0A1F3F; color: white; font-weight: 600; }
   .rotation td { background: #fafafa; }
 
-  .uebung-detail { background: white; border-radius: 10px; padding: 20px; box-shadow: 0 1px 4px rgba(0,0,0,0.1); margin-bottom: 20px; border-left: 4px solid #e67e22; }
-  .uebung-detail.spiel { border-left-color: #e74c3c; }
-  .uebung-detail.spiel h2 { color: #e74c3c; }
-  .uebung-detail h2 { font-size: 18px; margin-bottom: 4px; color: #e67e22; }
-  .uebung-detail .subtitle { font-size: 13px; color: #888; margin-bottom: 14px; }
-  .uebung-detail h4 { font-size: 14px; margin: 12px 0 6px; color: #444; }
+  .uebung-detail { background: white; border-radius: 10px; padding: 20px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); margin-bottom: 16px; border-left: 4px solid #FF8F00; }
+  .uebung-detail.spiel { border-left-color: #C62828; }
+  .uebung-detail.spiel h2 { color: #C62828; }
+  .uebung-detail h2 { font-size: 17px; margin-bottom: 4px; color: #FF8F00; }
+  .uebung-detail .subtitle { font-size: 12px; color: #78909C; margin-bottom: 14px; }
+  .uebung-detail h4 { font-size: 13px; margin: 12px 0 6px; color: #0A1F3F; font-weight: 700; }
   .uebung-detail p, .uebung-detail li { font-size: 13px; line-height: 1.6; }
   .uebung-detail ul { margin-left: 18px; }
-  .uebung-detail .aufbau { background: #fff8f0; border-radius: 8px; padding: 12px; margin: 10px 0; }
+  .uebung-detail .aufbau { background: #E3F2FD; border-radius: 8px; padding: 12px; margin: 10px 0; }
+  .uebung-detail .coaching { background: #EBF3FC; border-radius: 8px; padding: 12px; margin: 10px 0; }
+
+  .absagen { background: white; border-radius: 10px; padding: 16px; box-shadow: 0 1px 4px rgba(0,0,0,0.08); margin-bottom: 20px; }
+  .absagen h3 { font-size: 14px; color: #78909C; margin-bottom: 8px; }
+  .absagen .list { font-size: 13px; color: #78909C; }
 
   @media print {
     body { padding: 10px; background: white; }
     .header { break-after: avoid; }
     .station, .team-card, .uebung-detail, .rotation { break-inside: avoid; }
   }
+  @media (max-width: 600px) {
+    .grid { grid-template-columns: 1fr; }
+    .stations { grid-template-columns: 1fr; }
+  }
 </style>
 </head>
 <body>
 
 <div class="header">
-  <h1>Training DRAUSSEN</h1>
+  <h1>Training DRAUSSEN – Stationsbetrieb</h1>
   <div class="meta">Di. 31. März 2026 | 16:45 – 18:00 | Kunstrasen 1 im Ellental | 17 Spieler</div>
   <div class="meta" style="margin-top:4px;">Trainer: Andi, Linus, Marc, Marcus, Njazi</div>
 </div>
 
+<div class="section-title">Teams</div>
 <div class="grid">
   <div class="team-card t1">
     <h3>Team 1 – Rot (4)</h3>
@@ -81,11 +92,12 @@
   </div>
 </div>
 
+<div class="section-title">Stationen</div>
 <div class="stations">
   <div class="station">
     <h3>Station 1 – 4vs4 MiniTore</h3>
     <div class="trainer">Njazi & Marcus</div>
-    <div class="desc">Zwei MiniTore gegenüber. 4 gegen 4 (bzw. 4 vs 5 wenn Team 3 dabei). Freies Spiel, Tore zählen. Regeln siehe Übungskarte "4vs4" unten.</div>
+    <div class="desc">Zwei MiniTore gegenüber. 4 gegen 4 (bzw. 4 vs 5 wenn Team 3 dabei). Freies Spiel, Tore zählen. Regeln siehe Übungskarte „4vs4" unten.</div>
   </div>
   <div class="station">
     <h3>Station 2 – Dribbel-Tor</h3>
@@ -110,6 +122,8 @@
   </table>
 </div>
 
+<div class="section-title">Übungskarten</div>
+
 <div class="uebung-detail spiel">
   <h2>Übungskarte: 4vs4</h2>
   <div class="subtitle">2 Trainer | 2 Teams à 4–5 Spieler</div>
@@ -128,22 +142,27 @@
   <ul>
     <li>Freies Spiel 4 gegen 4 (bzw. 4 vs 5). Tore zählen.</li>
     <li>Nach jedem Tor: Anstoß für das Team das kassiert hat.</li>
+    <li>Bei Seitenaus: Eindribbeln statt Einwurf.</li>
+    <li>Abstoß: Flach spielen (kein Rauskloppen!).</li>
   </ul>
 
   <h4>Fairness-Regeln (Provokationsregeln nach DFB)</h4>
   <ul>
-    <li><strong>"Alle am Ball"-Regel:</strong> Ein Tor zählt nur, wenn vorher jeder Spieler des angreifenden Teams mindestens einmal den Ball berührt hat.</li>
+    <li><strong>„Alle am Ball"-Regel:</strong> Ein Tor zählt nur, wenn vorher jeder Spieler des angreifenden Teams mindestens einmal den Ball berührt hat.</li>
     <li><strong>Pflichtpass-Regel:</strong> Tor zählt nur nach mindestens 3 Pässen innerhalb des Teams.</li>
     <li><strong>Jeder muss treffen:</strong> Erst wenn jeder Spieler im Team ein Tor geschossen hat, wird neu gezählt. Solange einer noch kein Tor hat, muss auf den gespielt werden.</li>
     <li><strong>Schusszone:</strong> Bei klarem Vorsprung (ab 3:0) → das starke Team darf nur noch aus einer markierten Zone schießen (2 Hütchen als Linie, ca. 5m vor dem Tor).</li>
   </ul>
 
-  <h4>Coaching-Punkte</h4>
-  <ul>
-    <li>Trainer zählt mit und achtet aktiv auf die Regeln – nicht laufen lassen!</li>
-    <li>Bei Ungleichgewicht sofort Schusszone aktivieren</li>
-    <li>Alle Spieler einbinden, schwächere Kids ansprechen und ermutigen</li>
-  </ul>
+  <div class="coaching">
+    <h4>Coaching-Punkte</h4>
+    <ul>
+      <li>Trainer zählt mit und achtet aktiv auf die Regeln – nicht laufen lassen!</li>
+      <li>Bei Ungleichgewicht sofort Schusszone aktivieren</li>
+      <li>Alle Spieler einbinden, schwächere Kids ansprechen und ermutigen</li>
+      <li>Nicht zu viel eingreifen – Fehler gehören dazu</li>
+    </ul>
+  </div>
 </div>
 
 <div class="uebung-detail">
@@ -171,13 +190,20 @@
     <li><strong>Wettkampf:</strong> 2er-Teams, wer hat nach 2 Min mehr Tore?</li>
   </ul>
 
-  <h4>Coaching-Punkte</h4>
-  <ul>
-    <li>Blick hoch, nicht nur auf den Ball schauen</li>
-    <li>Kleine Kontakte, Ball nicht wegschieben</li>
-    <li>Beim Torschuss: Standbein neben den Ball, durchziehen</li>
-    <li>Viel loben, Spaß steht im Vordergrund!</li>
-  </ul>
+  <div class="coaching">
+    <h4>Coaching-Punkte</h4>
+    <ul>
+      <li>Blick hoch, nicht nur auf den Ball schauen</li>
+      <li>Kleine Kontakte, Ball nicht wegschieben</li>
+      <li>Beim Torschuss: Standbein neben den Ball, durchziehen</li>
+      <li>Viel loben, Spaß steht im Vordergrund!</li>
+    </ul>
+  </div>
+</div>
+
+<div class="absagen">
+  <h3>Absagen (6)</h3>
+  <div class="list">✓ Mats Wilsser (Urlaub), Samuel Salvatore Da Silva, Taio Fees, Samuel Adam, Oscar Ebinger, Azariah Liel Moses</div>
 </div>
 
 </body>
