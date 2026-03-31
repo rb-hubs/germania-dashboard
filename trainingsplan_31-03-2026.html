@@ -218,24 +218,9 @@ body.edit-mode #summary-section{display:block}
       <div class="tb-player" data-name="Dejvi Paja">Dejvi</div>
       <div class="tb-player" data-name="Unik Demiri">Unik</div>
       <div class="tb-player" data-name="Harshiv Rajesh Kumar">Harshiv</div>
-      <div class="tb-player" data-name="Ella Rossbach" style="opacity:0.6;font-style:italic">Ella (optional)</div>
     </div></div>
   </div>
 
-  <!-- Absence Drop Zone -->
-  <div id="absence-zone">
-    <div class="absence-box absence-reported absence-drop" data-absence="reported">✓ Abgemeldet</div>
-    <div class="absence-box absence-shortterm absence-drop" data-absence="shortterm">⚠️ Kurzfristig</div>
-    <div class="absence-box absence-unexcused absence-drop" data-absence="unexcused">🚫 Unentschuldigt</div>
-  </div>
-
-  <!-- Summary Section -->
-  <div id="summary-section">
-    <h3 style="font-size:16px;margin-bottom:12px">📋 Zusammenfassung</h3>
-    <p id="summary-text" style="font-size:13px;line-height:1.6;white-space:pre-wrap;background:white;padding:12px;border-radius:6px;font-family:monospace"></p>
-    <button id="copy-summary-btn">📋 Zusammenfassung kopieren</button>
-    <button id="notion-sync-btn" title="Kommt bald">📤 Nach Notion speichern</button>
-  </div>
 
   <div class="stitle">Rotationsplan · 5 × 13 Min · 2 Min Trinkpause</div>
   <table class="rot-tbl">
@@ -414,13 +399,6 @@ function checkPw(){
 document.getElementById('pw-input').addEventListener('keydown',function(e){if(e.key==='Enter')checkPw()});
 </script>
 
-<!-- FAB Button -->
-<div style="position:fixed;bottom:20px;right:20px;z-index:9999">
-  <button id="edit-fab" title="Bearbeiten">✏️</button>
-</div>
-
-<!-- SortableJS -->
-<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.7/Sortable.min.js"></script>
 
 <script>
 let editMode = false;
