@@ -12,15 +12,15 @@ html{-webkit-text-size-adjust:100%}
 body{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;background:linear-gradient(135deg,#F8FAFD 0%,#F3F6FA 50%,#E8F1FE 100%);background-attachment:fixed;color:var(--navy);min-height:100vh}
 button{font-family:inherit;cursor:pointer}
 ::-webkit-scrollbar{width:6px} ::-webkit-scrollbar-thumb{background:#B0BEC5;border-radius:3px}
-.header{background:linear-gradient(135deg,#0A1F3F 0%,#0D47A1 50%,#0A1F3F 100%);padding:32px 0 0;padding-top:max(32px,env(safe-area-inset-top));color:var(--white);position:relative;overflow:hidden}.header::before{content:"";position:absolute;top:-100px;right:-100px;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(21,101,192,0.4) 0%,transparent 70%);pointer-events:none}.header::after{content:"";position:absolute;bottom:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#1565C0 0%,#FF8F00 50%,#C62828 100%)}
+.header{background:transparent;padding:0;color:var(--navy);position:relative}.header-card{background:var(--white);max-width:1100px;margin:0 auto 16px;padding:18px 16px;border-radius:14px;box-shadow:0 4px 16px rgba(13,71,161,0.06);position:relative}.header-card::after{content:"";position:absolute;left:16px;right:16px;bottom:0;height:2px;background:linear-gradient(90deg,#0D47A1 0%,#1565C0 50%,#C62828 100%);border-radius:2px}@media(min-width:720px){.header-card{padding:28px 32px;margin-bottom:20px}.header-card::after{left:32px;right:32px}}
 .header-inner{max-width:1200px;margin:0 auto;padding:0 32px}
 .header h1{font-size:26px;font-weight:800;letter-spacing:-0.3px;position:relative;z-index:1}
 .header .sub{font-size:13px;opacity:0.8;margin-top:2px}
 .header-top{display:flex;align-items:center;gap:16px;margin-bottom:16px}
 .tabs{display:flex;gap:4px}
-.tab{padding:10px 20px;border-radius:8px 8px 0 0;border:none;background:rgba(255,255,255,0.12);color:rgba(255,255,255,0.85);font-weight:500;font-size:14px;transition:all 0.2s}
-.tab.active{background:var(--white);color:var(--navy);font-weight:800;box-shadow:0 -2px 12px rgba(255,255,255,0.3)}.tab:hover:not(.active){background:rgba(255,255,255,0.2)}
-.content{padding:0 32px 40px;max-width:1200px;margin:0 auto}
+.tabs{display:flex;gap:6px;flex-wrap:wrap}.tab{padding:9px 16px;border-radius:10px;border:none;background:#F0F4F8;color:#5C6B7A;font-weight:700;font-size:13px;transition:all 0.2s;letter-spacing:0.3px}
+.tab.active{background:linear-gradient(135deg,#1565C0,#0D47A1);color:#fff;font-weight:800;box-shadow:0 4px 12px rgba(21,101,192,0.3)}.tab:hover:not(.active){background:#E3F2FD;color:#0D47A1}
+.content{padding:0 8px 24px;max-width:1100px;margin:0 auto}@media(min-width:720px){.content{padding:0 16px 30px}}
 .cards{display:flex;gap:16px;flex-wrap:wrap;margin-top:24px}
 .stat-card{background:var(--white);border-radius:18px;padding:22px 26px;box-shadow:0 6px 24px rgba(13,71,161,0.08),0 1px 4px rgba(0,0,0,0.04);flex:1 1 200px;min-width:180px;border:1px solid #E3F2FD;transition:transform 0.25s ease,box-shadow 0.25s ease}.stat-card:hover{transform:translateY(-3px);box-shadow:0 12px 32px rgba(13,71,161,0.15),0 2px 6px rgba(0,0,0,0.06)}
 .stat-card .label{font-size:13px;color:var(--gray);font-weight:500;letter-spacing:0.5px}
@@ -96,15 +96,13 @@ tbody tr{border-bottom:1px solid #ECEFF1} tbody tr:nth-child(even){background:#F
 /* Phone */
 @media(max-width:480px){
   /* Header & Nav */
-  .header{padding:12px 12px 0}
-  .header h1{font-size:16px;line-height:1.2}
-  .header .sub{font-size:11px}
-  .header-top{gap:8px;margin-bottom:8px}
+  .header-card{padding:14px 14px;margin-bottom:10px}
+  .header-card h1{font-size:18px!important}
 
-  /* Tabs: horizontal scroll strip */
-  .tabs{flex-wrap:nowrap;gap:0;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding-bottom:0}
+  /* Tabs: horizontal scroll pills */
+  .tabs{flex-wrap:nowrap;gap:6px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding-bottom:2px}
   .tabs::-webkit-scrollbar{display:none}
-  .tab{padding:8px 14px;font-size:12px;white-space:nowrap;flex-shrink:0;border-radius:6px 6px 0 0}
+  .tab{padding:8px 14px;font-size:12px;white-space:nowrap;flex-shrink:0;border-radius:10px}
 
   /* Content area */
   .content{padding:0 12px 20px}
@@ -223,28 +221,28 @@ tbody tr{border-bottom:1px solid #ECEFF1} tbody tr:nth-child(even){background:#F
 </div>
 
 <div id="app-content" style="display:none">
-<div class="header">
- <div class="header-inner">
-  <div class="header-top">
-    <div>
-      <h1>Bambini 2019er – Training Dashboard</h1>
-      <div class="sub">JG 2019 · Saison 2025/26 · Stand: 08.05.2026</div>
-    </div>
+<div class="header-card" style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+  <div style="flex:1;min-width:200px">
+    <h1 style="font-size:22px;font-weight:900;letter-spacing:0.5px;background:linear-gradient(135deg,#0D47A1 0%,#1565C0 60%,#C62828 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;line-height:1.1">DASHBOARD</h1>
+    <div style="font-size:12px;color:#5C6B7A;font-weight:600;margin-top:2px">Bambini JG 2019 · Saison 2025/26 · Stand 08.05.2026</div>
   </div>
+  <div class="logo-pill" style="background:linear-gradient(135deg,#0D47A1,#1565C0);color:#fff;padding:8px 14px;border-radius:24px;font-size:11px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;box-shadow:0 4px 12px rgba(21,101,192,0.3)">SV Germania Bietigheim</div>
+</div>
+
+<div class="header-card" style="padding:8px 8px;margin-bottom:16px">
   <div class="tabs" id="tabs">
     <button class="tab active" data-tab="overview">Übersicht</button>
     <button class="tab" data-tab="kader">Kader & Anwesenheit</button>
     <button class="tab" data-tab="uebungen">Übungsbibliothek</button>
     <button class="tab" data-tab="trainings">Trainings-Log</button>
   </div>
- </div>
 </div>
 <div class="content">
   <div class="tab-content active" id="tab-overview"></div>
   <div class="tab-content" id="tab-kader"></div>
   <div class="tab-content" id="tab-uebungen"></div>
   <div class="tab-content" id="tab-trainings"></div>
-  <div class="footer">SV Germania Bietigheim · Bambini JG 2019</div>
+  <div style="text-align:center;font-size:11px;color:#90A4AE;margin:20px 0 10px;font-weight:600;letter-spacing:0.3px">SV GERMANIA BIETIGHEIM · BAMBINI JG 2019</div>
 </div>
 <div class="mo" id="modal"><div class="mi" id="modal-inner"></div></div>
 
