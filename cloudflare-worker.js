@@ -335,24 +335,37 @@ function formatDate(iso) {
 
 async function handleGetTrainings(request, env) {
   try {
-    // Trainings + Kader parallel laden, damit wir spielerIds → Namen mappen können
+    // Trainings + Kader parallel laden – Wahrheit für Anwesenheit liegt
+    // in der Spieler-DB (Property "Trainings"), die Trainings-DB
+    // ("Spieler"-Property) ist nicht durchgängig gepflegt. Daher Reverse-Map.
     const [tData, kData] = await Promise.all([
       notionQuery(DS_TRAININGS, env, { sorts: [{ property: 'Datum', direction: 'ascending' }] }),
       notionQuery(DS_KADER, env)
     ]);
 
-    // Map: notionId → Spielername (Kurzform aus Notion-Property "Name")
+    // Map: notionId → Spielername UND Map: trainingId → [spielerNamen]
     const idToName = new Map();
+    const trainingToAnwesend = new Map();
     for (const p of kData.results) {
       const name = pickPlain(p.properties?.['Name'], 'title');
-      if (name) idToName.set(p.id, name);
+      if (!name) continue;
+      idToName.set(p.id, name);
+      const trainingsRel = p.properties?.['Trainings']?.relation || [];
+      for (const ref of trainingsRel) {
+        if (!trainingToAnwesend.has(ref.id)) trainingToAnwesend.set(ref.id, []);
+        trainingToAnwesend.get(ref.id).push(name);
+      }
     }
 
     const trainings = tData.results.map((page, idx) => {
       const props = page.properties || {};
       const abwesendText = pickPlain(props['Abwesend']);
+      // Anwesend bevorzugt aus Reverse-Map (Spieler→Trainings),
+      // Fallback auf Trainings→Spieler-Relation falls Reverse-Map leer ist
+      const fromReverse = trainingToAnwesend.get(page.id) || [];
       const spielerIds = pickRelations(props['Spieler']);
-      const anwesend = spielerIds.map(id => idToName.get(id)).filter(Boolean);
+      const fromForward = spielerIds.map(id => idToName.get(id)).filter(Boolean);
+      const anwesend = fromReverse.length ? fromReverse : fromForward;
       return {
         id: idx + 1,
         notionId: page.id,
