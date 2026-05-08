@@ -301,6 +301,31 @@ async function fetchWithCache(endpoint) {
   }
 }
 
+// Reverse zu formatAbwesend(): Notion-Text → {rechtzeitig, kurzfristig, unentschuldigt}
+function parseAbwesendText(text) {
+  const empty = { rechtzeitig: [], kurzfristig: [], unentschuldigt: [] };
+  if (!text || typeof text !== 'string') return empty;
+  const trimmed = text.trim();
+  if (!trimmed || trimmed === '–' || trimmed === '-') return empty;
+  const result = { rechtzeitig: [], kurzfristig: [], unentschuldigt: [] };
+  const lines = trimmed.split(/\n|(?=✓|⚠|🚫)/).map(l => l.trim()).filter(Boolean);
+  for (const line of lines) {
+    let bucket = 'rechtzeitig', rest = line;
+    if (line.startsWith('✓')) { bucket = 'rechtzeitig'; rest = line.slice(1); }
+    else if (line.startsWith('⚠️')) { bucket = 'kurzfristig'; rest = line.slice(2); }
+    else if (line.startsWith('⚠')) { bucket = 'kurzfristig'; rest = line.slice(1); }
+    else if (line.startsWith('🚫')) { bucket = 'unentschuldigt'; rest = line.slice(2); }
+    rest.split(',').map(s => s.trim()).filter(Boolean).forEach(n => result[bucket].push(n));
+  }
+  return result;
+}
+
+function isAbwesendEmpty(a) {
+  if (!a) return true;
+  if (Array.isArray(a)) return a.length === 0;
+  return !(a.rechtzeitig?.length || a.kurzfristig?.length || a.unentschuldigt?.length);
+}
+
 async function loadFromNotion() {
   const banner = document.getElementById('notion-status');
   try {
@@ -308,16 +333,28 @@ async function loadFromNotion() {
       fetchWithCache('trainings'),
       fetchWithCache('kader')
     ]);
+    // Kader-Map (notionId → Name) für anwesend-Fallback wenn Worker nur spielerIds liefert
+    const idToName = new Map();
+    if (kRes && kRes.kader) {
+      for (const k of kRes.kader) if (k.notionId && k.n) idToName.set(k.notionId, k.n);
+    }
     if (tRes && tRes.trainings && tRes.trainings.length > 0) {
-      // Convert Notion-format zu Dashboard-format (anwesend-Liste fehlt → leer)
-      trainings = tRes.trainings.map(t => ({
-        id: t.id, name: t.name, datum: t.datum,
-        anwesendeKinder: t.anwesendeKinder,
-        anwesend: t.anwesend && t.anwesend.length ? t.anwesend : [],
-        abwesend: t.abwesend || { rechtzeitig: t.abwesendText ? t.abwesendText.split(',').map(s=>s.trim()) : [], kurzfristig: [], unentschuldigt: [] },
-        trainer: t.trainer || [], kategorien: t.kategorien || [],
-        coaching: t.coaching || '', uebungen: [], besonderheiten: t.besonderheiten || ''
-      }));
+      trainings = tRes.trainings.map(t => {
+        // anwesend: bevorzugt vom Worker, sonst aus spielerIds via Kader-Map ableiten
+        let anwesend = Array.isArray(t.anwesend) && t.anwesend.length ? t.anwesend : [];
+        if (!anwesend.length && Array.isArray(t.spielerIds) && idToName.size) {
+          anwesend = t.spielerIds.map(id => idToName.get(id)).filter(Boolean);
+        }
+        // abwesend: Worker-Objekt nur nutzen wenn nicht leer; sonst abwesendText parsen
+        const abwesend = isAbwesendEmpty(t.abwesend) ? parseAbwesendText(t.abwesendText) : t.abwesend;
+        return {
+          id: t.id, name: t.name, datum: t.datum,
+          anwesendeKinder: t.anwesendeKinder,
+          anwesend, abwesend,
+          trainer: t.trainer || [], kategorien: t.kategorien || [],
+          coaching: t.coaching || '', uebungen: [], besonderheiten: t.besonderheiten || ''
+        };
+      });
       console.log('✓ Trainings live aus Notion:', trainings.length);
     }
     if (kRes && kRes.kader && kRes.kader.length > 0) {

@@ -174,6 +174,39 @@ function formatAbwesend(abwesend) {
 }
 
 /**
+ * Reverse zu formatAbwesend(): zerlegt den Notion-Text wieder in
+ * { rechtzeitig, kurzfristig, unentschuldigt }.
+ *
+ * Erkennt Zeilen-Präfixe ✓ / ⚠️ / 🚫 (auch ⚠ ohne VS16). Splittet die
+ * Namen anschließend an Komma. Zeilen ohne erkanntes Präfix landen in
+ * `rechtzeitig` (graceful fallback). "–" oder leer ⇒ alle Listen leer.
+ */
+function parseAbwesend(text) {
+  const empty = { rechtzeitig: [], kurzfristig: [], unentschuldigt: [] };
+  if (!text || typeof text !== 'string') return empty;
+  const trimmed = text.trim();
+  if (!trimmed || trimmed === '–' || trimmed === '-') return empty;
+
+  const result = { rechtzeitig: [], kurzfristig: [], unentschuldigt: [] };
+  // Zeilen via Newline ODER Bullet trennen (Notion liefert manchmal alles in einer Zeile)
+  const lines = trimmed.split(/\n|(?=✓|⚠|🚫)/).map(l => l.trim()).filter(Boolean);
+
+  for (const line of lines) {
+    let bucket = 'rechtzeitig';
+    let rest = line;
+    if (line.startsWith('✓')) { bucket = 'rechtzeitig'; rest = line.slice(1); }
+    else if (line.startsWith('⚠️')) { bucket = 'kurzfristig'; rest = line.slice(2); }
+    else if (line.startsWith('⚠')) { bucket = 'kurzfristig'; rest = line.slice(1); }
+    else if (line.startsWith('🚫')) { bucket = 'unentschuldigt'; rest = line.slice(2); }
+
+    const names = rest.split(',').map(s => s.trim()).filter(Boolean);
+    result[bucket].push(...names);
+  }
+
+  return result;
+}
+
+/**
  * Aktualisiert den Teams-Abschnitt im Seiteninhalt
  * Sucht nach dem "## Teams" Block und ersetzt ihn
  */
@@ -302,24 +335,38 @@ function formatDate(iso) {
 
 async function handleGetTrainings(request, env) {
   try {
-    const data = await notionQuery(DS_TRAININGS, env, {
-      sorts: [{ property: 'Datum', direction: 'ascending' }]
-    });
-    const trainings = data.results.map((page, idx) => {
+    // Trainings + Kader parallel laden, damit wir spielerIds → Namen mappen können
+    const [tData, kData] = await Promise.all([
+      notionQuery(DS_TRAININGS, env, { sorts: [{ property: 'Datum', direction: 'ascending' }] }),
+      notionQuery(DS_KADER, env)
+    ]);
+
+    // Map: notionId → Spielername (Kurzform aus Notion-Property "Name")
+    const idToName = new Map();
+    for (const p of kData.results) {
+      const name = pickPlain(p.properties?.['Name'], 'title');
+      if (name) idToName.set(p.id, name);
+    }
+
+    const trainings = tData.results.map((page, idx) => {
       const props = page.properties || {};
+      const abwesendText = pickPlain(props['Abwesend']);
+      const spielerIds = pickRelations(props['Spieler']);
+      const anwesend = spielerIds.map(id => idToName.get(id)).filter(Boolean);
       return {
         id: idx + 1,
         notionId: page.id,
         name: pickPlain(props['Name'], 'title'),
         datum: formatDate(pickDate(props['Datum'])),
         anwesendeKinder: pickNumber(props['Anwesende Kinder']) || 0,
-        abwesend: { rechtzeitig: [], kurzfristig: [], unentschuldigt: [] },
-        abwesendText: pickPlain(props['Abwesend']),
+        anwesend,
+        abwesend: parseAbwesend(abwesendText),
+        abwesendText,
         trainer: pickMulti(props['Trainer']),
         kategorien: pickMulti(props['Kategorie']),
         coaching: pickPlain(props['Coaching-Schwerpunkte']),
         besonderheiten: pickPlain(props['Besonderheiten']),
-        spielerIds: pickRelations(props['Spieler']),
+        spielerIds,
         uebungenIds: pickRelations(props['Übungen'])
       };
     });
