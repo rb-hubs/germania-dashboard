@@ -9,25 +9,25 @@
 :root { --navy:#0A1F3F; --blue:#1565C0; --light:#E3F2FD; --accent:#FF8F00; --green:#2E7D32; --red:#C62828; --gray:#78909C; --white:#FFFFFF; }
 *{margin:0;padding:0;box-sizing:border-box}
 html{-webkit-text-size-adjust:100%}
-body{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;background:#F5F7FA;color:var(--navy)}
+body{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;background:linear-gradient(135deg,#F8FAFD 0%,#F3F6FA 50%,#E8F1FE 100%);background-attachment:fixed;color:var(--navy);min-height:100vh}
 button{font-family:inherit;cursor:pointer}
 ::-webkit-scrollbar{width:6px} ::-webkit-scrollbar-thumb{background:#B0BEC5;border-radius:3px}
-.header{background:var(--navy);padding:28px 0 0;padding-top:max(28px,env(safe-area-inset-top));color:var(--white)}
+.header{background:linear-gradient(135deg,#0A1F3F 0%,#0D47A1 50%,#0A1F3F 100%);padding:32px 0 0;padding-top:max(32px,env(safe-area-inset-top));color:var(--white);position:relative;overflow:hidden}.header::before{content:"";position:absolute;top:-100px;right:-100px;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(21,101,192,0.4) 0%,transparent 70%);pointer-events:none}.header::after{content:"";position:absolute;bottom:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#1565C0 0%,#FF8F00 50%,#C62828 100%)}
 .header-inner{max-width:1200px;margin:0 auto;padding:0 32px}
-.header h1{font-size:24px;font-weight:700}
+.header h1{font-size:26px;font-weight:800;letter-spacing:-0.3px;position:relative;z-index:1}
 .header .sub{font-size:13px;opacity:0.8;margin-top:2px}
 .header-top{display:flex;align-items:center;gap:16px;margin-bottom:16px}
 .tabs{display:flex;gap:4px}
 .tab{padding:10px 20px;border-radius:8px 8px 0 0;border:none;background:rgba(255,255,255,0.12);color:rgba(255,255,255,0.85);font-weight:500;font-size:14px;transition:all 0.2s}
-.tab.active{background:var(--white);color:var(--navy);font-weight:700}
+.tab.active{background:var(--white);color:var(--navy);font-weight:800;box-shadow:0 -2px 12px rgba(255,255,255,0.3)}.tab:hover:not(.active){background:rgba(255,255,255,0.2)}
 .content{padding:0 32px 40px;max-width:1200px;margin:0 auto}
 .cards{display:flex;gap:16px;flex-wrap:wrap;margin-top:24px}
-.stat-card{background:var(--white);border-radius:16px;padding:20px 24px;box-shadow:0 2px 12px rgba(10,31,63,0.08);flex:1 1 200px;min-width:180;border:1px solid var(--light)}
+.stat-card{background:var(--white);border-radius:18px;padding:22px 26px;box-shadow:0 6px 24px rgba(13,71,161,0.08),0 1px 4px rgba(0,0,0,0.04);flex:1 1 200px;min-width:180px;border:1px solid #E3F2FD;transition:transform 0.25s ease,box-shadow 0.25s ease}.stat-card:hover{transform:translateY(-3px);box-shadow:0 12px 32px rgba(13,71,161,0.15),0 2px 6px rgba(0,0,0,0.06)}
 .stat-card .label{font-size:13px;color:var(--gray);font-weight:500;letter-spacing:0.5px}
-.stat-card .value{font-size:36px;font-weight:700;line-height:1.1;margin-top:4px}
+.stat-card .value{font-size:38px;font-weight:800;line-height:1.1;margin-top:4px;background:linear-gradient(135deg,#0D47A1,#1565C0);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
 .stat-card .sub{font-size:12px;color:var(--gray);margin-top:4px}
-.sh{font-size:18px;font-weight:700;color:var(--navy);margin:32px 0 16px;padding-bottom:8px;border-bottom:2px solid var(--blue)}
-.chart-box{background:var(--white);border-radius:16px;padding:20px;box-shadow:0 2px 12px rgba(10,31,63,0.08)}
+.sh{font-size:19px;font-weight:800;color:var(--navy);margin:36px 0 18px;padding:8px 0 8px 16px;border-left:5px solid;border-image:linear-gradient(180deg,#0D47A1 0%,#1565C0 50%,#C62828 100%) 1;letter-spacing:-0.3px}
+.chart-box{background:var(--white);border-radius:18px;padding:22px;box-shadow:0 6px 24px rgba(13,71,161,0.08),0 1px 4px rgba(0,0,0,0.04);border:1px solid #E3F2FD}
 .row{display:flex;gap:24px;flex-wrap:wrap;margin-top:8px}
 .col{flex:1 1 400px;min-width:300px} .col-sm{flex:1 1 300px;min-width:280px}
 .badge{display:inline-block;font-size:12px;font-weight:600;padding:3px 10px;border-radius:20px;margin-right:6px;margin-bottom:4px}
@@ -228,7 +228,7 @@ tbody tr{border-bottom:1px solid #ECEFF1} tbody tr:nth-child(even){background:#F
   <div class="header-top">
     <div>
       <h1>Bambini 2019er – Training Dashboard</h1>
-      <div class="sub">JG 2019 · Saison 2025/26 · Stand: 27.03.2026</div>
+      <div class="sub">JG 2019 · Saison 2025/26 · Stand: 08.05.2026</div>
     </div>
   </div>
   <div class="tabs" id="tabs">
@@ -258,7 +258,9 @@ const trainings=[
 {id:4,name:"Training #4 – 3vs3 auf 4 Minitore",datum:"07.04.2026",anwesendeKinder:13,anwesend:["Carlos","Dejvi","Ejdin","Emil W.","Linus","Lorik","Luca","Mats","Mattheo","Samuel","Taio","Unik","Yuşa"],abwesend:{rechtzeitig:["Damiano","Azariah","Ioannis","Emil R.","Rafael","Noah","Oscar","Harshiv"],kurzfristig:[],unentschuldigt:["Jesaja"]},trainer:["Marc","Toni","Mike","Njazi"],kategorien:["Spielformen","Koordination","Dribbling","Passspiel"],coaching:"3 Stationen, 4×17 Min Runden. S1: 3vs3 auf 4 Minitore (Toni) – Orientierung, Kopf hoch. S2: Parcours groß mit Ball (Marc+Mike) – Koordination, Ballführung. S3: Dribbel-Tor + Hütchen-Tor-Passen (Njazi) – Technik, Passgenauigkeit.",uebungen:["4vs4 auf 4 Minitore","Parcours groß mit Ball","Dribbel-Tor","Hütchen-Tor-Passen"],besonderheiten:"13 Kids → 4 Teams (2×4er + 2×3er). 3 Stationen, 4×17 Min Runden. Jedes Team: 2× Spiel, 1× Parcours, 1× Technik. Andi nicht anwesend. Yuşa kam zu spät."},
 {id:5,name:"Training #5 – Rondo + Dribbel-Tor",datum:"10.04.2026",anwesendeKinder:14,anwesend:["Carlos","Dejvi","Ejdin","Emil R.","Harshiv","Linus","Lorik","Luca","Mattheo","Noah","Rafael","Taio","Unik","Yuşa"],abwesend:{rechtzeitig:["Damiano","Mats","Azariah","Ioannis","Samuel A.","Emil W.","Samuel D.","Oscar","Jesaja"],kurzfristig:[],unentschuldigt:[]},trainer:["Andi","Marc","Marcus","Njazi","Toni","Mike"],kategorien:["Spielformen","Passspiel","Dribbling","Torschuss","Koordination","Ballkontrolle"],coaching:"Passspiel unter Druck (Rondo), Dribbling + Abschluss (3 Varianten), freies Spielen 4vs4",uebungen:["4vs4 Standard","Rondo (3v1)","Dribbel-Tor","Parcours groß mit Ball"],besonderheiten:"4 Teams (2×3 + 2×4). Marcus als Trainer an S2 dabei. S1: 4vs4 Standard (Andi+Njazi), S2: Rondo (3v1) + Dribbel-Tor mit 3 Varianten (Marcus+Toni), S3: Parcours groß mit Ball (Marc+Mike). 4 Runden à 17 Min."},
 {id:6,name:"Training #6 – Format 4+1 (Raute/Rondo)",datum:"17.04.2026",anwesendeKinder:20,anwesend:["Azariah","Carlos","Damiano","Dejvi","Ejdin","Emil R.","Emil W.","Harshiv","Jesaja","Linus","Lorik","Luca","Mattheo","Noah","Rafael","Samuel A.","Samuel D.","Taio","Unik","Yuşa"],abwesend:{rechtzeitig:["Mats Wilsser","Ioannis Papanikolaou","Oscar Ebinger"],kurzfristig:[],unentschuldigt:[]},trainer:["Andi","Marc","Marcus","Njazi","Toni","Mike"],kategorien:["Spielformen","Koordination"],coaching:"Neu: Format 4+1 (mit Torwart). S2 wird noch festgelegt. 4 Teams à 5, 4×17 Min Runden.",uebungen:["4+1 (mit Torwart)","Pass-Karussell (Raute)","Handball-Rondo","Parcours groß mit Ball"],besonderheiten:"20 Kids → 4 Teams à 5 (volle Besetzung). Erstes Training mit Torwart-Format 4+1. S1: Andi+Marcus (Blau vs Rot / Gelb vs Orange feste Paarungen), S2: Toni+Njazi (Pass-Karussell 8½ Min + Handball-Rondo 8½ Min), S3: Marc+Mike (Parcours)."},
-{id:7,name:"Training #7 – 4vs4 + Dribbel-Reaktion + 1v1",datum:"24.04.2026",anwesendeKinder:16,anwesend:["Azariah","Carlos","Damiano","Dejvi","Ejdin","Emil R.","Emil W.","Harshiv","Linus","Luca","Mats","Mattheo","Noah","Rafael","Samuel D.","Yuşa"],abwesend:{rechtzeitig:["Jesaja Cello","Samuel Adam","Lorik Pllana","Oscar Ebinger","Ioannis Papanikolaou","Unik Demiri","Taio Fees"],kurzfristig:[],unentschuldigt:[]},trainer:["Andi","Marc","Marcus","Mike"],kategorien:["Spielformen","Dribbling","1v1","Koordination"],coaching:"4vs4 mit Sonderregel (Blau spielt nicht gegen Gelb wegen Stärkeunterschied). Gelb spielt gegen Rot + Orange. Dribbel-Reaktion für Koordination + Kopf-hoch-Spielen, 1v1-Duelle team-intern (Diagonale 1v1). 4 Runden × 17 Min, jedes Team 2×S1 + 1×S2 + 1×S3.",uebungen:["4vs4 Standard","Dribbel-Reaktion","Diagonale 1v1","Parcours groß mit Ball"],besonderheiten:"16 Kids, 4 Teams à 4. Blau spielt nicht gegen Gelb (zu großer Stärkeunterschied). Gelb spielt gegen Rot (R2) und Orange (R4). 4 Runden × 17 Min. S1/4vs4 = Andi, S2/Technik (Dribbel-Reaktion + Diagonale 1v1) = Marcus, S3/Parcours = Marc + Mike. Teams: T1-Blau (Azariah, Luca, Emil R., Rafael), T2-Rot (Noah, Linus, Damiano, Ejdin), T3-Orange (Mattheo, Carlos, Mats, Dejvi), T4-Gelb (Yuşa, Harshiv, Emil W., Samuel D.)."}
+{id:7,name:"Training #7 – 4vs4 + Dribbel-Reaktion + 1v1",datum:"24.04.2026",anwesendeKinder:16,anwesend:["Azariah","Carlos","Damiano","Dejvi","Ejdin","Emil R.","Emil W.","Harshiv","Linus","Luca","Mats","Mattheo","Noah","Rafael","Samuel D.","Yuşa"],abwesend:{rechtzeitig:["Jesaja Cello","Samuel Adam","Lorik Pllana","Oscar Ebinger","Ioannis Papanikolaou","Unik Demiri","Taio Fees"],kurzfristig:[],unentschuldigt:[]},trainer:["Andi","Marc","Marcus","Mike"],kategorien:["Spielformen","Dribbling","1v1","Koordination"],coaching:"4vs4 mit Sonderregel (Blau spielt nicht gegen Gelb wegen Stärkeunterschied). Gelb spielt gegen Rot + Orange. Dribbel-Reaktion für Koordination + Kopf-hoch-Spielen, 1v1-Duelle team-intern (Diagonale 1v1). 4 Runden × 17 Min, jedes Team 2×S1 + 1×S2 + 1×S3.",uebungen:["4vs4 Standard","Dribbel-Reaktion","Diagonale 1v1","Parcours groß mit Ball"],besonderheiten:"16 Kids, 4 Teams à 4. Blau spielt nicht gegen Gelb (zu großer Stärkeunterschied). Gelb spielt gegen Rot (R2) und Orange (R4). 4 Runden × 17 Min. S1/4vs4 = Andi, S2/Technik (Dribbel-Reaktion + Diagonale 1v1) = Marcus, S3/Parcours = Marc + Mike. Teams: T1-Blau (Azariah, Luca, Emil R., Rafael), T2-Rot (Noah, Linus, Damiano, Ejdin), T3-Orange (Mattheo, Carlos, Mats, Dejvi), T4-Gelb (Yuşa, Harshiv, Emil W., Samuel D.)."},
+{id:8,name:"Training #8 – 4vs4 mit 2 Teams (Halbzeit-Format)",datum:"02.05.2026",anwesendeKinder:8,anwesend:[],abwesend:{rechtzeitig:[],kurzfristig:[],unentschuldigt:[]},trainer:["Andi","Marc"],kategorien:["Spielformen"],coaching:"2 Teams, 4 Halbzeiten à 13 Min mit 4vs4 auf E-Jugendtore. Fokus: Spielfreude.",uebungen:["4vs4 Standard"],besonderheiten:"Sehr kleines Training mit reduziertem Format (Brückentag/Ferien). 2 Teams, 4 Halbzeiten."},
+{id:9,name:"Training #9 – Löwenrudel-Spezial mit 6 Teams",datum:"08.05.2026",anwesendeKinder:21,anwesend:["Emil R.","Luca","Azariah","Taio","Damiano","Ejdin","Unik","Linus","Lorik","Jesaja","Carlos","Mats","Mattheo","Noah","Emil W.","Dejvi","Yuşa","Samuel","Dimitrios","Ilias","Harshiv"],abwesend:{rechtzeitig:["Samuel Adam","Rafael Schmitz","Ioannis Papanikolaou"],kurzfristig:[],unentschuldigt:[]},trainer:["Andi","Marc","Mike","Toni"],kategorien:["Spielformen","Dribbling","Passspiel","Torschuss","1v1"],coaching:"21 Kids inkl. Ilias (NEU) + Andi+Marc als 6. Team an S1. A+M spielen 2× gegen Blau (R1+R5), 2× gegen Rot (R2+R4), 1× gegen Orange (R3). S3 als Doppelübung Slalom + Pass/Torschuss. Bl spielt nie gegen Gr auf S2.",uebungen:["4vs4 auf E-Jugendtore","4vs4 auf 4 Minitore","Slalom + Pass/Torschuss"],besonderheiten:"Erstes Training mit 6-Team-Format (Löwenrudel-Spezial). 5 Teams à 4-5 + Andi/Marc als 6. Team. Tausch Dejvi↔Mats. Ilias neu im Kader (🟢). Dimitrios auch neu."}
 ];
 const kader=[
   {n:"Azariah Liel Moses",r:"🔵"},
@@ -268,7 +270,9 @@ const kader=[
   {n:"Ejdin Beganovic",r:"🔵"},
   {n:"Emil Roßbach",r:"🔵"},
   {n:"Emil Wachtler",r:"🟡"},
+  {n:"Dimitrios Matlis",r:"🟢"},
   {n:"Harshiv Rajesh Kumar",r:"🟢"},
+  {n:"Ilias",r:"🟢"},
   {n:"Ioannis Papanikolaou",r:"🟢"},
   {n:"Jesaja Cello",r:"🟡"},
   {n:"Linus Würth",r:"🔵"},
