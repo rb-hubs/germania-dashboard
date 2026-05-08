@@ -31,9 +31,9 @@ body{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;background:#F5F7FA;
 #login-screen button:active{transform:translateY(0);box-shadow:0 4px 12px rgba(21,101,192,0.3)}
 #pw-error{color:#C62828;font-size:13px;margin-top:16px;display:none;font-weight:700;animation:loginFadeIn 0.35s ease both}
 
-body{background:linear-gradient(135deg,#F8FAFD 0%,#F3F6FA 100%);min-height:100vh;padding:14px 0;margin:0}
+body{background:linear-gradient(135deg,#F8FAFD 0%,#F3F6FA 100%);min-height:100vh;padding:8px 8px;margin:0}@media(min-width:720px){body{padding:14px 16px}}
 /* PAGE LAYOUT */
-.block{background:var(--white);max-width:920px;margin:0 auto 20px;padding:24px 22px;border-radius:16px;box-shadow:0 6px 24px rgba(13,71,161,0.07),0 1px 4px rgba(0,0,0,0.04)}@media(min-width:720px){.block{padding:32px 36px;margin-bottom:24px}}
+.block{background:var(--white);max-width:1100px;margin:0 auto 16px;padding:18px 16px;border-radius:14px;box-shadow:0 4px 16px rgba(13,71,161,0.06)}@media(min-width:720px){.block{padding:28px 32px;margin-bottom:20px}}
 @media(max-width:720px){.block{margin:0 0 12px;border-radius:0;padding:18px 14px;max-width:100%;box-shadow:0 2px 8px rgba(0,0,0,0.05)}}
 
 /* HEADER */
@@ -139,15 +139,15 @@ body{background:linear-gradient(135deg,#F8FAFD 0%,#F3F6FA 100%);min-height:100vh
 }
 
 /* EDIT MODE */
-body.edit-mode .tb-player{cursor:grab;background:rgba(21, 101, 192, 0.06);transition:background 0.15s;touch-action:none}
-body.edit-mode .tb-player:active{cursor:grabbing}
+
+
 .sortable-ghost{opacity:0.5;border:2px solid var(--blue)}
-#edit-fab{position:fixed;bottom:20px;right:20px;z-index:9999;background:var(--navy);color:var(--white);border:none;border-radius:50%;width:56px;height:56px;font-size:24px;cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,0.2);display:flex;align-items:center;justify-content:center;transition:all 0.3s;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif}
-#edit-fab:active{transform:scale(0.95)}
-#edit-fab-label{display:block;font-size:10px;margin-top:2px;text-align:center;width:100%;position:absolute;bottom:-18px;left:0}
+
+
+
 .fab-wrapper{position:relative}
 #absence-zone{display:none;margin:20px 0;padding:16px;background:#F5F7FA;border-radius:8px;gap:12px}
-body.edit-mode #absence-zone{display:grid;grid-template-columns:repeat(3,1fr)}
+
 #absence-zone .absence-box{padding:12px;border-radius:6px;min-height:80px;border:2px dashed rgba(0,0,0,0.2);font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:center;text-align:center;color:white}
 .absence-reported{background:#78909C;color:white}
 .absence-shortterm{background:#FF8F00;color:white}
@@ -155,7 +155,7 @@ body.edit-mode #absence-zone{display:grid;grid-template-columns:repeat(3,1fr)}
 .absence-drop{min-height:120px}
 @media(max-width:600px){
   #absence-zone{grid-template-columns:1fr}
-  #edit-fab{width:48px;height:48px;font-size:20px;bottom:16px;right:16px}
+  
 }
 
 /* NOTION SYNC BTN */
@@ -164,7 +164,7 @@ body.edit-mode #absence-zone{display:grid;grid-template-columns:repeat(3,1fr)}
 
 /* SUMMARY SECTION */
 #summary-section{display:none;margin-top:20px;padding:16px;background:#F5F7FA;border-radius:8px;border-left:4px solid var(--blue)}
-body.edit-mode #summary-section{display:block}
+
 #copy-summary-btn{background:var(--blue);color:white;border:none;padding:12px 20px;border-radius:6px;font-size:14px;font-weight:600;cursor:pointer;margin-top:12px;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif}
 #copy-summary-btn:active{opacity:0.9}
 
@@ -174,7 +174,7 @@ body.edit-mode #summary-section{display:block}
   .page{box-shadow:none;margin:0;padding:30px 40px}
   #login-screen{display:none!important}
   #app-content{display:block!important}
-  #edit-fab{display:none!important}
+  
   #absence-zone{display:none!important}
   #summary-section{display:none!important}
 }
@@ -205,7 +205,6 @@ body.edit-mode #summary-section{display:block}
 
 <div id="app-content" style="display:none">
 
-<!-- ==================== SEITE 1: ÜBERSICHT ==================== -->
 <section class="block">
   <div class="hdr">
     <div class="hdr-left">
@@ -293,9 +292,7 @@ body.edit-mode #summary-section{display:block}
 
 </section>
 
-<!-- ==================== SEITE 2: STATION 1 ==================== -->
 <section class="block">
-  </div>
 
   <div class="scard">
     <div class="scard-hdr">
@@ -322,9 +319,7 @@ body.edit-mode #summary-section{display:block}
 
 </section>
 
-<!-- ==================== SEITE 3: STATION 2 ==================== -->
 <section class="block">
-  </div>
 
   <div class="scard">
     <div class="scard-hdr">
@@ -351,9 +346,7 @@ body.edit-mode #summary-section{display:block}
 
 </section>
 
-<!-- ==================== SEITE 4: STATION 3 ==================== -->
 <section class="block">
-  </div>
 
   <div class="scard">
     <div class="scard-hdr">
@@ -379,7 +372,7 @@ body.edit-mode #summary-section{display:block}
 
 
 <!-- LIVE-EDIT DOM -->
-<button id="edit-fab" title="Bearbeiten">✏️</button>
+
 
 <div id="absence-zone" style="max-width:800px;margin:20px auto;">
   <div class="absence-box absence-reported absence-drop" data-absence="reported">✓ Rechtzeitig abgesagt</div>
@@ -404,8 +397,7 @@ function checkPw(){
 document.getElementById('pw-input').addEventListener('keydown',function(e){if(e.key==='Enter')checkPw()});
 </script>
 
-<!-- SortableJS für Live-Edit -->
-<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+
 <script>
 /**
  * Live-Edit + Notion Sync für Germania Trainingsplan
@@ -420,44 +412,7 @@ document.getElementById('pw-input').addEventListener('keydown',function(e){if(e.
  * - .tb-list Elemente mit data-team Attribut
  * - .tb-player Elemente mit data-name und data-rating Attributen
  * - .absence-drop Elemente mit data-absence Attribut
- * - #edit-fab Button
- * - #summary-text Element
- * - #copy-summary-btn Button
- * - #notion-sync-btn Button
- * - #absence-zone Container
- * - #summary-section Container
- *
- * Config (im HTML als data-Attribute auf <body>):
- * - data-worker-url: Cloudflare Worker URL
- * - data-sync-secret: Shared Secret für Auth
- * - data-notion-page-id: Trainingshistorie Page-ID in Notion
- * - data-training-date: Datum des Trainings (DD.MM.YYYY)
- */
-
-let editMode = false;
-let sortables = [];
-
-// === Config aus data-Attributen ===
-const WORKER_URL = document.body.dataset.workerUrl || '';
-const SYNC_SECRET = document.body.dataset.syncSecret || '';
-const NOTION_PAGE_ID = document.body.dataset.notionPageId || '';
-const TRAINING_DATE = document.body.dataset.trainingDate || '';
-
-function initSortables() {
-  sortables.forEach(s => s.destroy());
-  sortables = [];
-
-  document.querySelectorAll('.tb-list').forEach(list => {
-    const sortable = Sortable.create(list, {
-      animation: 150,
-      ghostClass: 'sortable-ghost',
-      group: 'teams',
-      delayOnTouchOnly: true,
-      delay: 100,
-      touchStartThreshold: 5,
-      disabled: !editMode,
-      onEnd: updateStats
-    });
+ * - );
     sortables.push(sortable);
   });
 
