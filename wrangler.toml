@@ -1,0 +1,7 @@
+name = "germania-notion-sync"
+main = "cloudflare-worker.js"
+compatibility_date = "2024-09-01"
+
+# Secrets werden via wrangler secret put gesetzt (nicht hier!):
+#   wrangler secret put NOTION_TOKEN
+#   wrangler secret put SYNC_SECRET
