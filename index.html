@@ -507,7 +507,9 @@ function abwBlock(a){
 // ── KIND-DETAIL ─────────────────────────────────────────────────────────
 function showKid(name){
   var k=kader.find(x=>x.n===name);if(!k)return;
-  var hist=trainings.map(t=>{
+  var fi=firstSeenIdx(name);
+  var relevant = fi<0 ? [] : trainings.slice(fi);
+  var hist=relevant.map(t=>{
     var allAb=abwAll(t.abwesend);
     var hasAnwData = Array.isArray(t.anwesend) && t.anwesend.length > 0;
     var inAnw = hasAnwData && t.anwesend.includes(name);
@@ -606,6 +608,20 @@ function renderOverview(){
     </div>`;
 }
 
+// Index des ersten Trainings in dem Spieler "name" entweder anwesend ODER
+// namentlich in einer Abwesend-Liste auftaucht. → Kader-Eintritt.
+// Ilias/Dimitrios kamen z.B. erst zum 9. Training, daher firstSeen=8.
+function firstSeenIdx(name){
+  for(var i=0;i<trainings.length;i++){
+    var t=trainings[i];
+    if(Array.isArray(t.anwesend)&&t.anwesend.includes(name))return i;
+    var ab=t.abwesend;
+    if(Array.isArray(ab)){if(ab.includes(name))return i;}
+    else if((ab.rechtzeitig||[]).includes(name)||(ab.kurzfristig||[]).includes(name)||(ab.unentschuldigt||[]).includes(name))return i;
+  }
+  return -1; // nie gesehen → Fallback "noch nie da"
+}
+
 function renderKader(){
   // Abwesenheits-Statistik pro Kind: {rechtzeitig, kurzfristig, unentschuldigt, total}
   const abStat={};kader.forEach(k=>abStat[k.n]={r:0,k:0,u:0,t:0});
@@ -614,16 +630,20 @@ function renderKader(){
     if(Array.isArray(ab)){ab.forEach(a=>{if(abStat[a]){abStat[a].r++;abStat[a].t++;}});}
     else{(ab.rechtzeitig||[]).forEach(a=>{if(abStat[a]){abStat[a].r++;abStat[a].t++;}});(ab.kurzfristig||[]).forEach(a=>{if(abStat[a]){abStat[a].k++;abStat[a].t++;}});(ab.unentschuldigt||[]).forEach(a=>{if(abStat[a]){abStat[a].u++;abStat[a].t++;}});}
   });
-  const tot=trainings.length;
-  // Echte Anwesenheits-Zählung pro Kind: t.anwesend ist Wahrheit wenn befüllt,
-  // sonst Fallback auf "nicht in abwesend-Liste"
-  const anStat={};kader.forEach(k=>anStat[k.n]=0);
+  // Pro Kind: relevanter Trainings-Zähler (ab Kader-Eintritt) + Anwesenheit
+  const totFor={},anStat={},firstFor={};kader.forEach(k=>{anStat[k.n]=0;});
+  kader.forEach(k=>{
+    var fi=firstSeenIdx(k.n);
+    firstFor[k.n]=fi;
+    totFor[k.n]= fi<0 ? 0 : (trainings.length - fi);
+  });
   // Übungen pro Kind
   const kidEx={};kader.forEach(k=>kidEx[k.n]=[]);
-  trainings.forEach(t=>{
+  trainings.forEach((t,idx)=>{
     var allAbw=abwAll(t.abwesend);
     var hasAnwData=Array.isArray(t.anwesend)&&t.anwesend.length>0;
     kader.forEach(k=>{
+      if(firstFor[k.n]<0||idx<firstFor[k.n])return; // noch nicht im Kader
       var da = hasAnwData ? t.anwesend.includes(k.n) : !allAbw.includes(k.n);
       if(da){
         anStat[k.n]++;
@@ -641,7 +661,7 @@ function renderKader(){
     <h2 class="sh">Kader-Übersicht</h2>
     <div class="table-wrap" style="background:var(--white);border-radius:16px;overflow:hidden">
       <table><thead><tr><th>#</th><th>Name</th><th>Stärke</th><th style="text-align:center">Da</th><th style="text-align:center">✓</th><th style="text-align:center">⚠️</th><th style="text-align:center">🚫</th><th style="text-align:center">Quote</th><th style="text-align:center">Übungen</th></tr></thead>
-      <tbody>${kader.map((k,i)=>{const s=abStat[k.n],an=anStat[k.n]||0,q=tot>0?Math.round(an/tot*100):0;const exCount=(kidEx[k.n]||[]).length;const qC=q===100?'var(--green)':q>=75?'var(--accent)':'var(--red)';const qB=q===100?'rgba(46,125,50,0.1)':q>=75?'rgba(255,143,0,0.1)':'rgba(198,40,40,0.1)';return`<tr style="cursor:pointer" onclick="showKid('${k.n.replace(/'/g,"\\'")}')"><td style="color:var(--gray)">${i+1}</td><td style="font-weight:600">${k.n}</td><td>${rl(k.r)}</td><td style="text-align:center;color:var(--green);font-weight:600">${an}/${tot}</td><td style="text-align:center;color:var(--gray)">${s.r||'–'}</td><td style="text-align:center;color:${s.k?'var(--accent)':'var(--gray)'}">${s.k||'–'}</td><td style="text-align:center;color:${s.u?'var(--red)':'var(--gray)'};font-weight:${s.u?700:400}">${s.u||'–'}</td><td style="text-align:center"><span style="display:inline-block;padding:2px 10px;border-radius:12px;font-size:12px;font-weight:600;background:${qB};color:${qC}">${q}%</span></td><td style="text-align:center;color:var(--blue);font-weight:600">${exCount||'–'}</td></tr>`;}).join('')}</tbody></table>
+      <tbody>${kader.map((k,i)=>{const s=abStat[k.n],an=anStat[k.n]||0,tk=totFor[k.n]||0,q=tk>0?Math.round(an/tk*100):0;const exCount=(kidEx[k.n]||[]).length;const qC=q===100?'var(--green)':q>=75?'var(--accent)':'var(--red)';const qB=q===100?'rgba(46,125,50,0.1)':q>=75?'rgba(255,143,0,0.1)':'rgba(198,40,40,0.1)';const qCell=tk>0?`<span style="display:inline-block;padding:2px 10px;border-radius:12px;font-size:12px;font-weight:600;background:${qB};color:${qC}">${q}%</span>`:'<span style="color:var(--gray);font-size:12px">–</span>';const daCell=tk>0?`${an}/${tk}`:'<span style="color:var(--gray)">–</span>';return`<tr style="cursor:pointer" onclick="showKid('${k.n.replace(/'/g,"\\'")}')"><td style="color:var(--gray)">${i+1}</td><td style="font-weight:600">${k.n}</td><td>${rl(k.r)}</td><td style="text-align:center;color:var(--green);font-weight:600">${daCell}</td><td style="text-align:center;color:var(--gray)">${s.r||'–'}</td><td style="text-align:center;color:${s.k?'var(--accent)':'var(--gray)'}">${s.k||'–'}</td><td style="text-align:center;color:${s.u?'var(--red)':'var(--gray)'};font-weight:${s.u?700:400}">${s.u||'–'}</td><td style="text-align:center">${qCell}</td><td style="text-align:center;color:var(--blue);font-weight:600">${exCount||'–'}</td></tr>`;}).join('')}</tbody></table>
     </div>
     <h2 class="sh">Trainer-Anwesenheit</h2>
     <div class="table-wrap" style="background:var(--white);border-radius:16px;overflow:hidden">
