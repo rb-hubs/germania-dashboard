@@ -509,13 +509,26 @@ function showKid(name){
   var k=kader.find(x=>x.n===name);if(!k)return;
   var hist=trainings.map(t=>{
     var allAb=abwAll(t.abwesend);
-    var status='✅ Anwesend',sColor='var(--green)';
+    var hasAnwData = Array.isArray(t.anwesend) && t.anwesend.length > 0;
+    var inAnw = hasAnwData && t.anwesend.includes(name);
+    var status, sColor, da;
+    // 1) Abwesend hat Vorrang (klare Notion-Daten)
     if(!Array.isArray(t.abwesend)){
-      if((t.abwesend.unentschuldigt||[]).includes(name)){status='🚫 Unentschuldigt';sColor='var(--red)';}
-      else if((t.abwesend.kurzfristig||[]).includes(name)){status='⚠️ Kurzfristig';sColor='var(--accent)';}
-      else if((t.abwesend.rechtzeitig||[]).includes(name)){status='✓ Abgemeldet';sColor='var(--gray)';}
-    }else if(t.abwesend.includes(name)){status='✓ Abgemeldet';sColor='var(--gray)';}
-    var da=!allAb.includes(name);
+      if((t.abwesend.unentschuldigt||[]).includes(name)){status='🚫 Unentschuldigt';sColor='var(--red)';da=false;}
+      else if((t.abwesend.kurzfristig||[]).includes(name)){status='⚠️ Kurzfristig';sColor='var(--accent)';da=false;}
+      else if((t.abwesend.rechtzeitig||[]).includes(name)){status='✓ Abgemeldet';sColor='var(--gray)';da=false;}
+      else if(inAnw){status='✅ Anwesend';sColor='var(--green)';da=true;}
+      else if(hasAnwData){status='❓ Nicht erfasst';sColor='var(--gray)';da=false;}
+      else {status='✅ Anwesend';sColor='var(--green)';da=true;} // Legacy-Fallback
+    } else if(t.abwesend.includes(name)){
+      status='✓ Abgemeldet';sColor='var(--gray)';da=false;
+    } else if(inAnw){
+      status='✅ Anwesend';sColor='var(--green)';da=true;
+    } else if(hasAnwData){
+      status='❓ Nicht erfasst';sColor='var(--gray)';da=false;
+    } else {
+      status='✅ Anwesend';sColor='var(--green)';da=true;
+    }
     return{datum:t.datum,status:status,sColor:sColor,da:da,uebungen:da?t.uebungen:[]};
   });
   var exDone=[...new Set(hist.flatMap(h=>h.uebungen))];
@@ -606,7 +619,11 @@ function renderKader(){
   const kidEx={};kader.forEach(k=>kidEx[k.n]=[]);
   trainings.forEach(t=>{
     var allAbw=abwAll(t.abwesend);
-    kader.forEach(k=>{if(!allAbw.includes(k.n)){t.uebungen.forEach(u=>{if(!kidEx[k.n].includes(u))kidEx[k.n].push(u);});}});
+    var hasAnwData=Array.isArray(t.anwesend)&&t.anwesend.length>0;
+    kader.forEach(k=>{
+      var da = hasAnwData ? t.anwesend.includes(k.n) : !allAbw.includes(k.n);
+      if(da){t.uebungen.forEach(u=>{if(!kidEx[k.n].includes(u))kidEx[k.n].push(u);});}
+    });
   });
   document.getElementById('tab-kader').innerHTML=`
     <div class="cards">
