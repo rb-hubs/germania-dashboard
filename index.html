@@ -352,7 +352,7 @@ async function loadFromNotion() {
           anwesendeKinder: t.anwesendeKinder,
           anwesend, abwesend,
           trainer: t.trainer || [], kategorien: t.kategorien || [],
-          coaching: t.coaching || '', uebungen: [], besonderheiten: t.besonderheiten || ''
+          coaching: t.coaching || '', uebungen: Array.isArray(t.uebungen) ? t.uebungen : [], besonderheiten: t.besonderheiten || ''
         };
       });
       console.log('✓ Trainings live aus Notion:', trainings.length);
@@ -615,6 +615,9 @@ function renderKader(){
     else{(ab.rechtzeitig||[]).forEach(a=>{if(abStat[a]){abStat[a].r++;abStat[a].t++;}});(ab.kurzfristig||[]).forEach(a=>{if(abStat[a]){abStat[a].k++;abStat[a].t++;}});(ab.unentschuldigt||[]).forEach(a=>{if(abStat[a]){abStat[a].u++;abStat[a].t++;}});}
   });
   const tot=trainings.length;
+  // Echte Anwesenheits-Zählung pro Kind: t.anwesend ist Wahrheit wenn befüllt,
+  // sonst Fallback auf "nicht in abwesend-Liste"
+  const anStat={};kader.forEach(k=>anStat[k.n]=0);
   // Übungen pro Kind
   const kidEx={};kader.forEach(k=>kidEx[k.n]=[]);
   trainings.forEach(t=>{
@@ -622,7 +625,10 @@ function renderKader(){
     var hasAnwData=Array.isArray(t.anwesend)&&t.anwesend.length>0;
     kader.forEach(k=>{
       var da = hasAnwData ? t.anwesend.includes(k.n) : !allAbw.includes(k.n);
-      if(da){t.uebungen.forEach(u=>{if(!kidEx[k.n].includes(u))kidEx[k.n].push(u);});}
+      if(da){
+        anStat[k.n]++;
+        (t.uebungen||[]).forEach(u=>{if(!kidEx[k.n].includes(u))kidEx[k.n].push(u);});
+      }
     });
   });
   document.getElementById('tab-kader').innerHTML=`
@@ -634,8 +640,8 @@ function renderKader(){
     </div>
     <h2 class="sh">Kader-Übersicht</h2>
     <div class="table-wrap" style="background:var(--white);border-radius:16px;overflow:hidden">
-      <table><thead><tr><th>#</th><th>Name</th><th>Stärke</th><th style="text-align:center">Da</th><th style="text-align:center">✓</th><th style="text-align:center">⚠️</th><th style="text-align:center">🚫</th><th style="text-align:center">Quote</th></tr></thead>
-      <tbody>${kader.map((k,i)=>{const s=abStat[k.n],an=tot-s.t,q=tot>0?Math.round(an/tot*100):0;const qC=q===100?'var(--green)':q>=75?'var(--accent)':'var(--red)';const qB=q===100?'rgba(46,125,50,0.1)':q>=75?'rgba(255,143,0,0.1)':'rgba(198,40,40,0.1)';return`<tr style="cursor:pointer" onclick="showKid('${k.n.replace(/'/g,"\\'")}')"><td style="color:var(--gray)">${i+1}</td><td style="font-weight:600">${k.n}</td><td>${rl(k.r)}</td><td style="text-align:center;color:var(--green);font-weight:600">${an}</td><td style="text-align:center;color:var(--gray)">${s.r||'–'}</td><td style="text-align:center;color:${s.k?'var(--accent)':'var(--gray)'}">${s.k||'–'}</td><td style="text-align:center;color:${s.u?'var(--red)':'var(--gray)'};font-weight:${s.u?700:400}">${s.u||'–'}</td><td style="text-align:center"><span style="display:inline-block;padding:2px 10px;border-radius:12px;font-size:12px;font-weight:600;background:${qB};color:${qC}">${q}%</span></td></tr>`;}).join('')}</tbody></table>
+      <table><thead><tr><th>#</th><th>Name</th><th>Stärke</th><th style="text-align:center">Da</th><th style="text-align:center">✓</th><th style="text-align:center">⚠️</th><th style="text-align:center">🚫</th><th style="text-align:center">Quote</th><th style="text-align:center">Übungen</th></tr></thead>
+      <tbody>${kader.map((k,i)=>{const s=abStat[k.n],an=anStat[k.n]||0,q=tot>0?Math.round(an/tot*100):0;const exCount=(kidEx[k.n]||[]).length;const qC=q===100?'var(--green)':q>=75?'var(--accent)':'var(--red)';const qB=q===100?'rgba(46,125,50,0.1)':q>=75?'rgba(255,143,0,0.1)':'rgba(198,40,40,0.1)';return`<tr style="cursor:pointer" onclick="showKid('${k.n.replace(/'/g,"\\'")}')"><td style="color:var(--gray)">${i+1}</td><td style="font-weight:600">${k.n}</td><td>${rl(k.r)}</td><td style="text-align:center;color:var(--green);font-weight:600">${an}/${tot}</td><td style="text-align:center;color:var(--gray)">${s.r||'–'}</td><td style="text-align:center;color:${s.k?'var(--accent)':'var(--gray)'}">${s.k||'–'}</td><td style="text-align:center;color:${s.u?'var(--red)':'var(--gray)'};font-weight:${s.u?700:400}">${s.u||'–'}</td><td style="text-align:center"><span style="display:inline-block;padding:2px 10px;border-radius:12px;font-size:12px;font-weight:600;background:${qB};color:${qC}">${q}%</span></td><td style="text-align:center;color:var(--blue);font-weight:600">${exCount||'–'}</td></tr>`;}).join('')}</tbody></table>
     </div>
     <h2 class="sh">Trainer-Anwesenheit</h2>
     <div class="table-wrap" style="background:var(--white);border-radius:16px;overflow:hidden">

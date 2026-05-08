@@ -335,12 +335,12 @@ function formatDate(iso) {
 
 async function handleGetTrainings(request, env) {
   try {
-    // Trainings + Kader parallel laden – Wahrheit für Anwesenheit liegt
-    // in der Spieler-DB (Property "Trainings"), die Trainings-DB
-    // ("Spieler"-Property) ist nicht durchgängig gepflegt. Daher Reverse-Map.
-    const [tData, kData] = await Promise.all([
+    // Trainings + Kader + Übungen parallel laden – Wahrheit für Anwesenheit
+    // liegt in der Spieler-DB (Property "Trainings"). Übungen via ID→Name-Map.
+    const [tData, kData, uData] = await Promise.all([
       notionQuery(DS_TRAININGS, env, { sorts: [{ property: 'Datum', direction: 'ascending' }] }),
-      notionQuery(DS_KADER, env)
+      notionQuery(DS_KADER, env),
+      notionQuery(DS_UEBUNGEN, env)
     ]);
 
     // Map: notionId → Spielername UND Map: trainingId → [spielerNamen]
@@ -357,15 +357,22 @@ async function handleGetTrainings(request, env) {
       }
     }
 
+    // Map: notionId → Übungs-Name
+    const uebungIdToName = new Map();
+    for (const u of uData.results) {
+      const name = pickPlain(u.properties?.['Name'], 'title');
+      if (name) uebungIdToName.set(u.id, name);
+    }
+
     const trainings = tData.results.map((page, idx) => {
       const props = page.properties || {};
       const abwesendText = pickPlain(props['Abwesend']);
-      // Anwesend bevorzugt aus Reverse-Map (Spieler→Trainings),
-      // Fallback auf Trainings→Spieler-Relation falls Reverse-Map leer ist
       const fromReverse = trainingToAnwesend.get(page.id) || [];
       const spielerIds = pickRelations(props['Spieler']);
       const fromForward = spielerIds.map(id => idToName.get(id)).filter(Boolean);
       const anwesend = fromReverse.length ? fromReverse : fromForward;
+      const uebungenIds = pickRelations(props['Übungen']);
+      const uebungen = uebungenIds.map(id => uebungIdToName.get(id)).filter(Boolean);
       return {
         id: idx + 1,
         notionId: page.id,
@@ -380,7 +387,8 @@ async function handleGetTrainings(request, env) {
         coaching: pickPlain(props['Coaching-Schwerpunkte']),
         besonderheiten: pickPlain(props['Besonderheiten']),
         spielerIds,
-        uebungenIds: pickRelations(props['Übungen'])
+        uebungen,
+        uebungenIds
       };
     });
     return jsonResponse({ trainings }, 200, request);
