@@ -17,7 +17,7 @@ button{font-family:inherit;cursor:pointer}
 .header h1{font-size:26px;font-weight:800;letter-spacing:-0.3px;position:relative;z-index:1}
 .header .sub{font-size:13px;opacity:0.8;margin-top:2px}
 .header-top{display:flex;align-items:center;gap:16px;margin-bottom:16px}
-.tabs-bar{background:var(--white);max-width:1100px;margin:0 auto 16px;padding:8px;border-radius:14px;box-shadow:0 4px 16px rgba(13,71,161,0.06);box-sizing:border-box}@media(min-width:720px){.tabs-bar{padding:10px 16px;margin-bottom:20px}}
+.tabs-bar{background:var(--white);margin:0 0 16px;padding:8px;border-radius:14px;box-shadow:0 4px 16px rgba(13,71,161,0.06);box-sizing:border-box}@media(min-width:720px){.tabs-bar{padding:10px 16px;margin-bottom:20px}}
 .tabs{display:flex;gap:6px;flex-wrap:wrap}.tab{padding:9px 16px;border-radius:10px;border:none;background:#F0F4F8;color:#5C6B7A;font-weight:700;font-size:13px;transition:all 0.2s;letter-spacing:0.3px;cursor:pointer}
 .tab.active{background:linear-gradient(135deg,#1565C0,#0D47A1);color:#fff;font-weight:800;box-shadow:0 4px 12px rgba(21,101,192,0.3)}.tab:hover:not(.active){background:#E3F2FD;color:#0D47A1}
 .content{padding:0 8px 24px;max-width:1100px;margin:0 auto}@media(min-width:720px){.content{padding:0 16px 30px}}
@@ -249,15 +249,15 @@ tbody tr{border-bottom:1px solid #ECEFF1} tbody tr:nth-child(even){background:#F
 </div>
 
 <div id="notion-status" style="display:none;background:#FFF3E0;color:#E65100;padding:8px 14px;border-radius:10px;text-align:center;font-size:12px;font-weight:600;max-width:1100px;margin:0 auto 10px;border:1px solid #FFB74D"></div>
-<div class="tabs-bar">
-  <div class="tabs" id="tabs">
-    <button class="tab active" data-tab="overview">Übersicht</button>
-    <button class="tab" data-tab="kader">Kader & Anwesenheit</button>
-    <button class="tab" data-tab="uebungen">Übungsbibliothek</button>
-    <button class="tab" data-tab="trainings">Trainings-Log</button>
-  </div>
-</div>
 <div class="content">
+  <div class="tabs-bar">
+    <div class="tabs" id="tabs">
+      <button class="tab active" data-tab="overview">Übersicht</button>
+      <button class="tab" data-tab="kader">Kader & Anwesenheit</button>
+      <button class="tab" data-tab="uebungen">Übungsbibliothek</button>
+      <button class="tab" data-tab="trainings">Trainings-Log</button>
+    </div>
+  </div>
   <div class="tab-content active" id="tab-overview"></div>
   <div class="tab-content" id="tab-kader"></div>
   <div class="tab-content" id="tab-uebungen"></div>
