@@ -35,7 +35,7 @@ body{background:linear-gradient(135deg,#F8FAFD 0%,#F3F6FA 100%);min-height:100vh
 
 .stitle{font-size:20px;font-weight:700;margin:28px 0 14px;color:var(--navy)}
 
-.team-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:24px}
+.team-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:20px}@media(min-width:720px){.team-grid{gap:12px}}
 .team-box{border-radius:12px;overflow:hidden;background:var(--white);box-shadow:0 1px 4px rgba(0,0,0,0.08)}
 .team-box .tb-hdr{padding:10px 14px;color:var(--white);font-weight:700;font-size:15px;text-align:center}
 .tb-blau{background:#1565C0}.tb-rot{background:#C62828}.tb-orange{background:#FF8F00}.tb-gelb{background:#F9A825}.tb-gruen{background:#2E7D32}
@@ -77,6 +77,12 @@ body{background:linear-gradient(135deg,#F8FAFD 0%,#F3F6FA 100%);min-height:100vh
 .footer{display:flex;justify-content:space-between;font-size:10px;color:#B0BEC5;margin-top:24px;padding-top:8px;border-top:1px solid #ECEFF1}
 
 @media(max-width:600px){
+  /* Tabellen: horizontal scrollen statt zerquetschen */
+  .rot-tbl,.stat-tbl{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch;white-space:nowrap;border-radius:12px}
+  .rot-tbl::-webkit-scrollbar,.stat-tbl::-webkit-scrollbar{height:5px}
+  .rot-tbl::-webkit-scrollbar-thumb,.stat-tbl::-webkit-scrollbar-thumb{background:#BBDEFB;border-radius:3px}
+  .rot-tbl thead,.rot-tbl tbody,.stat-tbl thead,.stat-tbl tbody{display:table;width:100%;min-width:480px}
+
   .hdr{flex-direction:column;gap:8px}
   .hdr-right{text-align:left}
   .hdr-right h1{font-size:20px}

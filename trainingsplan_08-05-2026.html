@@ -53,7 +53,7 @@ body{background:linear-gradient(135deg,#F8FAFD 0%,#F3F6FA 100%);min-height:100vh
 .stitle{font-size:20px;font-weight:800;margin:32px 0 16px;color:var(--navy);padding:6px 0 6px 16px;border-left:5px solid;border-image:linear-gradient(180deg,#0D47A1 0%,#1565C0 50%,#C62828 100%) 1;letter-spacing:-0.3px}
 
 /* TEAM BOXES */
-.team-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px}@media(min-width:720px){.team-grid{grid-template-columns:repeat(6,1fr);gap:12px}}
+.team-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:20px}@media(min-width:720px){.team-grid{gap:12px}}
 .team-box{border-radius:14px;overflow:hidden;background:var(--white);box-shadow:0 4px 16px rgba(13,71,161,0.08),0 1px 3px rgba(0,0,0,0.06);transition:transform 0.2s ease, box-shadow 0.2s ease}.team-box:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(13,71,161,0.15),0 2px 6px rgba(0,0,0,0.08)}
 .team-box .tb-hdr{padding:10px 12px;color:var(--white);font-weight:800;font-size:14px;text-align:center;letter-spacing:0.5px;text-transform:uppercase}
 .tb-blau{background:linear-gradient(135deg,#1976D2,#0D47A1)}.tb-rot{background:linear-gradient(135deg,#E53935,#B71C1C)}.tb-orange{background:linear-gradient(135deg,#FB8C00,#E65100)}.tb-gelb{background:linear-gradient(135deg,#FBC02D,#F57F17);color:#3E2723 !important}.tb-gruen{background:linear-gradient(135deg,#43A047,#1B5E20)}
@@ -105,6 +105,12 @@ body{background:linear-gradient(135deg,#F8FAFD 0%,#F3F6FA 100%);min-height:100vh
 
 /* RESPONSIVE */
 @media(max-width:600px){
+  /* Tabellen: horizontal scrollen statt zerquetschen */
+  .rot-tbl,.stat-tbl{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch;white-space:nowrap;border-radius:12px}
+  .rot-tbl::-webkit-scrollbar,.stat-tbl::-webkit-scrollbar{height:5px}
+  .rot-tbl::-webkit-scrollbar-thumb,.stat-tbl::-webkit-scrollbar-thumb{background:#BBDEFB;border-radius:3px}
+  .rot-tbl thead,.rot-tbl tbody,.stat-tbl thead,.stat-tbl tbody{display:table;width:100%;min-width:480px}
+
   .hdr{align-items:center;gap:10px}
   .hdr-right h1{font-size:18px}
   .hdr-left img{width:36px;height:36px}
@@ -265,7 +271,7 @@ body{background:linear-gradient(135deg,#F8FAFD 0%,#F3F6FA 100%);min-height:100vh
 
   <div class="stitle">Rotationsplan · 5 × 13 Min · 2 Min Trinkpause</div>
   <table class="rot-tbl">
-    <thead><tr><th></th><th>Zeit</th><th>S1 · E-Jugendtore</th><th>S2 · Minitore</th><th>S3 · Slalom + Pass/Schuss</th></tr></thead>
+    <thead><tr><th></th><th>Zeit</th><th>1</th><th>2</th><th>3</th></tr></thead>
     <tbody>
       <tr><td class="rnum"><span class="rnum-pill">R1</span></td><td>16:45–16:58</td><td><span class="team-col"><span style="color:#B8860B">Andi+Marc</span><span class="vs">vs</span><span style="color:#1565C0">Blau</span></span></td><td><span class="team-col"><span style="color:#FF8F00">Orange</span><span class="vs">vs</span><span style="color:#F9A825">Gelb</span></span></td><td><span class="team-col"><span style="color:#C62828">Rot</span><span class="vs">+</span><span style="color:#2E7D32">Grün</span></span></td></tr>
       <tr class="pause"><td></td><td>2'</td><td colspan="3">■ Trinkpause</td></tr>

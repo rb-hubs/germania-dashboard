@@ -41,7 +41,7 @@ body{background:linear-gradient(135deg,#F8FAFD 0%,#F3F6FA 100%);min-height:100vh
 .stitle{font-size:20px;font-weight:700;margin:28px 0 14px;color:var(--navy)}
 
 /* TEAM BOXES */
-.team-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:24px}
+.team-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:20px}@media(min-width:720px){.team-grid{gap:12px}}
 .team-box{border-radius:12px;overflow:hidden;background:var(--white);box-shadow:0 1px 4px rgba(0,0,0,0.08)}
 .team-box .tb-hdr{padding:8px 12px;color:var(--white);font-weight:700;font-size:14px;text-align:center}
 .tb-blau{background:#1565C0}.tb-rot{background:#C62828}.tb-orange{background:#FF8F00}.tb-gelb{background:#F9A825}.tb-gruen{background:#2E7D32}
@@ -93,6 +93,12 @@ body{background:linear-gradient(135deg,#F8FAFD 0%,#F3F6FA 100%);min-height:100vh
 
 /* RESPONSIVE */
 @media(max-width:600px){
+  /* Tabellen: horizontal scrollen statt zerquetschen */
+  .rot-tbl,.stat-tbl{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch;white-space:nowrap;border-radius:12px}
+  .rot-tbl::-webkit-scrollbar,.stat-tbl::-webkit-scrollbar{height:5px}
+  .rot-tbl::-webkit-scrollbar-thumb,.stat-tbl::-webkit-scrollbar-thumb{background:#BBDEFB;border-radius:3px}
+  .rot-tbl thead,.rot-tbl tbody,.stat-tbl thead,.stat-tbl tbody{display:table;width:100%;min-width:480px}
+
   .hdr{flex-direction:column;gap:8px}
   .hdr-right{text-align:left}
   .hdr-right h1{font-size:20px}
@@ -224,7 +230,7 @@ body.edit-mode #summary-section{display:block}
 
   <div class="stitle">Rotationsplan · 4 × 17 Min · 2 Min Trinkpause</div>
   <table class="rot-tbl">
-    <thead><tr><th></th><th>Zeit</th><th>S1 – 4vs4</th><th>S2 – Rondo + Dribbel-Tor</th><th>S3 – Parcours</th></tr></thead>
+    <thead><tr><th></th><th>Zeit</th><th>1</th><th>2</th><th>3</th></tr></thead>
     <tbody>
       <tr><td class="rnum">R1</td><td>16:45–17:02</td><td class="team-col"><span style="color:#1565C0">Blau</span><span class="vs">vs</span><span style="color:#FF8F00">Orange</span></td><td style="color:#F9A825;font-weight:700">Gelb</td><td style="color:#C62828;font-weight:700">Rot</td></tr>
       <tr class="pause"><td></td><td>2'</td><td colspan="3">■ Trinkpause</td></tr>

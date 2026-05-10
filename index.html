@@ -797,7 +797,27 @@ function renderKader(){
     <h2 class="sh">Trainer-Anwesenheit</h2>
     <div class="table-wrap" style="background:var(--white);border-radius:16px;overflow:hidden">
       <table><thead><tr><th>Trainer</th><th style="text-align:center">Trainings</th><th style="text-align:center">Quote</th></tr></thead>
-      <tbody>${trainerTeam.map(tr=>{const cnt=trainings.filter(t=>t.trainer.includes(tr)).length;const q=trainings.length>0?Math.round(cnt/trainings.length*100):0;const qC=q===100?'var(--green)':q>=75?'var(--accent)':'var(--red)';const qB=q===100?'rgba(46,125,50,0.1)':q>=75?'rgba(255,143,0,0.1)':'rgba(198,40,40,0.1)';return`<tr><td style="font-weight:600">${tr}</td><td style="text-align:center;font-weight:600;color:var(--green)">${cnt} / ${trainings.length}</td><td style="text-align:center"><span style="display:inline-block;padding:2px 10px;border-radius:12px;font-size:12px;font-weight:600;background:${qB};color:${qC}">${q}%</span></td></tr>`;}).join('')}</tbody></table>
+      <tbody>${(()=>{
+        // Nur Trainings zählen wo Trainer-Daten gepflegt sind (Spond-Historie hat keine).
+        // Sortierung sicherstellen: aufsteigend nach Datum (älteste zuerst).
+        const tWith = trainings.filter(t=>Array.isArray(t.trainer)&&t.trainer.length>0).slice().sort((a,b)=>{
+          var da=(a.datum||'').split('.'),db=(b.datum||'').split('.');
+          var ia=da.length===3?da[2]+da[1]+da[0]:'',ib=db.length===3?db[2]+db[1]+db[0]:'';
+          return ia.localeCompare(ib);
+        });
+        return trainerTeam.map(tr=>{
+          // firstSeenIdx pro Trainer: erstes Training in dem Trainer eingetragen war
+          var firstIdx=tWith.findIndex(t=>t.trainer.includes(tr));
+          if(firstIdx<0) return `<tr><td style="font-weight:600">${tr}</td><td style="text-align:center;color:var(--gray)">– / –</td><td style="text-align:center;color:var(--gray)">noch nicht dabei</td></tr>`;
+          var relevant=tWith.slice(firstIdx);
+          var cnt=relevant.filter(t=>t.trainer.includes(tr)).length;
+          var tot=relevant.length;
+          var q=tot>0?Math.round(cnt/tot*100):0;
+          var qC=q===100?'var(--green)':q>=75?'var(--accent)':'var(--red)';
+          var qB=q===100?'rgba(46,125,50,0.1)':q>=75?'rgba(255,143,0,0.1)':'rgba(198,40,40,0.1)';
+          return`<tr><td style="font-weight:600">${tr}</td><td style="text-align:center;font-weight:600;color:var(--green)">${cnt} / ${tot}</td><td style="text-align:center"><span style="display:inline-block;padding:2px 10px;border-radius:12px;font-size:12px;font-weight:600;background:${qB};color:${qC}">${q}%</span></td></tr>`;
+        }).join('');
+      })()}</tbody></table>
     </div>
     <h2 class="sh">Kader-Verteilung</h2><div class="chart-box"><canvas id="ch-kd" height="250"></canvas></div>`;
 }
@@ -975,7 +995,7 @@ function renderOC(){
   dc('pie');const p=document.getElementById('ch-pie');
   if(p){const tp=UB.filter(u=>u.bew==='Top').length,g=UB.filter(u=>u.bew==='Gut').length,o=UB.filter(u=>u.bew==='OK').length;CI.pie=new Chart(p,{type:'doughnut',data:{labels:['Top','Gut','OK'],datasets:[{data:[tp,g,o],backgroundColor:['#2E7D32','#1565C0','#78909C'],borderWidth:2,borderColor:'#fff'}]},options:{responsive:true,maintainAspectRatio:false,cutout:'55%',plugins:{legend:{position:'bottom',labels:{font:{size:12}}}}}});}
   dc('tr');const tc=document.getElementById('ch-tr');
-  if(tc){const d={};trainerTeam.forEach(t=>d[t]=0);trainings.forEach(t=>t.trainer.forEach(tr=>d[tr]=(d[tr]||0)+1));CI.tr=new Chart(tc,{type:'bar',data:{labels:trainerTeam,datasets:[{label:'Einsätze',data:trainerTeam.map(t=>d[t]||0),backgroundColor:'#1565C0',borderRadius:8,barThickness:22}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,scales:{x:{ticks:{stepSize:1},grid:{display:false}},y:{grid:{display:false}}},plugins:{legend:{display:false}}}});}
+  if(tc){const d={};trainerTeam.forEach(t=>d[t]=0);trainings.forEach(t=>(t.trainer||[]).forEach(tr=>d[tr]=(d[tr]||0)+1));CI.tr=new Chart(tc,{type:'bar',data:{labels:trainerTeam,datasets:[{label:'Einsätze',data:trainerTeam.map(t=>d[t]||0),backgroundColor:'#1565C0',borderRadius:8,barThickness:22}]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,scales:{x:{ticks:{stepSize:1},grid:{display:false}},y:{grid:{display:false}}},plugins:{legend:{display:false}}}});}
   dc('att');const a=document.getElementById('ch-att');
   if(a){
     var uData=trainings.map(t=>{var ab=t.abwesend;if(Array.isArray(ab))return{r:ab.length,k:0,u:0};return{r:(ab.rechtzeitig||[]).length,k:(ab.kurzfristig||[]).length,u:(ab.unentschuldigt||[]).length};});
