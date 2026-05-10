@@ -555,21 +555,21 @@ function abwBlock(a){
 // ── KIND-DETAIL ─────────────────────────────────────────────────────────
 function showKid(name){
   var k=kader.find(x=>x.n===name);if(!k)return;
+
+  // ── Trainings-Historie ──────────────────────────────────────────────
   var fi=firstSeenIdx(name);
   var relevant = fi<0 ? [] : trainings.slice(fi);
   var hist=relevant.map(t=>{
-    var allAb=abwAll(t.abwesend);
     var hasAnwData = Array.isArray(t.anwesend) && t.anwesend.length > 0;
     var inAnw = hasAnwData && t.anwesend.includes(name);
     var status, sColor, da;
-    // 1) Abwesend hat Vorrang (klare Notion-Daten)
     if(!Array.isArray(t.abwesend)){
       if((t.abwesend.unentschuldigt||[]).includes(name)){status='🚫 Unentschuldigt';sColor='var(--red)';da=false;}
       else if((t.abwesend.kurzfristig||[]).includes(name)){status='⚠️ Kurzfristig';sColor='var(--accent)';da=false;}
       else if((t.abwesend.rechtzeitig||[]).includes(name)){status='✓ Abgemeldet';sColor='var(--gray)';da=false;}
       else if(inAnw){status='✅ Anwesend';sColor='var(--green)';da=true;}
       else if(hasAnwData){status='✓ Abgesagt';sColor='var(--gray)';da=false;}
-      else {status='✅ Anwesend';sColor='var(--green)';da=true;} // Legacy-Fallback
+      else {status='✅ Anwesend';sColor='var(--green)';da=true;}
     } else if(t.abwesend.includes(name)){
       status='✓ Abgemeldet';sColor='var(--gray)';da=false;
     } else if(inAnw){
@@ -579,42 +579,169 @@ function showKid(name){
     } else {
       status='✅ Anwesend';sColor='var(--green)';da=true;
     }
-    return{datum:t.datum,status:status,sColor:sColor,da:da,uebungen:da?t.uebungen:[]};
+    return{datum:t.datum,name:t.name,status:status,sColor:sColor,da:da,uebungen:da?(t.uebungen||[]):[],kategorien:da?(t.kategorien||[]):[]};
   });
+  var trDa = hist.filter(h=>h.da).length, trTot = hist.length;
+  var trQ = trTot>0 ? Math.round(trDa/trTot*100) : null;
   var exDone=[...new Set(hist.flatMap(h=>h.uebungen))];
-  // Turnier-Historie: Status pro Turnier (sortiert neueste zuerst)
+
+  // ── Turnier-Historie ────────────────────────────────────────────────
   var turHist = [...turniere].sort((a,b)=>(b.datumIso||'').localeCompare(a.datumIso||'')).map(tr=>{
-    var st, sC, eingeladen=true;
-    if((tr.da||[]).includes(name)){st='✅ Da';sC='var(--green)';}
+    var st, sC, da=false, eing=true;
+    if((tr.da||[]).includes(name)){st='✅ Da';sC='var(--green)';da=true;}
     else if((tr.abgesagt||[]).includes(name)){st='🚫 Abgesagt';sC='var(--red)';}
-    else {st='– Nicht eingeladen';sC='var(--gray)';eingeladen=false;}
-    return {datum:tr.datum, name:tr.name, status:st, sColor:sC, eingeladen};
+    else {st='– Nicht eingeladen';sC='var(--gray)';eing=false;}
+    return {datum:tr.datum, name:tr.name, status:st, sColor:sC, da:da, eingeladen:eing, platzierung:tr.platzierung||''};
   });
-  var tDa = turHist.filter(h=>h.status.startsWith('✅')).length;
+  var tDa = turHist.filter(h=>h.da).length;
   var tAbg = turHist.filter(h=>h.status.startsWith('🚫')).length;
   var tEing = tDa + tAbg;
+  var tQ = tEing>0 ? Math.round(tDa/tEing*100) : null;
+
+  // ── Header-Helpers ──────────────────────────────────────────────────
+  var initials = name.split(' ').filter(Boolean).map(x=>x[0]).slice(0,2).join('').toUpperCase();
+  var staerkeColor = k.r==='🔵'?'#1565C0':k.r==='🟡'?'#FF8F00':k.r==='🟢'?'#2E7D32':'#5C6B7A';
+  var staerkeLabel = k.r==='🔵'?'Stark':k.r==='🟡'?'Mittel':k.r==='🟢'?'Beginner':'';
+  var teamMap={Blau:'#1565C0',Rot:'#C62828',Orange:'#FF8F00',Gelb:'#F9A825',Grün:'#2E7D32'};
+  var teamColor = teamMap[k.team] || '#5C6B7A';
+  // MitgliedSeit + Tage
+  var msIso = k.mitgliedSeit||'';
+  var msPretty='–', daysSeit=null;
+  if(msIso){
+    var p=msIso.split('-'); if(p.length===3){
+      msPretty=`${p[2]}.${p[1]}.${p[0]}`;
+      daysSeit = Math.round((Date.now() - new Date(msIso).getTime())/86400000);
+    }
+  }
+
+  // ── Achievements ────────────────────────────────────────────────────
+  var ach=[];
+  if(trQ===100 && trTot>=5) ach.push({i:'🔥',l:'Immer dabei',c:'#2E7D32'});
+  else if(trQ!==null && trQ>=90) ach.push({i:'💪',l:'90%+ Trainings',c:'#2E7D32'});
+  if(trDa>=20) ach.push({i:'🏅',l:'20+ Trainings',c:'#1565C0'});
+  if(tDa>=10) ach.push({i:'🏆',l:'10+ Turniere',c:'#FF8F00'});
+  if(tQ===100 && tEing>=5) ach.push({i:'🎯',l:'Nie abgesagt',c:'#FF8F00'});
+  if(daysSeit!==null && daysSeit>=170) ach.push({i:'📅',l:'Gründungsmitglied',c:'#0D47A1'});
+  if(exDone.length>=15) ach.push({i:'🧠',l:`${exDone.length} Übungen`,c:'#7B1FA2'});
+
+  // ── Übungen nach Kategorie ──────────────────────────────────────────
+  var exByKat={};
+  hist.forEach(h=>{
+    if(!h.da) return;
+    var kats = h.kategorien.length ? h.kategorien : ['Sonstige'];
+    h.uebungen.forEach(u=>{
+      kats.forEach(kt=>{ if(!exByKat[kt]) exByKat[kt]=new Set(); exByKat[kt].add(u); });
+    });
+  });
+
+  // ── Modal-Markup ────────────────────────────────────────────────────
   var modal=document.createElement('div');
-  modal.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:1000;display:flex;align-items:center;justify-content:center;padding:20px';
+  modal.style.cssText='position:fixed;inset:0;background:rgba(10,31,63,0.55);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);z-index:1000;display:flex;align-items:flex-start;justify-content:center;padding:20px;overflow-y:auto';
   modal.onclick=e=>{if(e.target===modal)modal.remove();};
-  modal.innerHTML=`<div style="background:white;border-radius:16px;max-width:500px;width:100%;max-height:85vh;overflow-y:auto;padding:28px">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
-      <div><div style="font-size:20px;font-weight:700;color:var(--navy)">${name}</div><div style="margin-top:4px">${rl(k.r)}</div></div>
-      <button onclick="this.closest('div[style*=fixed]').remove()" style="border:none;background:var(--light);width:32px;height:32px;border-radius:50%;font-size:16px;cursor:pointer;color:var(--navy)">✕</button>
+
+  var statCard = (label,value,sub,color)=>`<div style="background:#fff;border:1px solid #E3F2FD;border-radius:14px;padding:12px 14px;text-align:center;flex:1;min-width:0">
+    <div style="font-size:10px;font-weight:700;color:var(--gray);letter-spacing:0.5px;text-transform:uppercase">${label}</div>
+    <div style="font-size:22px;font-weight:800;color:${color};margin-top:2px;line-height:1.1">${value}</div>
+    <div style="font-size:10px;color:var(--gray);margin-top:2px">${sub}</div>
+  </div>`;
+
+  var subTabBtn = (id,label,active)=>`<button data-sub="${id}" class="kid-sub ${active?'active':''}" style="padding:8px 16px;border-radius:18px;border:1.5px solid ${active?'#0D47A1':'#E3F2FD'};background:${active?'linear-gradient(135deg,#1565C0,#0D47A1)':'#fff'};color:${active?'#fff':'#5C6B7A'};font-weight:700;font-size:12px;letter-spacing:0.3px;cursor:pointer">${label}</button>`;
+
+  // Trainings-Liste mit Mini-Timeline
+  var trainingsHtml = hist.length ? hist.slice().reverse().map(h=>`<div style="display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #F0F0F0">
+    <div style="flex:1;min-width:0">
+      <div style="font-weight:600;color:var(--navy);font-size:13px">${h.datum}</div>
+      <div style="font-size:11px;color:var(--gray);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${h.name||''}</div>
     </div>
-    <div style="font-size:13px;font-weight:700;color:var(--blue);margin-bottom:8px;text-transform:uppercase">Trainings-Historie</div>
-    ${hist.map(h=>`<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #F0F0F0;font-size:13px">
-      <span style="font-weight:600">${h.datum}</span>
-      <span style="color:${h.sColor};font-weight:600">${h.status}</span>
-    </div>`).join('')}
-    <div style="font-size:13px;font-weight:700;color:var(--blue);margin:16px 0 8px;text-transform:uppercase">Turniere (${tDa} da · ${tAbg} abgesagt · ${tEing} eingeladen)</div>
-    ${turHist.map(h=>`<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;padding:8px 0;border-bottom:1px solid #F0F0F0;font-size:13px">
-      <span style="font-weight:600;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${h.datum} · ${h.name}</span>
-      <span style="color:${h.sColor};font-weight:600;white-space:nowrap">${h.status}</span>
-    </div>`).join('')||'<div style="font-size:13px;color:var(--gray)">Keine Turniere</div>'}
-    <div style="font-size:13px;font-weight:700;color:var(--blue);margin:16px 0 8px;text-transform:uppercase">Übungen gemacht (${exDone.length})</div>
-    <div>${exDone.length?exDone.map(u=>bg(u,'#0A1F3F')).join(''):'<span style="font-size:13px;color:var(--gray)">Noch keine</span>'}</div>
+    <span style="color:${h.sColor};font-weight:700;font-size:12px;white-space:nowrap">${h.status}</span>
+  </div>`).join('') : '<div style="font-size:13px;color:var(--gray);padding:14px 0">Keine Trainings im Zeitraum.</div>';
+
+  // Turniere-Liste
+  var turniereHtml = turHist.length ? turHist.map(h=>`<div style="display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #F0F0F0">
+    <div style="flex:1;min-width:0">
+      <div style="font-weight:600;color:var(--navy);font-size:13px">${h.datum}</div>
+      <div style="font-size:11px;color:var(--gray);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${h.name||''}${h.platzierung?` · ${h.platzierung}`:''}</div>
+    </div>
+    <span style="color:${h.sColor};font-weight:700;font-size:12px;white-space:nowrap">${h.status}</span>
+  </div>`).join('') : '<div style="font-size:13px;color:var(--gray);padding:14px 0">Keine Turniere</div>';
+
+  // Übungen-Liste nach Kategorie
+  var katEntries = Object.entries(exByKat).sort((a,b)=>b[1].size-a[1].size);
+  var uebungenHtml = exDone.length ? katEntries.map(([kat,set])=>`<div style="margin-bottom:14px">
+    <div style="font-size:12px;font-weight:700;color:var(--navy);margin-bottom:6px">${kat} <span style="color:var(--gray);font-weight:500">(${set.size})</span></div>
+    <div>${[...set].map(u=>bg(u,'#0A1F3F',true)).join('')}</div>
+  </div>`).join('') : '<div style="font-size:13px;color:var(--gray)">Noch keine Übungen erfasst</div>';
+
+  modal.innerHTML=`<div style="background:#fff;border-radius:20px;max-width:560px;width:100%;max-height:92vh;overflow-y:auto;padding:0;box-shadow:0 24px 64px rgba(13,71,161,0.25);position:relative">
+    <!-- Header mit Gradient + Avatar -->
+    <div style="position:relative;background:linear-gradient(135deg,${staerkeColor} 0%,${shade(staerkeColor,-25)} 100%);color:#fff;padding:24px 24px 56px;border-radius:20px 20px 0 0">
+      <button onclick="this.closest('div[style*=fixed]').remove()" style="position:absolute;top:14px;right:14px;border:none;background:rgba(255,255,255,0.2);width:32px;height:32px;border-radius:50%;font-size:14px;cursor:pointer;color:#fff;backdrop-filter:blur(4px)">✕</button>
+      <div style="display:flex;align-items:center;gap:14px">
+        <div style="width:54px;height:54px;border-radius:50%;background:rgba(255,255,255,0.22);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;color:#fff;border:2px solid rgba(255,255,255,0.4);flex-shrink:0">${initials}</div>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:21px;font-weight:800;letter-spacing:-0.3px;line-height:1.1">${name}</div>
+          <div style="margin-top:6px;display:flex;flex-wrap:wrap;gap:6px">
+            <span style="background:rgba(255,255,255,0.22);padding:2px 9px;border-radius:10px;font-size:11px;font-weight:700;backdrop-filter:blur(4px)">${k.r} ${staerkeLabel}</span>
+            ${k.team?`<span style="background:${teamColor};padding:2px 9px;border-radius:10px;font-size:11px;font-weight:700">Team ${k.team}</span>`:''}
+            ${msIso?`<span style="background:rgba(255,255,255,0.22);padding:2px 9px;border-radius:10px;font-size:11px;font-weight:700;backdrop-filter:blur(4px)">📅 seit ${msPretty}</span>`:''}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats-Cards (überlappen Header) -->
+    <div style="margin:-40px 18px 0;display:flex;gap:8px;flex-wrap:wrap">
+      ${statCard('TRAININGS', trQ===null?'–':`${trQ}%`, trTot?`${trDa}/${trTot} da`:'noch nicht', trQ===null?'var(--gray)':trQ>=75?'#2E7D32':trQ>=50?'#FF8F00':'#C62828')}
+      ${statCard('TURNIERE', tQ===null?'–':`${tQ}%`, tEing?`${tDa}/${tEing} da`:'nicht eingeladen', tQ===null?'var(--gray)':tQ>=75?'#2E7D32':tQ>=50?'#FF8F00':'#C62828')}
+      ${statCard('ÜBUNGEN', exDone.length, 'erlernt', '#0D47A1')}
+      ${statCard('DABEI SEIT', daysSeit!==null?daysSeit+' T.':'–', msPretty, '#7B1FA2')}
+    </div>
+
+    <!-- Achievements -->
+    ${ach.length?`<div style="padding:18px 24px 0;display:flex;flex-wrap:wrap;gap:6px">
+      ${ach.map(a=>`<span style="display:inline-flex;align-items:center;gap:4px;padding:5px 10px;border-radius:14px;background:${a.c}15;color:${a.c};font-size:11px;font-weight:700;border:1px solid ${a.c}33">${a.i} ${a.l}</span>`).join('')}
+    </div>`:''}
+
+    <!-- Sub-Tabs -->
+    <div style="padding:18px 24px 0;display:flex;gap:8px;flex-wrap:wrap">
+      ${subTabBtn('trainings',`Trainings (${trTot})`,true)}
+      ${subTabBtn('turniere',`Turniere (${tEing})`,false)}
+      ${subTabBtn('uebungen',`Übungen (${exDone.length})`,false)}
+    </div>
+
+    <!-- Sub-Tab-Content -->
+    <div style="padding:14px 24px 24px">
+      <div data-pane="trainings" class="kid-pane">${trainingsHtml}</div>
+      <div data-pane="turniere" class="kid-pane" style="display:none">${turniereHtml}</div>
+      <div data-pane="uebungen" class="kid-pane" style="display:none">${uebungenHtml}</div>
+    </div>
   </div>`;
   document.body.appendChild(modal);
+
+  // Sub-Tab-Switch
+  modal.querySelectorAll('.kid-sub').forEach(btn=>{
+    btn.addEventListener('click',function(e){
+      e.stopPropagation();
+      var t = this.dataset.sub;
+      modal.querySelectorAll('.kid-sub').forEach(b=>{
+        var act=b.dataset.sub===t;
+        b.classList.toggle('active',act);
+        b.style.borderColor = act?'#0D47A1':'#E3F2FD';
+        b.style.background = act?'linear-gradient(135deg,#1565C0,#0D47A1)':'#fff';
+        b.style.color = act?'#fff':'#5C6B7A';
+      });
+      modal.querySelectorAll('.kid-pane').forEach(p=>{
+        p.style.display = (p.dataset.pane===t)?'block':'none';
+      });
+    });
+  });
+}
+
+// Helper: Hex-Color um pct% dunkler/heller
+function shade(hex, pct){
+  var f=parseInt(hex.slice(1),16),t=pct<0?0:255,p=Math.abs(pct)/100,
+      R=f>>16,G=(f>>8)&0x00FF,B=f&0x0000FF;
+  return '#'+(0x1000000+(Math.round((t-R)*p)+R)*0x10000+(Math.round((t-G)*p)+G)*0x100+(Math.round((t-B)*p)+B)).toString(16).slice(1);
 }
 
 // ── TABS ────────────────────────────────────────────────────────────────
