@@ -29,6 +29,7 @@ export default {
     // GET-Routes (read-only, public)
     if (request.method === 'GET') {
       if (url.pathname === '/trainings') return handleGetTrainings(request, env);
+      if (url.pathname === '/turniere') return handleGetTurniere(request, env);
       if (url.pathname === '/kader') return handleGetKader(request, env);
       if (url.pathname === '/uebungen') return handleGetUebungen(request, env);
       if (url.pathname === '/dashboard-data') return handleGetDashboardData(request, env);
@@ -297,6 +298,7 @@ async function updateTeamsContent(pageId, teams, env) {
 const DS_TRAININGS = 'cc1275ee-918e-4fa2-a973-4dd4bb4e78e7';
 const DS_KADER = '99ed9b49-bdff-4057-9198-a5025690448c';
 const DS_UEBUNGEN = '5514b6fe-6e0f-43b0-8473-bfce09ce3471';
+const DS_TURNIERE = 'c2a3892f-c4f8-434c-b3a0-00b8e930cc0c';
 
 async function notionQuery(dataSourceId, env, body = {}) {
   const resp = await fetch(`https://api.notion.com/v1/data_sources/${dataSourceId}/query`, {
@@ -411,13 +413,80 @@ async function handleGetKader(request, env) {
         n: pickPlain(props['Name'], 'title'),
         r: r,
         team: pickSelect(props['Team']),
-        notizen: pickPlain(props['Notizen'])
+        notizen: pickPlain(props['Notizen']),
+        mitgliedSeit: pickDate(props['MitgliedSeit']),
+        trainingsCount: pickRelations(props['Trainings']).length,
+        turniereCount: pickRelations(props['Turniere']).length
       };
     }).filter(k => k.n).sort((a, b) => a.n.localeCompare(b.n));
     return jsonResponse({ kader }, 200, request);
   } catch (e) {
     return jsonResponse({ error: e.message }, 500, request);
   }
+}
+
+async function handleGetTurniere(request, env) {
+  try {
+    // Turniere + Kader parallel: Anwesenheit-Wahrheit liegt in Spieler.Turniere-Relation,
+    // zusätzlich Abgesagt-Liste aus Turniere.Abgesagt (Komma-Liste von Namen).
+    const [tData, kData] = await Promise.all([
+      notionQuery(DS_TURNIERE, env, { sorts: [{ property: 'Datum', direction: 'ascending' }] }),
+      notionQuery(DS_KADER, env)
+    ]);
+
+    const idToName = new Map();
+    const turnierToDa = new Map();
+    for (const p of kData.results) {
+      const name = pickPlain(p.properties?.['Name'], 'title');
+      if (!name) continue;
+      idToName.set(p.id, name);
+      const turniereRel = p.properties?.['Turniere']?.relation || [];
+      for (const ref of turniereRel) {
+        if (!turnierToDa.has(ref.id)) turnierToDa.set(ref.id, []);
+        turnierToDa.get(ref.id).push(name);
+      }
+    }
+
+    const turniere = tData.results.map((page, idx) => {
+      const props = page.properties || {};
+      const spielerIds = pickRelations(props['Spieler']);
+      // "Da" = Spieler-Relation (forward) ODER reverse aus Spieler.Turniere
+      const fromForward = spielerIds.map(id => idToName.get(id)).filter(Boolean);
+      const fromReverse = turnierToDa.get(page.id) || [];
+      const da = fromReverse.length ? fromReverse : fromForward;
+      const abgesagtText = pickPlain(props['Abgesagt']);
+      const abgesagt = parseNamesList(abgesagtText);
+      return {
+        id: idx + 1,
+        notionId: page.id,
+        name: pickPlain(props['Name'], 'title'),
+        datum: formatDate(pickDate(props['Datum'])),
+        datumIso: pickDate(props['Datum']),
+        ort: pickPlain(props['Ort']),
+        format: pickSelect(props['Format']),
+        platzierung: pickPlain(props['Platzierung']),
+        ergebnis: pickPlain(props['Ergebnis']),
+        highlights: pickPlain(props['Highlights']),
+        notizen: pickPlain(props['Notizen']),
+        da,
+        abgesagt,
+        abgesagtText,
+        spielerIds
+      };
+    });
+    return jsonResponse({ turniere }, 200, request);
+  } catch (e) {
+    return jsonResponse({ error: e.message }, 500, request);
+  }
+}
+
+/**
+ * Zerlegt eine Komma-/Newline-getrennte Namensliste in ein Array.
+ * Akzeptiert "Name1, Name2" oder "Name1\nName2".
+ */
+function parseNamesList(text) {
+  if (!text || typeof text !== 'string') return [];
+  return text.split(/[,\n]/).map(s => s.trim()).filter(Boolean);
 }
 
 async function handleGetUebungen(request, env) {
@@ -445,19 +514,22 @@ async function handleGetUebungen(request, env) {
 // Convenience: alles in einem Call
 async function handleGetDashboardData(request, env) {
   try {
-    const [t, k, u] = await Promise.all([
+    const [t, k, u, tu] = await Promise.all([
       notionQuery(DS_TRAININGS, env, { sorts: [{ property: 'Datum', direction: 'ascending' }] }),
       notionQuery(DS_KADER, env),
-      notionQuery(DS_UEBUNGEN, env)
+      notionQuery(DS_UEBUNGEN, env),
+      notionQuery(DS_TURNIERE, env, { sorts: [{ property: 'Datum', direction: 'ascending' }] })
     ]);
     return jsonResponse({
       generated: new Date().toISOString(),
       trainingsRaw: t.results.length,
       kaderRaw: k.results.length,
       uebungenRaw: u.results.length,
+      turniereRaw: tu.results.length,
       trainings: t.results,
       kader: k.results,
-      uebungen: u.results
+      uebungen: u.results,
+      turniere: tu.results
     }, 200, request);
   } catch (e) {
     return jsonResponse({ error: e.message }, 500, request);

@@ -256,12 +256,14 @@ tbody tr{border-bottom:1px solid #ECEFF1} tbody tr:nth-child(even){background:#F
       <button class="tab" data-tab="kader">Kader & Anwesenheit</button>
       <button class="tab" data-tab="uebungen">Übungsbibliothek</button>
       <button class="tab" data-tab="trainings">Trainings-Log</button>
+      <button class="tab" data-tab="turniere">Turniere</button>
     </div>
   </div>
   <div class="tab-content active" id="tab-overview"></div>
   <div class="tab-content" id="tab-kader"></div>
   <div class="tab-content" id="tab-uebungen"></div>
   <div class="tab-content" id="tab-trainings"></div>
+  <div class="tab-content" id="tab-turniere"></div>
   <div style="text-align:center;font-size:11px;color:#90A4AE;margin:20px 0 10px;font-weight:600;letter-spacing:0.3px">SV GERMANIA BIETIGHEIM · BAMBINI JG 2019</div>
 </div>
 <div class="mo" id="modal"><div class="mi" id="modal-inner"></div></div>
@@ -329,9 +331,10 @@ function isAbwesendEmpty(a) {
 async function loadFromNotion() {
   const banner = document.getElementById('notion-status');
   try {
-    const [tRes, kRes] = await Promise.all([
+    const [tRes, kRes, turRes] = await Promise.all([
       fetchWithCache('trainings'),
-      fetchWithCache('kader')
+      fetchWithCache('kader'),
+      fetchWithCache('turniere')
     ]);
     // Kader-Map (notionId → Name) für anwesend-Fallback wenn Worker nur spielerIds liefert
     const idToName = new Map();
@@ -358,8 +361,23 @@ async function loadFromNotion() {
       console.log('✓ Trainings live aus Notion:', trainings.length);
     }
     if (kRes && kRes.kader && kRes.kader.length > 0) {
-      kader = kRes.kader.map(k => ({ n: k.n, r: k.r }));
+      kader = kRes.kader.map(k => ({
+        n: k.n, r: k.r,
+        mitgliedSeit: k.mitgliedSeit || '',
+        trainingsCount: k.trainingsCount || 0,
+        turniereCount: k.turniereCount || 0
+      }));
       console.log('✓ Kader live aus Notion:', kader.length);
+    }
+    if (turRes && turRes.turniere && turRes.turniere.length > 0) {
+      turniere = turRes.turniere.map(t => ({
+        id: t.id, name: t.name, datum: t.datum, datumIso: t.datumIso || '',
+        ort: t.ort || '', format: t.format || '', platzierung: t.platzierung || '',
+        ergebnis: t.ergebnis || '', highlights: t.highlights || '', notizen: t.notizen || '',
+        da: Array.isArray(t.da) ? t.da : [],
+        abgesagt: Array.isArray(t.abgesagt) ? t.abgesagt : []
+      }));
+      console.log('✓ Turniere live aus Notion:', turniere.length);
     }
     // Stand-Datum auto: letztes Training (sortiert ascending → letztes ist neuestes)
     const last = trainings[trainings.length - 1];
@@ -414,6 +432,7 @@ let kader=[
   {n:"Unik Demiri",r:"🟡"},
   {n:"Yuşa Ergen",r:"🟢"}
 ];
+let turniere=[];
 const trainerTeam=["Andi","Marc","Njazi","Toni","Mike"];
 const CC={Dribbling:"#FDD835",Passspiel:"#42A5F5",Torschuss:"#AB47BC","1v1":"#EF5350",Ballkontrolle:"#66BB6A",Koordination:"#8D6E63","Flügelspiel":"#FF7043",Positionsspiel:"#EC407A",Spielformen:"#78909C"};
 const AC=Object.keys(CC);
@@ -534,6 +553,17 @@ function showKid(name){
     return{datum:t.datum,status:status,sColor:sColor,da:da,uebungen:da?t.uebungen:[]};
   });
   var exDone=[...new Set(hist.flatMap(h=>h.uebungen))];
+  // Turnier-Historie: Status pro Turnier (sortiert neueste zuerst)
+  var turHist = [...turniere].sort((a,b)=>(b.datumIso||'').localeCompare(a.datumIso||'')).map(tr=>{
+    var st, sC, eingeladen=true;
+    if((tr.da||[]).includes(name)){st='✅ Da';sC='var(--green)';}
+    else if((tr.abgesagt||[]).includes(name)){st='🚫 Abgesagt';sC='var(--red)';}
+    else {st='– Nicht eingeladen';sC='var(--gray)';eingeladen=false;}
+    return {datum:tr.datum, name:tr.name, status:st, sColor:sC, eingeladen};
+  });
+  var tDa = turHist.filter(h=>h.status.startsWith('✅')).length;
+  var tAbg = turHist.filter(h=>h.status.startsWith('🚫')).length;
+  var tEing = tDa + tAbg;
   var modal=document.createElement('div');
   modal.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);z-index:1000;display:flex;align-items:center;justify-content:center;padding:20px';
   modal.onclick=e=>{if(e.target===modal)modal.remove();};
@@ -547,6 +577,11 @@ function showKid(name){
       <span style="font-weight:600">${h.datum}</span>
       <span style="color:${h.sColor};font-weight:600">${h.status}</span>
     </div>`).join('')}
+    <div style="font-size:13px;font-weight:700;color:var(--blue);margin:16px 0 8px;text-transform:uppercase">Turniere (${tDa} da · ${tAbg} abgesagt · ${tEing} eingeladen)</div>
+    ${turHist.map(h=>`<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;padding:8px 0;border-bottom:1px solid #F0F0F0;font-size:13px">
+      <span style="font-weight:600;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${h.datum} · ${h.name}</span>
+      <span style="color:${h.sColor};font-weight:600;white-space:nowrap">${h.status}</span>
+    </div>`).join('')||'<div style="font-size:13px;color:var(--gray)">Keine Turniere</div>'}
     <div style="font-size:13px;font-weight:700;color:var(--blue);margin:16px 0 8px;text-transform:uppercase">Übungen gemacht (${exDone.length})</div>
     <div>${exDone.length?exDone.map(u=>bg(u,'#0A1F3F')).join(''):'<span style="font-size:13px;color:var(--gray)">Noch keine</span>'}</div>
   </div>`;
@@ -582,7 +617,7 @@ document.getElementById('modal').addEventListener('click',e=>{if(e.target.id==='
 // ── RENDER ──────────────────────────────────────────────────────────────
 function renderOverview(){
   const t0=trainings[trainings.length-1],used=UB.filter(u=>u.ein>0).length;
-  // Anwesenheit pro Kind (gleiche Logik wie renderKader, ab Kader-Eintritt)
+  // Anwesenheit pro Kind – Trainings (gleiche Logik wie renderKader, ab Kader-Eintritt)
   const att = kader.map(k=>{
     const fi = firstSeenIdx(k.n);
     if(fi<0) return {n:k.n, r:k.r, an:0, tot:0, q:null};
@@ -597,24 +632,38 @@ function renderOverview(){
     const tot = trainings.length - fi;
     return {n:k.n, r:k.r, an, tot, q: tot>0 ? Math.round(an/tot*100) : null};
   }).filter(x=>x.tot>0).sort((a,b)=> b.q - a.q || b.an - a.an || a.n.localeCompare(b.n));
-  const attRows = att.map(x=>{
+  // Anwesenheit pro Kind – Turniere (Da / Eingeladen, Eingeladen = da + abgesagt)
+  const attT = kader.map(k=>{
+    let da=0, abg=0;
+    for(const tr of turniere){
+      if((tr.da||[]).includes(k.n)) da++;
+      else if((tr.abgesagt||[]).includes(k.n)) abg++;
+    }
+    const tot = da + abg;
+    return {n:k.n, r:k.r, an:da, tot, q: tot>0 ? Math.round(da/tot*100) : null};
+  }).filter(x=>x.tot>0).sort((a,b)=> b.q - a.q || b.an - a.an || a.n.localeCompare(b.n));
+  const rowHtml = (x)=>{
     const qC = x.q===100?'var(--green)':x.q>=75?'var(--accent)':'var(--red)';
     const qB = x.q===100?'rgba(46,125,50,0.15)':x.q>=75?'rgba(255,143,0,0.15)':'rgba(198,40,40,0.15)';
-    return `<div onclick="showKid('${x.n.replace(/'/g,"\\'")}')" style="display:grid;grid-template-columns:minmax(120px,1.6fr) 3fr minmax(70px,auto);gap:14px;align-items:center;padding:8px 10px;border-radius:10px;cursor:pointer;transition:background 0.15s" onmouseover="this.style.background='#F5F8FC'" onmouseout="this.style.background='transparent'">
+    return `<div onclick="showKid('${x.n.replace(/'/g,"\\'")}')" style="display:grid;grid-template-columns:minmax(110px,1.4fr) 2.5fr minmax(70px,auto);gap:10px;align-items:center;padding:6px 8px;border-radius:10px;cursor:pointer;transition:background 0.15s" onmouseover="this.style.background='#F5F8FC'" onmouseout="this.style.background='transparent'">
       <div style="display:flex;align-items:center;gap:6px;font-weight:600;color:var(--navy);font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"><span style="font-size:11px">${x.r}</span>${x.n}</div>
-      <div style="position:relative;height:10px;background:#EEF2F7;border-radius:6px;overflow:hidden"><div style="position:absolute;left:0;top:0;bottom:0;width:${x.q}%;background:${qC};border-radius:6px"></div></div>
-      <div style="text-align:right;font-size:12px;font-weight:700"><span style="color:var(--navy)">${x.an}/${x.tot}</span> <span style="display:inline-block;padding:2px 8px;border-radius:10px;background:${qB};color:${qC};margin-left:4px;font-size:11px">${x.q}%</span></div>
+      <div style="position:relative;height:8px;background:#EEF2F7;border-radius:6px;overflow:hidden"><div style="position:absolute;left:0;top:0;bottom:0;width:${x.q}%;background:${qC};border-radius:6px"></div></div>
+      <div style="text-align:right;font-size:12px;font-weight:700"><span style="color:var(--navy)">${x.an}/${x.tot}</span> <span style="display:inline-block;padding:2px 6px;border-radius:10px;background:${qB};color:${qC};margin-left:3px;font-size:11px">${x.q}%</span></div>
     </div>`;
-  }).join('');
+  };
+  const attRows = att.map(rowHtml).join('');
+  const attTRows = attT.map(rowHtml).join('');
   document.getElementById('tab-overview').innerHTML=`
     <div class="cards">
       <div class="stat-card"><div class="label">TRAININGS</div><div class="value" style="color:var(--blue)">${trainings.length}</div><div class="sub">diese Saison</div></div>
+      <div class="stat-card"><div class="label">TURNIERE</div><div class="value" style="color:var(--accent)">${turniere.length}</div><div class="sub">diese Saison</div></div>
       <div class="stat-card"><div class="label">Ø KINDER</div><div class="value" style="color:var(--green)">${t0.anwesendeKinder}</div><div class="sub">von ${kader.length} im Kader</div></div>
       <div class="stat-card"><div class="label">ÜBUNGEN</div><div class="value" style="color:var(--accent)">${UB.length}</div><div class="sub">${used} eingesetzt, ${UB.length-used} noch nicht</div></div>
-      <div class="stat-card"><div class="label">TRAINER</div><div class="value" style="color:var(--navy)">${trainerTeam.length}</div><div class="sub">im Team</div></div>
     </div>
-    <h2 class="sh">Anwesenheit pro Kind</h2>
-    <div class="chart-box" style="padding:14px">${attRows||'<div style="color:var(--gray);font-size:13px">Noch keine Daten</div>'}</div>
+    <div class="row">
+      <div class="col"><h2 class="sh">Anwesenheit – Trainings</h2><div class="chart-box" style="padding:14px">${attRows||'<div style="color:var(--gray);font-size:13px">Noch keine Daten</div>'}</div></div>
+      <div class="col"><h2 class="sh">Anwesenheit – Turniere</h2><div class="chart-box" style="padding:14px">${attTRows||'<div style="color:var(--gray);font-size:13px">Noch keine Daten</div>'}</div></div>
+    </div>
     <div class="row"><div class="col"><h2 class="sh">Kategorien-Abdeckung</h2><div class="chart-box"><canvas id="ch-radar" height="300"></canvas></div></div>
     <div class="col-sm"><h2 class="sh">Übungs-Bewertungen</h2><div class="chart-box"><canvas id="ch-pie" height="300"></canvas></div></div></div>
     <div class="row"><div class="col"><h2 class="sh">Trainer-Einsätze</h2><div class="chart-box"><canvas id="ch-tr" height="200"></canvas></div></div>
@@ -686,8 +735,8 @@ function renderKader(){
     </div>
     <h2 class="sh">Kader-Übersicht</h2>
     <div class="table-wrap" style="background:var(--white);border-radius:16px;overflow:hidden">
-      <table><thead><tr><th>#</th><th>Name</th><th>Stärke</th><th style="text-align:center">Da</th><th style="text-align:center">✓</th><th style="text-align:center">⚠️</th><th style="text-align:center">🚫</th><th style="text-align:center">Quote</th><th style="text-align:center">Übungen</th></tr></thead>
-      <tbody>${kader.map((k,i)=>{const s=abStat[k.n],an=anStat[k.n]||0,tk=totFor[k.n]||0,q=tk>0?Math.round(an/tk*100):0;const exCount=(kidEx[k.n]||[]).length;const qC=q===100?'var(--green)':q>=75?'var(--accent)':'var(--red)';const qB=q===100?'rgba(46,125,50,0.1)':q>=75?'rgba(255,143,0,0.1)':'rgba(198,40,40,0.1)';const qCell=tk>0?`<span style="display:inline-block;padding:2px 10px;border-radius:12px;font-size:12px;font-weight:600;background:${qB};color:${qC}">${q}%</span>`:'<span style="color:var(--gray);font-size:12px">–</span>';const daCell=tk>0?`${an}/${tk}`:'<span style="color:var(--gray)">–</span>';return`<tr style="cursor:pointer" onclick="showKid('${k.n.replace(/'/g,"\\'")}')"><td style="color:var(--gray)">${i+1}</td><td style="font-weight:600">${k.n}</td><td>${rl(k.r)}</td><td style="text-align:center;color:var(--green);font-weight:600">${daCell}</td><td style="text-align:center;color:var(--gray)">${s.r||'–'}</td><td style="text-align:center;color:${s.k?'var(--accent)':'var(--gray)'}">${s.k||'–'}</td><td style="text-align:center;color:${s.u?'var(--red)':'var(--gray)'};font-weight:${s.u?700:400}">${s.u||'–'}</td><td style="text-align:center">${qCell}</td><td style="text-align:center;color:var(--blue);font-weight:600">${exCount||'–'}</td></tr>`;}).join('')}</tbody></table>
+      <table><thead><tr><th>#</th><th>Name</th><th>Stärke</th><th style="text-align:center">Da</th><th style="text-align:center">✓</th><th style="text-align:center">⚠️</th><th style="text-align:center">🚫</th><th style="text-align:center">Quote</th><th style="text-align:center" title="Turnier: Da">T✓</th><th style="text-align:center" title="Turnier: Abgesagt">T🚫</th><th style="text-align:center">T-Quote</th><th style="text-align:center">Übungen</th></tr></thead>
+      <tbody>${kader.map((k,i)=>{const s=abStat[k.n],an=anStat[k.n]||0,tk=totFor[k.n]||0,q=tk>0?Math.round(an/tk*100):0;const exCount=(kidEx[k.n]||[]).length;const qC=q===100?'var(--green)':q>=75?'var(--accent)':'var(--red)';const qB=q===100?'rgba(46,125,50,0.1)':q>=75?'rgba(255,143,0,0.1)':'rgba(198,40,40,0.1)';const qCell=tk>0?`<span style="display:inline-block;padding:2px 10px;border-radius:12px;font-size:12px;font-weight:600;background:${qB};color:${qC}">${q}%</span>`:'<span style="color:var(--gray);font-size:12px">–</span>';const daCell=tk>0?`${an}/${tk}`:'<span style="color:var(--gray)">–</span>';let tDa=0,tAbg=0;turniere.forEach(tr=>{if((tr.da||[]).includes(k.n))tDa++;else if((tr.abgesagt||[]).includes(k.n))tAbg++;});const tEing=tDa+tAbg;const tQ=tEing>0?Math.round(tDa/tEing*100):null;const tQC=tQ===null?'var(--gray)':tQ===100?'var(--green)':tQ>=75?'var(--accent)':'var(--red)';const tQB=tQ===null?'transparent':tQ===100?'rgba(46,125,50,0.1)':tQ>=75?'rgba(255,143,0,0.1)':'rgba(198,40,40,0.1)';const tQCell=tQ===null?'<span style="color:var(--gray);font-size:12px">–</span>':`<span style="display:inline-block;padding:2px 10px;border-radius:12px;font-size:12px;font-weight:600;background:${tQB};color:${tQC}">${tQ}%</span>`;return`<tr style="cursor:pointer" onclick="showKid('${k.n.replace(/'/g,"\\'")}')"><td style="color:var(--gray)">${i+1}</td><td style="font-weight:600">${k.n}</td><td>${rl(k.r)}</td><td style="text-align:center;color:var(--green);font-weight:600">${daCell}</td><td style="text-align:center;color:var(--gray)">${s.r||'–'}</td><td style="text-align:center;color:${s.k?'var(--accent)':'var(--gray)'}">${s.k||'–'}</td><td style="text-align:center;color:${s.u?'var(--red)':'var(--gray)'};font-weight:${s.u?700:400}">${s.u||'–'}</td><td style="text-align:center">${qCell}</td><td style="text-align:center;color:var(--green);font-weight:600">${tDa||'–'}</td><td style="text-align:center;color:${tAbg?'var(--red)':'var(--gray)'};font-weight:${tAbg?700:400}">${tAbg||'–'}</td><td style="text-align:center">${tQCell}</td><td style="text-align:center;color:var(--blue);font-weight:600">${exCount||'–'}</td></tr>`;}).join('')}</tbody></table>
     </div>
     <h2 class="sh">Trainer-Anwesenheit</h2>
     <div class="table-wrap" style="background:var(--white);border-radius:16px;overflow:hidden">
@@ -745,6 +794,34 @@ const CI={};
 function dc(id){if(CI[id]){CI[id].destroy();delete CI[id];}}
 function renderCharts(tab){setTimeout(()=>{if(tab==='overview')renderOC();if(tab==='kader')renderKC();if(tab==='uebungen')renderUC();},50);}
 
+function renderTurniere(){
+  // sort newest first
+  const list = [...turniere].sort((a,b)=> (b.datumIso||'').localeCompare(a.datumIso||''));
+  const totalEingeladen = list.reduce((s,t)=> s + (t.da?.length||0) + (t.abgesagt?.length||0), 0);
+  const totalDa = list.reduce((s,t)=> s + (t.da?.length||0), 0);
+  const avgDa = list.length ? Math.round(totalDa/list.length*10)/10 : 0;
+  const quote = totalEingeladen ? Math.round(totalDa/totalEingeladen*100) : 0;
+  document.getElementById('tab-turniere').innerHTML=`
+    <div class="cards">
+      <div class="stat-card"><div class="label">TURNIERE</div><div class="value" style="color:var(--blue)">${list.length}</div><div class="sub">diese Saison</div></div>
+      <div class="stat-card"><div class="label">Ø DA</div><div class="value" style="color:var(--green)">${avgDa}</div><div class="sub">Spieler/Turnier</div></div>
+      <div class="stat-card"><div class="label">EINGELADEN</div><div class="value" style="color:var(--accent)">${totalEingeladen}</div><div class="sub">Slots gesamt</div></div>
+      <div class="stat-card"><div class="label">QUOTE</div><div class="value" style="color:var(--navy)">${quote}%</div><div class="sub">Da von Eingeladen</div></div>
+    </div>
+    ${list.map(t=>`
+      <div class="tc" style="margin-top:24px">
+        <div class="flex-between">
+          <div><div class="training-date">${t.datum}${t.format?` · <span style="font-size:12px;color:var(--gray)">${t.format}</span>`:''}</div><div class="training-title">${t.name}</div></div>
+          <div class="kpi-row"><div class="kpi-box"><div class="num">${t.da.length}</div><div class="lbl">Da</div></div><div class="kpi-box"><div class="num" style="color:var(--red)">${t.abgesagt.length}</div><div class="lbl">Abg.</div></div></div>
+        </div>
+        ${t.platzierung||t.ergebnis?`<div class="info-row">${t.platzierung?`<div class="info-block"><div class="lbl">Platzierung</div><div class="val">${t.platzierung}</div></div>`:''}${t.ergebnis?`<div class="info-block"><div class="lbl">Ergebnis</div><div class="val">${t.ergebnis}</div></div>`:''}</div>`:''}
+        ${t.highlights?`<div class="info-row"><div class="info-block"><div class="lbl">Highlights</div><div class="val">${t.highlights}</div></div></div>`:''}
+        ${t.notizen?`<div class="info-row"><div class="info-block"><div class="lbl">Notizen</div><div class="val">${t.notizen}</div></div></div>`:''}
+        ${t.da.length?`<div style="margin-top:12px"><div style="font-size:12px;font-weight:600;color:var(--green);margin-bottom:6px;text-transform:uppercase">✅ Da (${t.da.length})</div>${t.da.map(x=>bg(x,'#2E7D32')).join('')}</div>`:''}
+        ${t.abgesagt.length?`<div style="margin-top:12px"><div style="font-size:12px;font-weight:600;color:var(--red);margin-bottom:6px;text-transform:uppercase">🚫 Abgesagt (${t.abgesagt.length})</div>${t.abgesagt.map(x=>bg(x,'#C62828')).join('')}</div>`:''}
+      </div>`).join('')||'<div style="color:var(--gray);font-size:13px;padding:24px">Noch keine Turniere.</div>'}`;
+}
+
 function renderOC(){
   dc('radar');const r=document.getElementById('ch-radar');
   if(r)CI.radar=new Chart(r,{type:'radar',data:{labels:AC.map(c=>c.length>10?c.slice(0,9)+'…':c),datasets:[{label:'Bibliothek',data:AC.map(c=>UB.filter(u=>u.kat.includes(c)).length),backgroundColor:'rgba(21,101,192,0.2)',borderColor:'#1565C0',pointBackgroundColor:'#1565C0'},{label:'Trainiert',data:AC.map(c=>trainings.reduce((s,t)=>s+(t.kategorien.includes(c)?1:0),0)),backgroundColor:'rgba(255,143,0,0.3)',borderColor:'#FF8F00',pointBackgroundColor:'#FF8F00'}]},options:{responsive:true,maintainAspectRatio:false,scales:{r:{ticks:{font:{size:10}},pointLabels:{font:{size:11}}}},plugins:{legend:{labels:{font:{size:12}}}}}});
@@ -766,10 +843,10 @@ function renderUC(){dc('cats');const c=document.getElementById('ch-cats');if(c){
 document.addEventListener('DOMContentLoaded', async function() {
   try {
     // Erst initial Render (mit Hardcoded), dann Notion-Update
-    renderOverview();renderKader();renderUebungen();renderTrainings();renderCharts('overview');
+    renderOverview();renderKader();renderUebungen();renderTrainings();renderTurniere();renderCharts('overview');
     // Im Hintergrund: Live-Daten holen, dann re-render
     await loadFromNotion();
-    renderOverview();renderKader();renderUebungen();renderTrainings();renderCharts('overview');
+    renderOverview();renderKader();renderUebungen();renderTrainings();renderTurniere();renderCharts('overview');
   } catch(e) {
     document.body.innerHTML = '<div style="padding:20px;color:red;font-family:sans-serif"><h2>Fehler</h2><pre>' + e.message + '\n' + e.stack + '</pre></div>';
   }
