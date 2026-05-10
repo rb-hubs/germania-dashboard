@@ -12,7 +12,7 @@ html{-webkit-text-size-adjust:100%}
 body{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;background:linear-gradient(135deg,#F8FAFD 0%,#F3F6FA 50%,#E8F1FE 100%);background-attachment:fixed;color:var(--navy);min-height:100vh}
 button{font-family:inherit;cursor:pointer}
 ::-webkit-scrollbar{width:6px} ::-webkit-scrollbar-thumb{background:#B0BEC5;border-radius:3px}
-.header{background:transparent;padding:0;color:var(--navy);position:relative}.header-card{background:var(--white);max-width:1100px;margin:0 auto 16px;padding:18px 16px;border-radius:14px;box-shadow:0 4px 16px rgba(13,71,161,0.06);position:relative}.header-card::after{content:"";position:absolute;left:16px;right:16px;bottom:0;height:2px;background:linear-gradient(90deg,#0D47A1 0%,#1565C0 50%,#C62828 100%);border-radius:2px}@media(min-width:720px){.header-card{padding:28px 32px;margin-bottom:20px}.header-card::after{left:32px;right:32px}}
+.header{background:transparent;padding:0;color:var(--navy);position:relative}.header-card{background:var(--white);margin:0 0 16px;padding:18px 16px;border-radius:14px;box-shadow:0 4px 16px rgba(13,71,161,0.06);position:relative;box-sizing:border-box}.header-card::after{content:"";position:absolute;left:16px;right:16px;bottom:0;height:2px;background:linear-gradient(90deg,#0D47A1 0%,#1565C0 50%,#C62828 100%);border-radius:2px}@media(min-width:720px){.header-card{padding:28px 32px;margin-bottom:20px}.header-card::after{left:32px;right:32px}}
 .header-inner{max-width:1200px;margin:0 auto;padding:0 32px}
 .header h1{font-size:26px;font-weight:800;letter-spacing:-0.3px;position:relative;z-index:1}
 .header .sub{font-size:13px;opacity:0.8;margin-top:2px}
@@ -240,6 +240,7 @@ tbody tr{border-bottom:1px solid #ECEFF1} tbody tr:nth-child(even){background:#F
 </div>
 
 <div id="app-content" style="display:none">
+<div class="content">
 <div class="header-card" style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
   <div style="flex:1;min-width:200px">
     <h1 style="font-size:22px;font-weight:900;letter-spacing:0.5px;background:linear-gradient(135deg,#0D47A1 0%,#1565C0 60%,#C62828 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;line-height:1.1">DASHBOARD</h1>
@@ -248,8 +249,7 @@ tbody tr{border-bottom:1px solid #ECEFF1} tbody tr:nth-child(even){background:#F
   <div class="logo-pill" style="background:linear-gradient(135deg,#0D47A1,#1565C0);color:#fff;padding:8px 14px;border-radius:24px;font-size:11px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;box-shadow:0 4px 12px rgba(21,101,192,0.3)">SV Germania Bietigheim</div>
 </div>
 
-<div id="notion-status" style="display:none;background:#FFF3E0;color:#E65100;padding:8px 14px;border-radius:10px;text-align:center;font-size:12px;font-weight:600;max-width:1100px;margin:0 auto 10px;border:1px solid #FFB74D"></div>
-<div class="content">
+<div id="notion-status" style="display:none;background:#FFF3E0;color:#E65100;padding:8px 14px;border-radius:10px;text-align:center;font-size:12px;font-weight:600;margin:0 0 10px;border:1px solid #FFB74D"></div>
   <div class="tabs-bar">
     <div class="tabs" id="tabs">
       <button class="tab active" data-tab="overview">Übersicht</button>
