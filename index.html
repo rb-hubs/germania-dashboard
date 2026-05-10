@@ -582,6 +582,30 @@ document.getElementById('modal').addEventListener('click',e=>{if(e.target.id==='
 // ── RENDER ──────────────────────────────────────────────────────────────
 function renderOverview(){
   const t0=trainings[trainings.length-1],used=UB.filter(u=>u.ein>0).length;
+  // Anwesenheit pro Kind (gleiche Logik wie renderKader, ab Kader-Eintritt)
+  const att = kader.map(k=>{
+    const fi = firstSeenIdx(k.n);
+    if(fi<0) return {n:k.n, r:k.r, an:0, tot:0, q:null};
+    let an = 0;
+    for(let i=fi;i<trainings.length;i++){
+      const t = trainings[i];
+      const allAbw = abwAll(t.abwesend);
+      const hasAnwData = Array.isArray(t.anwesend) && t.anwesend.length>0;
+      const da = hasAnwData ? t.anwesend.includes(k.n) : !allAbw.includes(k.n);
+      if(da) an++;
+    }
+    const tot = trainings.length - fi;
+    return {n:k.n, r:k.r, an, tot, q: tot>0 ? Math.round(an/tot*100) : null};
+  }).filter(x=>x.tot>0).sort((a,b)=> b.q - a.q || b.an - a.an || a.n.localeCompare(b.n));
+  const attRows = att.map(x=>{
+    const qC = x.q===100?'var(--green)':x.q>=75?'var(--accent)':'var(--red)';
+    const qB = x.q===100?'rgba(46,125,50,0.15)':x.q>=75?'rgba(255,143,0,0.15)':'rgba(198,40,40,0.15)';
+    return `<div onclick="showKid('${x.n.replace(/'/g,"\\'")}')" style="display:grid;grid-template-columns:minmax(120px,1.6fr) 3fr minmax(70px,auto);gap:14px;align-items:center;padding:8px 10px;border-radius:10px;cursor:pointer;transition:background 0.15s" onmouseover="this.style.background='#F5F8FC'" onmouseout="this.style.background='transparent'">
+      <div style="display:flex;align-items:center;gap:6px;font-weight:600;color:var(--navy);font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"><span style="font-size:11px">${x.r}</span>${x.n}</div>
+      <div style="position:relative;height:10px;background:#EEF2F7;border-radius:6px;overflow:hidden"><div style="position:absolute;left:0;top:0;bottom:0;width:${x.q}%;background:${qC};border-radius:6px"></div></div>
+      <div style="text-align:right;font-size:12px;font-weight:700"><span style="color:var(--navy)">${x.an}/${x.tot}</span> <span style="display:inline-block;padding:2px 8px;border-radius:10px;background:${qB};color:${qC};margin-left:4px;font-size:11px">${x.q}%</span></div>
+    </div>`;
+  }).join('');
   document.getElementById('tab-overview').innerHTML=`
     <div class="cards">
       <div class="stat-card"><div class="label">TRAININGS</div><div class="value" style="color:var(--blue)">${trainings.length}</div><div class="sub">diese Saison</div></div>
@@ -589,6 +613,8 @@ function renderOverview(){
       <div class="stat-card"><div class="label">ÜBUNGEN</div><div class="value" style="color:var(--accent)">${UB.length}</div><div class="sub">${used} eingesetzt, ${UB.length-used} noch nicht</div></div>
       <div class="stat-card"><div class="label">TRAINER</div><div class="value" style="color:var(--navy)">${trainerTeam.length}</div><div class="sub">im Team</div></div>
     </div>
+    <h2 class="sh">Anwesenheit pro Kind</h2>
+    <div class="chart-box" style="padding:14px">${attRows||'<div style="color:var(--gray);font-size:13px">Noch keine Daten</div>'}</div>
     <div class="row"><div class="col"><h2 class="sh">Kategorien-Abdeckung</h2><div class="chart-box"><canvas id="ch-radar" height="300"></canvas></div></div>
     <div class="col-sm"><h2 class="sh">Übungs-Bewertungen</h2><div class="chart-box"><canvas id="ch-pie" height="300"></canvas></div></div></div>
     <div class="row"><div class="col"><h2 class="sh">Trainer-Einsätze</h2><div class="chart-box"><canvas id="ch-tr" height="200"></canvas></div></div>
