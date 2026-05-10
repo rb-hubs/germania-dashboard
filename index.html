@@ -26,7 +26,10 @@ button{font-family:inherit;cursor:pointer}
 .stat-card .label{font-size:13px;color:var(--gray);font-weight:500;letter-spacing:0.5px}
 .stat-card .value{font-size:38px;font-weight:800;line-height:1.1;margin-top:4px;background:linear-gradient(135deg,#0D47A1,#1565C0);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
 .stat-card .sub{font-size:12px;color:var(--gray);margin-top:4px}
-.sh{font-size:19px;font-weight:800;color:var(--navy);margin:36px 0 18px;padding:8px 0 8px 16px;border-left:5px solid;border-image:linear-gradient(180deg,#0D47A1 0%,#1565C0 50%,#C62828 100%) 1;letter-spacing:-0.3px}
+.sh{font-size:19px;font-weight:800;color:var(--navy);margin:36px 0 18px;padding:8px 0 8px 16px;border-left:5px solid;border-image:linear-gradient(180deg,#0D47A1 0%,#1565C0 50%,#C62828 100%) 1;letter-spacing:-0.3px;cursor:pointer;user-select:none;display:flex;align-items:center;gap:10px;transition:opacity 0.15s}
+.sh:hover{opacity:0.75}
+.sh-chev{display:inline-block;font-size:0.7em;color:var(--gray);transition:transform 0.2s ease;transform:rotate(0deg);flex-shrink:0}
+.sh.collapsed .sh-chev{transform:rotate(-90deg)}
 .chart-box{background:var(--white);border-radius:18px;padding:22px;box-shadow:0 6px 24px rgba(13,71,161,0.08),0 1px 4px rgba(0,0,0,0.04);border:1px solid #E3F2FD}
 .row{display:flex;gap:24px;flex-wrap:wrap;margin-top:8px}
 .col{flex:1 1 400px;min-width:300px} .col-sm{flex:1 1 300px;min-width:280px}
@@ -792,7 +795,41 @@ function renderTrainings(){
 // ── CHARTS ──────────────────────────────────────────────────────────────
 const CI={};
 function dc(id){if(CI[id]){CI[id].destroy();delete CI[id];}}
-function renderCharts(tab){setTimeout(()=>{if(tab==='overview')renderOC();if(tab==='kader')renderKC();if(tab==='uebungen')renderUC();},50);}
+function renderCharts(tab){setTimeout(()=>{if(tab==='overview')renderOC();if(tab==='kader')renderKC();if(tab==='uebungen')renderUC();setupCollapsibles();},50);}
+
+// Macht alle h2.sh klappbar (toggelt alle folgenden Siblings bis zum nächsten h2.sh)
+// State pro Header-Text in localStorage gespeichert.
+function setupCollapsibles(){
+  document.querySelectorAll('h2.sh').forEach(h=>{
+    if(h.dataset.collapsibleInit) return;
+    h.dataset.collapsibleInit='1';
+    // Chevron einfügen
+    var chev=document.createElement('span');
+    chev.className='sh-chev';
+    chev.textContent='▾';
+    h.insertBefore(chev,h.firstChild);
+    // Folge-Siblings sammeln (bis zum nächsten h2.sh oder Ende)
+    var targets=[],n=h.nextElementSibling;
+    while(n && !(n.tagName==='H2' && n.classList.contains('sh'))){
+      targets.push(n);
+      n=n.nextElementSibling;
+    }
+    h.dataset.targetCount=targets.length;
+    var key='germania_collapse_'+h.textContent.trim().replace(/[^a-zA-Z0-9_]/g,'_').slice(0,60);
+    var collapsed=localStorage.getItem(key)==='1';
+    var apply=function(c){
+      targets.forEach(t=>{ if(c){ t.dataset.prevDisplay=t.style.display||''; t.style.display='none';} else { t.style.display=t.dataset.prevDisplay||'';} });
+      h.classList.toggle('collapsed',c);
+    };
+    apply(collapsed);
+    h.addEventListener('click',function(e){
+      e.stopPropagation();
+      var nowCollapsed=!h.classList.contains('collapsed');
+      apply(nowCollapsed);
+      try{localStorage.setItem(key,nowCollapsed?'1':'0');}catch(e){}
+    });
+  });
+}
 
 function renderTurniere(){
   // sort newest first
