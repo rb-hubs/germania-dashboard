@@ -30,6 +30,22 @@ button{font-family:inherit;cursor:pointer}
 .sh:hover{opacity:0.75}
 .sh-chev{display:inline-block;font-size:0.7em;color:var(--gray);transition:transform 0.2s ease;transform:rotate(0deg);flex-shrink:0}
 .sh.collapsed .sh-chev{transform:rotate(-90deg)}
+.ev-filters{display:flex;gap:8px;margin:0 0 16px;flex-wrap:wrap}
+.ev-filter{padding:7px 14px;border-radius:20px;border:1.5px solid #E3F2FD;background:var(--white);color:#5C6B7A;font-weight:700;font-size:12px;letter-spacing:0.3px;cursor:pointer;transition:all 0.15s}
+.ev-filter:hover{border-color:#1565C0;color:#0D47A1}
+.ev-filter.active{background:linear-gradient(135deg,#1565C0,#0D47A1);color:#fff;border-color:#0D47A1;box-shadow:0 3px 10px rgba(21,101,192,0.25)}
+.ev-filter.active.training{background:linear-gradient(135deg,#1565C0,#0D47A1);border-color:#0D47A1}
+.ev-filter.active.turnier{background:linear-gradient(135deg,#FF8F00,#E65100);border-color:#E65100;box-shadow:0 3px 10px rgba(230,81,0,0.25)}
+.ev-timeline{position:relative;padding-left:36px;margin-top:8px}
+.ev-timeline::before{content:'';position:absolute;left:14px;top:6px;bottom:6px;width:2px;background:linear-gradient(180deg,#0D47A1 0%,#1565C0 50%,#FF8F00 100%);border-radius:2px;opacity:0.25}
+.ev-item{position:relative;margin-bottom:20px}
+.ev-dot{position:absolute;left:-29px;top:8px;width:14px;height:14px;border-radius:50%;border:3px solid var(--white);box-shadow:0 0 0 2px currentColor,0 2px 6px rgba(13,71,161,0.2);z-index:1}
+.ev-dot.training{color:#1565C0;background:#1565C0}
+.ev-dot.turnier{color:#E65100;background:#FF8F00}
+.ev-type-pill{display:inline-block;padding:2px 10px;border-radius:10px;font-size:10px;font-weight:800;letter-spacing:0.5px;text-transform:uppercase;vertical-align:middle;margin-right:8px}
+.ev-type-pill.training{background:rgba(13,71,161,0.1);color:#0D47A1}
+.ev-type-pill.turnier{background:rgba(230,81,0,0.12);color:#E65100}
+@media(max-width:640px){.ev-timeline{padding-left:28px}.ev-timeline::before{left:10px}.ev-dot{left:-25px;width:12px;height:12px}}
 .chart-box{background:var(--white);border-radius:18px;padding:22px;box-shadow:0 6px 24px rgba(13,71,161,0.08),0 1px 4px rgba(0,0,0,0.04);border:1px solid #E3F2FD}
 .row{display:flex;gap:24px;flex-wrap:wrap;margin-top:8px}
 .col{flex:1 1 400px;min-width:300px} .col-sm{flex:1 1 300px;min-width:280px}
@@ -258,15 +274,13 @@ tbody tr{border-bottom:1px solid #ECEFF1} tbody tr:nth-child(even){background:#F
       <button class="tab active" data-tab="overview">Übersicht</button>
       <button class="tab" data-tab="kader">Kader & Anwesenheit</button>
       <button class="tab" data-tab="uebungen">Übungsbibliothek</button>
-      <button class="tab" data-tab="trainings">Trainings-Log</button>
-      <button class="tab" data-tab="turniere">Turniere</button>
+      <button class="tab" data-tab="events">Veranstaltungen</button>
     </div>
   </div>
   <div class="tab-content active" id="tab-overview"></div>
   <div class="tab-content" id="tab-kader"></div>
   <div class="tab-content" id="tab-uebungen"></div>
-  <div class="tab-content" id="tab-trainings"></div>
-  <div class="tab-content" id="tab-turniere"></div>
+  <div class="tab-content" id="tab-events"></div>
   <div style="text-align:center;font-size:11px;color:#90A4AE;margin:20px 0 10px;font-weight:600;letter-spacing:0.3px">SV GERMANIA BIETIGHEIM · BAMBINI JG 2019</div>
 </div>
 <div class="mo" id="modal"><div class="mi" id="modal-inner"></div></div>
@@ -772,24 +786,108 @@ function renderUebungen(){
     <h2 class="sh">Kategorie-Verteilung</h2><div class="chart-box"><canvas id="ch-cats" height="280"></canvas></div>`;
 }
 
-function renderTrainings(){
-  document.getElementById('tab-trainings').innerHTML=trainings.map(t=>{
+// Events = Trainings + Turniere zusammen, sortiert nach Datum desc, mit Filter
+let _evFilter = (typeof localStorage!=='undefined' && localStorage.getItem('germania_ev_filter')) || 'all';
+
+function isoFromDe(de){ if(!de) return ''; const p=de.split('.'); return p.length===3 ? `${p[2]}-${p[1]}-${p[0]}` : ''; }
+
+function renderEvents(){
+  const root = document.getElementById('tab-events');
+  if(!root) return;
+  // Build unified event list
+  const tEvents = trainings.map(t=>({type:'training', iso: isoFromDe(t.datum), data:t}));
+  const uEvents = (turniere||[]).map(t=>({type:'turnier', iso: t.datumIso || isoFromDe(t.datum), data:t}));
+  const all = [...tEvents, ...uEvents].sort((a,b)=> (b.iso||'').localeCompare(a.iso||''));
+  const f = _evFilter;
+  const list = f==='training' ? all.filter(e=>e.type==='training')
+             : f==='turnier'  ? all.filter(e=>e.type==='turnier')
+             : all;
+
+  // Stats abhängig vom Filter
+  const trainings_in = list.filter(e=>e.type==='training').map(e=>e.data);
+  const turniere_in  = list.filter(e=>e.type==='turnier').map(e=>e.data);
+  const trAvgKids = trainings_in.length ? Math.round(trainings_in.reduce((s,t)=>s+(t.anwesendeKinder||0),0)/trainings_in.length*10)/10 : 0;
+  const trAttCount = trainings_in.reduce((s,t)=>s+(Array.isArray(t.anwesend)?t.anwesend.length:0),0);
+  const trAbCount  = trainings_in.reduce((s,t)=>{var ab=t.abwesend;return s+(Array.isArray(ab)?ab.length:((ab?.rechtzeitig?.length||0)+(ab?.kurzfristig?.length||0)+(ab?.unentschuldigt?.length||0)));},0);
+  const trEing = trAttCount + trAbCount;
+  const trQuote = trEing ? Math.round(trAttCount/trEing*100) : 0;
+  const tuDa = turniere_in.reduce((s,t)=>s+(t.da?.length||0),0);
+  const tuAbg = turniere_in.reduce((s,t)=>s+(t.abgesagt?.length||0),0);
+  const tuEing = tuDa + tuAbg;
+  const tuQuote = tuEing ? Math.round(tuDa/tuEing*100) : 0;
+
+  // Stats-Cards je nach Filter
+  let statsHtml = '';
+  if(f==='all'){
+    statsHtml = `
+      <div class="stat-card"><div class="label">EVENTS</div><div class="value" style="color:var(--navy)">${all.length}</div><div class="sub">${tEvents.length} Trainings · ${uEvents.length} Turniere</div></div>
+      <div class="stat-card"><div class="label">TRAININGS-QUOTE</div><div class="value" style="color:var(--blue)">${trQuote}%</div><div class="sub">${trAttCount}/${trEing} da</div></div>
+      <div class="stat-card"><div class="label">TURNIER-QUOTE</div><div class="value" style="color:var(--accent)">${tuQuote}%</div><div class="sub">${tuDa}/${tuEing} da</div></div>
+      <div class="stat-card"><div class="label">Ø KINDER TR</div><div class="value" style="color:var(--green)">${trAvgKids}</div><div class="sub">pro Training</div></div>`;
+  } else if(f==='training'){
+    statsHtml = `
+      <div class="stat-card"><div class="label">TRAININGS</div><div class="value" style="color:var(--blue)">${trainings_in.length}</div><div class="sub">diese Saison</div></div>
+      <div class="stat-card"><div class="label">QUOTE</div><div class="value" style="color:var(--blue)">${trQuote}%</div><div class="sub">${trAttCount}/${trEing} da</div></div>
+      <div class="stat-card"><div class="label">Ø KINDER</div><div class="value" style="color:var(--green)">${trAvgKids}</div><div class="sub">pro Training</div></div>
+      <div class="stat-card"><div class="label">EINGELADEN</div><div class="value" style="color:var(--accent)">${trEing}</div><div class="sub">Slots gesamt</div></div>`;
+  } else {
+    const platzMaps = turniere_in.filter(t=>t.platzierung).length;
+    statsHtml = `
+      <div class="stat-card"><div class="label">TURNIERE</div><div class="value" style="color:var(--accent)">${turniere_in.length}</div><div class="sub">diese Saison</div></div>
+      <div class="stat-card"><div class="label">QUOTE</div><div class="value" style="color:var(--accent)">${tuQuote}%</div><div class="sub">${tuDa}/${tuEing} da</div></div>
+      <div class="stat-card"><div class="label">Ø DA</div><div class="value" style="color:var(--green)">${turniere_in.length?Math.round(tuDa/turniere_in.length*10)/10:0}</div><div class="sub">Spieler/Turnier</div></div>
+      <div class="stat-card"><div class="label">PLATZIERUNGEN</div><div class="value" style="color:var(--navy)">${platzMaps}</div><div class="sub">erfasst</div></div>`;
+  }
+
+  // Cards je Event-Typ
+  const renderTraining = (t)=>{
     var dd=t.datum.split('.'),dfn=dd[0]+'-'+dd[1]+'-'+dd[2];
-    return `
-    <div class="tc" style="margin-top:24px">
+    return `<div class="tc" style="margin-top:0">
       <div class="flex-between">
-        <div><div class="training-date">${t.datum} <a href="trainingsplan_${dfn}.html" target="_blank" style="font-size:12px;color:var(--blue);margin-left:8px;text-decoration:none;font-weight:600">📋 Trainingsplan</a></div><div class="training-title">${t.name}</div></div>
-        <div class="kpi-row"><div class="kpi-box"><div class="num">${t.anwesendeKinder}</div><div class="lbl">Kinder</div></div><div class="kpi-box"><div class="num">${t.trainer.length}</div><div class="lbl">Trainer</div></div></div>
+        <div><div class="training-date"><span class="ev-type-pill training">Training</span>${t.datum} <a href="trainingsplan_${dfn}.html" target="_blank" style="font-size:12px;color:var(--blue);margin-left:8px;text-decoration:none;font-weight:600">📋 Plan</a></div><div class="training-title">${t.name}</div></div>
+        <div class="kpi-row"><div class="kpi-box"><div class="num">${t.anwesendeKinder||0}</div><div class="lbl">Kinder</div></div><div class="kpi-box"><div class="num">${(t.trainer||[]).length}</div><div class="lbl">Trainer</div></div></div>
       </div>
-      <div class="info-row"><div class="info-block"><div class="lbl">Coaching</div><div class="val">${t.coaching}</div></div><div class="info-block"><div class="lbl">Besonderheiten</div><div class="val">${t.besonderheiten||'—'}</div></div></div>
+      ${t.coaching||t.besonderheiten?`<div class="info-row">${t.coaching?`<div class="info-block"><div class="lbl">Coaching</div><div class="val">${t.coaching}</div></div>`:''}${t.besonderheiten?`<div class="info-block"><div class="lbl">Besonderheiten</div><div class="val">${t.besonderheiten}</div></div>`:''}</div>`:''}
       <div class="tags-row">
-        <div class="tags-group"><div class="lbl">Kategorien</div>${t.kategorien.map(k=>cb(k)).join('')}</div>
-        <div class="tags-group"><div class="lbl">Übungen</div>${t.uebungen.map(u=>bg(u,'#0A1F3F',true)).join('')}</div>
-        <div class="tags-group"><div class="lbl">Trainer</div>${t.trainer.map(tr=>bg(tr,'#2E7D32')).join('')}</div>
+        ${(t.kategorien||[]).length?`<div class="tags-group"><div class="lbl">Kategorien</div>${t.kategorien.map(k=>cb(k)).join('')}</div>`:''}
+        ${(t.uebungen||[]).length?`<div class="tags-group"><div class="lbl">Übungen</div>${t.uebungen.map(u=>bg(u,'#0A1F3F',true)).join('')}</div>`:''}
+        ${(t.trainer||[]).length?`<div class="tags-group"><div class="lbl">Trainer</div>${t.trainer.map(tr=>bg(tr,'#2E7D32')).join('')}</div>`:''}
       </div>
-      ${t.anwesend?`<div style="margin-top:12px"><div style="font-size:12px;font-weight:600;color:var(--green);margin-bottom:6px;text-transform:uppercase">✅ Anwesend (${t.anwesend.length})</div>${t.anwesend.map(x=>bg(x,'#2E7D32')).join('')}</div>`:''}
+      ${t.anwesend&&t.anwesend.length?`<div style="margin-top:12px"><div style="font-size:12px;font-weight:600;color:var(--green);margin-bottom:6px;text-transform:uppercase">✅ Anwesend (${t.anwesend.length})</div>${t.anwesend.map(x=>bg(x,'#2E7D32')).join('')}</div>`:''}
       ${abwBlock(t.abwesend)}
-    </div>`;}).join('');
+    </div>`;
+  };
+  const renderTurnier = (t)=>`<div class="tc" style="margin-top:0">
+      <div class="flex-between">
+        <div><div class="training-date"><span class="ev-type-pill turnier">Turnier</span>${t.datum}${t.format?` · <span style="font-size:12px;color:var(--gray)">${t.format}</span>`:''}${t.ort?` · <span style="font-size:12px;color:var(--gray)">${t.ort}</span>`:''}</div><div class="training-title">${t.name}</div></div>
+        <div class="kpi-row"><div class="kpi-box"><div class="num">${(t.da||[]).length}</div><div class="lbl">Da</div></div><div class="kpi-box"><div class="num" style="color:var(--red)">${(t.abgesagt||[]).length}</div><div class="lbl">Abg.</div></div></div>
+      </div>
+      ${t.platzierung||t.ergebnis?`<div class="info-row">${t.platzierung?`<div class="info-block"><div class="lbl">Platzierung</div><div class="val">${t.platzierung}</div></div>`:''}${t.ergebnis?`<div class="info-block"><div class="lbl">Ergebnis</div><div class="val">${t.ergebnis}</div></div>`:''}</div>`:''}
+      ${t.highlights?`<div class="info-row"><div class="info-block"><div class="lbl">Highlights</div><div class="val">${t.highlights}</div></div></div>`:''}
+      ${t.notizen?`<div class="info-row"><div class="info-block"><div class="lbl">Notizen</div><div class="val">${t.notizen}</div></div></div>`:''}
+      ${(t.da||[]).length?`<div style="margin-top:12px"><div style="font-size:12px;font-weight:600;color:var(--green);margin-bottom:6px;text-transform:uppercase">✅ Da (${t.da.length})</div>${t.da.map(x=>bg(x,'#2E7D32')).join('')}</div>`:''}
+      ${(t.abgesagt||[]).length?`<div style="margin-top:12px"><div style="font-size:12px;font-weight:600;color:var(--red);margin-bottom:6px;text-transform:uppercase">🚫 Abgesagt (${t.abgesagt.length})</div>${t.abgesagt.map(x=>bg(x,'#C62828')).join('')}</div>`:''}
+    </div>`;
+
+  const items = list.map(e=>`<div class="ev-item"><span class="ev-dot ${e.type}"></span>${e.type==='training'?renderTraining(e.data):renderTurnier(e.data)}</div>`).join('');
+
+  root.innerHTML = `
+    <div class="cards">${statsHtml}</div>
+    <div class="ev-filters">
+      <button class="ev-filter ${f==='all'?'active':''}" data-filter="all">Alle (${all.length})</button>
+      <button class="ev-filter training ${f==='training'?'active training':''}" data-filter="training">Trainings (${tEvents.length})</button>
+      <button class="ev-filter turnier ${f==='turnier'?'active turnier':''}" data-filter="turnier">Turniere (${uEvents.length})</button>
+    </div>
+    <div class="ev-timeline">${items||'<div style="color:var(--gray);font-size:13px;padding:24px">Keine Veranstaltungen.</div>'}</div>`;
+
+  root.querySelectorAll('.ev-filter').forEach(btn=>{
+    btn.addEventListener('click', function(){
+      _evFilter = this.dataset.filter;
+      try{ localStorage.setItem('germania_ev_filter', _evFilter); }catch(e){}
+      renderEvents();
+      setupCollapsibles();
+    });
+  });
 }
 
 // ── CHARTS ──────────────────────────────────────────────────────────────
@@ -831,33 +929,6 @@ function setupCollapsibles(){
   });
 }
 
-function renderTurniere(){
-  // sort newest first
-  const list = [...turniere].sort((a,b)=> (b.datumIso||'').localeCompare(a.datumIso||''));
-  const totalEingeladen = list.reduce((s,t)=> s + (t.da?.length||0) + (t.abgesagt?.length||0), 0);
-  const totalDa = list.reduce((s,t)=> s + (t.da?.length||0), 0);
-  const avgDa = list.length ? Math.round(totalDa/list.length*10)/10 : 0;
-  const quote = totalEingeladen ? Math.round(totalDa/totalEingeladen*100) : 0;
-  document.getElementById('tab-turniere').innerHTML=`
-    <div class="cards">
-      <div class="stat-card"><div class="label">TURNIERE</div><div class="value" style="color:var(--blue)">${list.length}</div><div class="sub">diese Saison</div></div>
-      <div class="stat-card"><div class="label">Ø DA</div><div class="value" style="color:var(--green)">${avgDa}</div><div class="sub">Spieler/Turnier</div></div>
-      <div class="stat-card"><div class="label">EINGELADEN</div><div class="value" style="color:var(--accent)">${totalEingeladen}</div><div class="sub">Slots gesamt</div></div>
-      <div class="stat-card"><div class="label">QUOTE</div><div class="value" style="color:var(--navy)">${quote}%</div><div class="sub">Da von Eingeladen</div></div>
-    </div>
-    ${list.map(t=>`
-      <div class="tc" style="margin-top:24px">
-        <div class="flex-between">
-          <div><div class="training-date">${t.datum}${t.format?` · <span style="font-size:12px;color:var(--gray)">${t.format}</span>`:''}</div><div class="training-title">${t.name}</div></div>
-          <div class="kpi-row"><div class="kpi-box"><div class="num">${t.da.length}</div><div class="lbl">Da</div></div><div class="kpi-box"><div class="num" style="color:var(--red)">${t.abgesagt.length}</div><div class="lbl">Abg.</div></div></div>
-        </div>
-        ${t.platzierung||t.ergebnis?`<div class="info-row">${t.platzierung?`<div class="info-block"><div class="lbl">Platzierung</div><div class="val">${t.platzierung}</div></div>`:''}${t.ergebnis?`<div class="info-block"><div class="lbl">Ergebnis</div><div class="val">${t.ergebnis}</div></div>`:''}</div>`:''}
-        ${t.highlights?`<div class="info-row"><div class="info-block"><div class="lbl">Highlights</div><div class="val">${t.highlights}</div></div></div>`:''}
-        ${t.notizen?`<div class="info-row"><div class="info-block"><div class="lbl">Notizen</div><div class="val">${t.notizen}</div></div></div>`:''}
-        ${t.da.length?`<div style="margin-top:12px"><div style="font-size:12px;font-weight:600;color:var(--green);margin-bottom:6px;text-transform:uppercase">✅ Da (${t.da.length})</div>${t.da.map(x=>bg(x,'#2E7D32')).join('')}</div>`:''}
-        ${t.abgesagt.length?`<div style="margin-top:12px"><div style="font-size:12px;font-weight:600;color:var(--red);margin-bottom:6px;text-transform:uppercase">🚫 Abgesagt (${t.abgesagt.length})</div>${t.abgesagt.map(x=>bg(x,'#C62828')).join('')}</div>`:''}
-      </div>`).join('')||'<div style="color:var(--gray);font-size:13px;padding:24px">Noch keine Turniere.</div>'}`;
-}
 
 function renderOC(){
   dc('radar');const r=document.getElementById('ch-radar');
@@ -880,10 +951,10 @@ function renderUC(){dc('cats');const c=document.getElementById('ch-cats');if(c){
 document.addEventListener('DOMContentLoaded', async function() {
   try {
     // Erst initial Render (mit Hardcoded), dann Notion-Update
-    renderOverview();renderKader();renderUebungen();renderTrainings();renderTurniere();renderCharts('overview');
+    renderOverview();renderKader();renderUebungen();renderEvents();renderCharts('overview');
     // Im Hintergrund: Live-Daten holen, dann re-render
     await loadFromNotion();
-    renderOverview();renderKader();renderUebungen();renderTrainings();renderTurniere();renderCharts('overview');
+    renderOverview();renderKader();renderUebungen();renderEvents();renderCharts('overview');
   } catch(e) {
     document.body.innerHTML = '<div style="padding:20px;color:red;font-family:sans-serif"><h2>Fehler</h2><pre>' + e.message + '\n' + e.stack + '</pre></div>';
   }
