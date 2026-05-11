@@ -17,13 +17,7 @@ button{font-family:inherit;cursor:pointer}
 .header h1{font-size:26px;font-weight:800;letter-spacing:-0.3px;position:relative;z-index:1}
 .header .sub{font-size:13px;opacity:0.8;margin-top:2px}
 .header-top{display:flex;align-items:center;gap:16px;margin-bottom:16px}
-.tabs-bar{background:var(--white);margin:0 0 16px;padding:8px;border-radius:14px;box-shadow:0 4px 16px rgba(13,71,161,0.06);box-sizing:border-box;position:relative}@media(min-width:720px){.tabs-bar{padding:10px 16px;margin-bottom:20px}}
-.burger{display:none;width:100%;align-items:center;justify-content:space-between;padding:10px 14px;border:none;background:linear-gradient(135deg,#1565C0,#0D47A1);color:#fff;font-weight:800;font-size:14px;border-radius:10px;cursor:pointer;letter-spacing:0.3px}
-.burger-icon{display:inline-flex;flex-direction:column;gap:3px;width:18px}
-.burger-icon span{height:2px;background:#fff;border-radius:1px;transition:transform 0.2s,opacity 0.2s}
-.burger.open .burger-icon span:nth-child(1){transform:translateY(5px) rotate(45deg)}
-.burger.open .burger-icon span:nth-child(2){opacity:0}
-.burger.open .burger-icon span:nth-child(3){transform:translateY(-5px) rotate(-45deg)}
+.tabs-bar{background:var(--white);margin:0 0 16px;padding:8px;border-radius:14px;box-shadow:0 4px 16px rgba(13,71,161,0.06);box-sizing:border-box}@media(min-width:720px){.tabs-bar{padding:10px 16px;margin-bottom:20px}}
 .tabs{display:flex;gap:6px;flex-wrap:wrap}.tab{padding:9px 16px;border-radius:10px;border:none;background:#F0F4F8;color:#5C6B7A;font-weight:700;font-size:13px;transition:all 0.2s;letter-spacing:0.3px;cursor:pointer}
 .tab.active{background:linear-gradient(135deg,#1565C0,#0D47A1);color:#fff;font-weight:800;box-shadow:0 4px 12px rgba(21,101,192,0.3)}.tab:hover:not(.active){background:#E3F2FD;color:#0D47A1}
 .content{padding:0 8px 24px;max-width:1100px;margin:0 auto}@media(min-width:720px){.content{padding:0 16px 30px}}
@@ -124,12 +118,9 @@ tbody tr{border-bottom:1px solid #ECEFF1} tbody tr:nth-child(even){background:#F
   .header-card{padding:14px 14px;margin-bottom:10px}
   .header-card h1{font-size:18px!important}
 
-  /* Mobile: Burger statt Tabs */
-  .tabs-bar{padding:0;background:transparent;box-shadow:none;border-radius:0}
-  .burger{display:flex}
-  .tabs{display:none;flex-direction:column;gap:6px;background:var(--white);border-radius:14px;box-shadow:0 8px 24px rgba(13,71,161,0.12);padding:8px;margin-top:8px;position:absolute;left:0;right:0;z-index:50}
-  .tabs.open{display:flex}
-  .tab{width:100%;text-align:left;padding:12px 16px;font-size:14px;border-radius:10px;flex-shrink:0}
+  /* Tabs: kompakt mit etwas Wrap-Toleranz */
+  .tabs{flex-wrap:wrap;gap:6px}
+  .tab{padding:8px 12px;font-size:12px;border-radius:10px;flex:0 1 auto}
 
   /* Content area */
   .content{padding:0 12px 20px}
@@ -278,10 +269,6 @@ tbody tr{border-bottom:1px solid #ECEFF1} tbody tr:nth-child(even){background:#F
 
 <div id="notion-status" style="display:none;background:#FFF3E0;color:#E65100;padding:8px 14px;border-radius:10px;text-align:center;font-size:12px;font-weight:600;margin:0 0 10px;border:1px solid #FFB74D"></div>
   <div class="tabs-bar">
-    <button class="burger" id="burger" aria-label="Menü" aria-expanded="false">
-      <span id="burger-label">Übersicht</span>
-      <span class="burger-icon"><span></span><span></span><span></span></span>
-    </button>
     <div class="tabs" id="tabs">
       <button class="tab active" data-tab="overview">Übersicht</button>
       <button class="tab" data-tab="kader">Kader</button>
@@ -752,26 +739,6 @@ document.getElementById('tabs').addEventListener('click',e=>{
   e.target.classList.add('active');
   document.getElementById('tab-'+e.target.dataset.tab).classList.add('active');
   renderCharts(e.target.dataset.tab);
-  // Burger-Label updaten + Menü zu
-  var bl=document.getElementById('burger-label');if(bl)bl.textContent=e.target.textContent.trim();
-  document.getElementById('tabs').classList.remove('open');
-  var b=document.getElementById('burger');if(b){b.classList.remove('open');b.setAttribute('aria-expanded','false');}
-});
-// Burger-Toggle (mobile)
-document.getElementById('burger').addEventListener('click',function(e){
-  e.stopPropagation();
-  var t=document.getElementById('tabs');
-  var open=t.classList.toggle('open');
-  this.classList.toggle('open',open);
-  this.setAttribute('aria-expanded',open?'true':'false');
-});
-// Klick außerhalb schließt das Menü
-document.addEventListener('click',function(e){
-  var bar=document.querySelector('.tabs-bar');
-  if(bar && !bar.contains(e.target)){
-    document.getElementById('tabs').classList.remove('open');
-    var b=document.getElementById('burger');if(b){b.classList.remove('open');b.setAttribute('aria-expanded','false');}
-  }
 });
 
 // ── MODAL (read-only) ──────────────────────────────────────────────────
