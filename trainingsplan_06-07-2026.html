@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Trainingsplan 06.07.2026 – Germania Bambini</title>
+<style>
+:root{--navy:#0A1F3F;--blue:#1565C0;--light:#E3F2FD;--accent:#FF8F00;--green:#2E7D32;--red:#C62828;--white:#FFF;--gray:#78909C;--tip-bg:#EBF3FC}
+*{margin:0;padding:0;box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;background:#F5F7FA;color:var(--navy);line-height:1.5}
+
+/* LOGIN */
+@keyframes loginFadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes loginGlow{0%,100%{box-shadow:0 8px 32px rgba(21,101,192,0.18)}50%{box-shadow:0 14px 44px rgba(21,101,192,0.38)}}
+@keyframes loginBgShift{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+@keyframes loginBlobFloat{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(30px,-20px) scale(1.05)}66%{transform:translate(-20px,20px) scale(0.95)}}
+#login-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;background:linear-gradient(135deg,#FFFFFF 0%,#E8F1FE 30%,#FFFFFF 60%,#FFEBEE 100%);background-size:300% 300%;animation:loginBgShift 22s ease-in-out infinite;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;position:relative;overflow:hidden;padding:24px}
+#login-screen::before{content:"";position:absolute;width:520px;height:520px;border-radius:50%;background:radial-gradient(circle,rgba(21,101,192,0.16) 0%,transparent 70%);top:-180px;left:-160px;pointer-events:none;animation:loginBlobFloat 15s ease-in-out infinite}
+#login-screen::after{content:"";position:absolute;width:460px;height:460px;border-radius:50%;background:radial-gradient(circle,rgba(198,40,40,0.13) 0%,transparent 70%);bottom:-140px;right:-130px;pointer-events:none;animation:loginBlobFloat 18s ease-in-out infinite reverse}
+#login-screen .inner{text-align:center;padding:44px 38px 36px;background:rgba(255,255,255,0.78);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);border-radius:28px;border:1px solid rgba(255,255,255,0.7);max-width:380px;width:100%;position:relative;z-index:1;animation:loginFadeIn 0.7s cubic-bezier(0.4,0,0.2,1) both, loginGlow 4s ease-in-out 0.7s infinite}
+#login-screen .badge{display:inline-block;background:linear-gradient(135deg,#0D47A1,#1565C0);color:white;padding:5px 16px;border-radius:24px;font-size:10.5px;font-weight:800;letter-spacing:1.6px;margin-bottom:20px;text-transform:uppercase;box-shadow:0 4px 14px rgba(21,101,192,0.35)}
+#login-screen .logo{font-size:60px;line-height:1;margin-bottom:14px;filter:drop-shadow(0 6px 16px rgba(21,101,192,0.25));animation:loginFadeIn 0.9s cubic-bezier(0.4,0,0.2,1) 0.15s both}
+#login-screen .inner h1{font-size:26px;font-weight:800;margin-bottom:6px;background:linear-gradient(135deg,#0D47A1 0%,#1565C0 50%,#C62828 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:-0.4px;line-height:1.15}
+#login-screen .inner .sub{font-size:13px;color:#5C6B7A;margin-bottom:28px;font-weight:500;letter-spacing:0.2px}
+#login-screen input[type="password"]{padding:14px 22px;border-radius:14px;border:2px solid #DCE7F4;background:#F8FAFD;color:#0D47A1;font-size:16px;width:250px;text-align:center;outline:none;font-weight:700;letter-spacing:3px;transition:all 0.25s cubic-bezier(0.4,0,0.2,1);font-family:inherit}
+#login-screen input[type="password"]:focus{border-color:#1565C0;background:#FFFFFF;box-shadow:0 0 0 4px rgba(21,101,192,0.14);transform:scale(1.015)}
+#login-screen input::placeholder{color:#90A4AE;letter-spacing:0;font-weight:500}
+#login-screen button{margin-top:18px;padding:14px 44px;border-radius:14px;border:none;background:linear-gradient(135deg,#1565C0 0%,#0D47A1 100%);color:white;font-size:14.5px;font-weight:800;cursor:pointer;box-shadow:0 8px 22px rgba(21,101,192,0.38);transition:all 0.25s cubic-bezier(0.4,0,0.2,1);letter-spacing:1.2px;text-transform:uppercase;font-family:inherit}
+#login-screen button:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(21,101,192,0.5)}
+#login-screen button:active{transform:translateY(0);box-shadow:0 4px 12px rgba(21,101,192,0.3)}
+#pw-error{color:#C62828;font-size:13px;margin-top:16px;display:none;font-weight:700;animation:loginFadeIn 0.35s ease both}
+
+body{background:linear-gradient(135deg,#F8FAFD 0%,#F3F6FA 100%);min-height:100vh;padding:8px 8px;margin:0}@media(min-width:720px){body{padding:14px 16px}}
+/* PAGE LAYOUT */
+.block{background:var(--white);max-width:1100px;margin:0 auto 16px;padding:18px 16px;border-radius:14px;box-shadow:0 4px 16px rgba(13,71,161,0.06)}@media(min-width:720px){.block{padding:28px 32px;margin-bottom:20px}}
+@media(max-width:720px){.block{margin:0 0 12px;border-radius:0;padding:18px 14px;max-width:100%;box-shadow:0 2px 8px rgba(0,0,0,0.05)}}
+
+/* HEADER */
+.hdr{display:flex;justify-content:space-between;align-items:center;padding-bottom:14px;margin-bottom:18px;position:relative;gap:12px}.hdr::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:linear-gradient(90deg,#0D47A1 0%,#1565C0 50%,#C62828 100%);border-radius:2px}
+.hdr-left{display:flex;align-items:center;gap:14px}
+.hdr-left img{width:44px;height:44px;border-radius:8px}
+.hdr-left span{font-size:13px;font-weight:700;letter-spacing:0.3px;line-height:1.2}
+.hdr-right{text-align:right}
+.hdr-right h1{font-size:22px;font-weight:900;letter-spacing:0.5px;background:linear-gradient(135deg,#0D47A1 0%,#1565C0 60%,#C62828 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.hdr-right .datum{font-size:15px;color:var(--blue);font-weight:600}
+
+/* META */
+.meta{font-size:13px;margin-bottom:24px;line-height:1.8}
+.meta b{display:inline-block;width:100px}
+
+/* SECTION TITLES */
+.stitle{font-size:20px;font-weight:800;margin:32px 0 16px;color:var(--navy);padding:6px 0 6px 16px;border-left:5px solid;border-image:linear-gradient(180deg,#0D47A1 0%,#1565C0 50%,#C62828 100%) 1;letter-spacing:-0.3px}
+
+/* TEAM BOXES */
+.team-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:20px}@media(min-width:720px){.team-grid{gap:12px}}
+.table-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:12px}
+.table-scroll::-webkit-scrollbar{height:6px}.table-scroll::-webkit-scrollbar-thumb{background:#BBDEFB;border-radius:3px}
+.team-box{border-radius:14px;overflow:hidden;background:var(--white);box-shadow:0 4px 16px rgba(13,71,161,0.08),0 1px 3px rgba(0,0,0,0.06);transition:transform 0.2s ease, box-shadow 0.2s ease}.team-box:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(13,71,161,0.15),0 2px 6px rgba(0,0,0,0.08)}
+.team-box .tb-hdr{padding:10px 12px;color:var(--white);font-weight:800;font-size:14px;text-align:center;letter-spacing:0.5px;text-transform:uppercase}
+.tb-blau{background:linear-gradient(135deg,#1976D2,#0D47A1)}.tb-rot{background:linear-gradient(135deg,#E53935,#B71C1C)}.tb-orange{background:linear-gradient(135deg,#FB8C00,#E65100)}.tb-gelb{background:linear-gradient(135deg,#FBC02D,#F57F17);color:#3E2723 !important}.tb-gruen{background:linear-gradient(135deg,#43A047,#1B5E20)}
+.team-box .tb-list{padding:8px 12px}
+.team-box .tb-player{padding:4px 0;font-size:12.5px;border-bottom:1px solid #F0F0F0;display:flex;align-items:center;gap:6px}
+.team-box .tb-player:last-child{border-bottom:none}
+.dot{display:none}
+.dot-b{background:#1565C0}.dot-y{background:#F9A825}.dot-g{background:#2E7D32}
+
+/* ROTATION TABLE */
+.rot-tbl{width:100%;border-collapse:separate;border-spacing:0;font-size:13px;margin-bottom:6px;table-layout:fixed;border-radius:12px;overflow:hidden;background:#fff;border:1px solid #E3F2FD}
+.rot-tbl th{background:linear-gradient(135deg,#0D47A1,#1565C0);color:var(--white);padding:11px 10px;font-weight:700;text-align:center;font-size:12px;text-transform:uppercase;letter-spacing:0.8px}
+.rot-tbl td{padding:7px 10px;text-align:center;vertical-align:middle;border-bottom:1px solid #ECEFF1;font-size:12.5px}
+.rot-tbl td.rnum{padding:6px 4px;text-align:center;vertical-align:middle}.rot-tbl .rnum-pill{background:linear-gradient(135deg,#E3F2FD,#BBDEFB);color:#0D47A1;border-radius:10px;width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;line-height:1;font-weight:800;font-size:14px;border:1.5px solid rgba(21,101,192,0.25)}
+.rot-tbl .pause td{background:#F0F0F0;font-size:11px;color:var(--gray);padding:3px 10px}
+.rot-tbl .team-col{font-weight:600;line-height:1.8}
+.rot-tbl .team-col .vs{display:block;font-size:10px;font-weight:400;color:var(--gray);line-height:1}
+
+/* STATIONS OVERVIEW TABLE */
+.stat-tbl{width:100%;border-collapse:separate;border-spacing:0;font-size:13px;margin-bottom:8px;border-radius:12px;overflow:hidden;background:#fff;border:1px solid #E3F2FD}
+.stat-tbl th{background:linear-gradient(135deg,#0D47A1,#1565C0);color:var(--white);padding:11px 14px;font-weight:700;text-align:left;font-size:12px;text-transform:uppercase;letter-spacing:0.8px}
+.stat-tbl td{padding:10px 12px;border-bottom:1px solid #ECEFF1;vertical-align:middle;font-size:12.5px}
+.stat-tbl .snum{text-align:center;width:50px;padding:6px 4px;vertical-align:middle}.stat-tbl .snum-inner{background:linear-gradient(135deg,#E3F2FD,#BBDEFB);color:#0D47A1;border-radius:10px;width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;line-height:1;font-weight:800;font-size:16px;border:1.5px solid rgba(21,101,192,0.25)}
+
+.hint{font-size:12px;color:#607D8B;margin-top:8px;line-height:1.5}
+
+/* STATION DETAIL CARD */
+.scard{border:1px solid #E3F2FD;border-radius:14px;overflow:hidden;margin-bottom:14px}
+.scard-hdr{background:linear-gradient(135deg,#E3F2FD 0%,#FFFFFF 60%,#FFEBEE 100%);padding:14px 18px;color:var(--navy);display:flex;justify-content:space-between;align-items:center;gap:12px;border-bottom:1px solid rgba(21,101,192,0.1)}
+.scard-hdr .lbl{font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;opacity:0.65}
+.scard-hdr .num{font-size:30px;font-weight:900;line-height:1;color:#1565C0;letter-spacing:-1px}
+.scard-hdr .sname{font-size:15px;font-weight:700;color:var(--blue);margin-top:2px}
+.scard-hdr .trainer{font-size:12px;color:#fff;text-align:right;margin-top:auto;background:linear-gradient(135deg,#1565C0,#0D47A1);padding:6px 14px;border-radius:20px;font-weight:700;letter-spacing:0.5px;box-shadow:0 3px 10px rgba(21,101,192,0.3)}
+.scard-body{padding:20px 24px}
+
+.sec-label{font-size:11px;font-weight:700;color:var(--blue);letter-spacing:0.5px;text-transform:uppercase;margin:16px 0 6px}
+.sec-label:first-child{margin-top:0}
+.sec-text{font-size:13px;line-height:1.6}
+.sec-text.bold{font-weight:700}
+
+.tip{background:linear-gradient(135deg,#E8F5FE 0%,#F3E5F5 100%);padding:16px 20px;margin:18px 0 0;font-size:13px;line-height:1.55;border-radius:14px;border-left:4px solid #1565C0;box-shadow:0 3px 12px rgba(21,101,192,0.08)}
+.tip b{color:var(--blue)}
+
+.sketch{text-align:center;margin-top:20px}
+.sketch img{max-width:100%;max-height:380px;border-radius:4px}
+
+/* FOOTER */
+.footer{display:flex;justify-content:space-between;font-size:10px;color:#B0BEC5;margin-top:24px;padding-top:8px;border-top:1px solid #ECEFF1}
+
+/* RESPONSIVE */
+@media(max-width:600px){
+  .hdr{align-items:center;gap:10px}
+  .hdr-right h1{font-size:18px}
+  .hdr-left img{width:36px;height:36px}
+  .hdr-left span{font-size:11px}
+  /* Team-Grid bricht via auto-fit eh schon um */
+  .team-box .tb-hdr{font-size:12px;padding:7px 8px}
+  .team-box .tb-player{font-size:11.5px;padding:3px 0;line-height:1.3}
+  .team-box .tb-list{padding:6px 10px}
+  /* Tabellen: horizontal scrollen statt zerquetschen */
+  .rot-tbl,.stat-tbl{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch;white-space:nowrap;border-radius:12px}
+  .rot-tbl::-webkit-scrollbar,.stat-tbl::-webkit-scrollbar{height:5px}
+  .rot-tbl::-webkit-scrollbar-thumb,.stat-tbl::-webkit-scrollbar-thumb{background:#BBDEFB;border-radius:3px}
+  .rot-tbl thead,.rot-tbl tbody,.stat-tbl thead,.stat-tbl tbody{display:table;width:100%;min-width:480px}
+  .rot-tbl th,.rot-tbl td{font-size:11px;padding:5px 4px}
+  .rot-tbl .rnum-pill{font-size:11px;padding:4px 8px;min-width:28px}
+  .rot-tbl .team-col{font-size:11px;white-space:normal}
+  .rot-tbl .team-col .vs{font-size:9px}
+  .stat-tbl{font-size:12px}
+  .stat-tbl th,.stat-tbl td{font-size:11px;padding:7px 6px;white-space:normal}
+  .stat-tbl .snum{width:40px;padding:6px 4px;white-space:nowrap}
+  .stat-tbl .snum-inner{width:30px;height:30px;font-size:14px}
+  .scard{border-radius:12px}
+  .scard-hdr{padding:12px 14px;flex-wrap:wrap;gap:8px}
+  .scard-hdr .num{font-size:24px}
+  .scard-body{padding:14px 16px}
+  .tip{padding:12px 14px;font-size:12px}
+  .stitle{font-size:16px;margin:18px 0 10px;padding-left:12px}
+  .meta b{width:auto;min-width:80px}
+  .meta{font-size:12px;line-height:1.7}
+}
+
+/* PRINT */
+@media print{
+  body{background:white}
+  .page{box-shadow:none;margin:0;padding:30px 40px}
+  #login-screen{display:none!important}
+  #app-content{display:block!important}
+}
+
+/* EDIT MODE */
+
+
+.sortable-ghost{opacity:0.5;border:2px solid var(--blue)}
+
+
+
+.fab-wrapper{position:relative}
+#absence-zone{display:none;margin:20px 0;padding:16px;background:#F5F7FA;border-radius:8px;gap:12px}
+
+#absence-zone .absence-box{padding:12px;border-radius:6px;min-height:80px;border:2px dashed rgba(0,0,0,0.2);font-size:12px;font-weight:600;display:flex;align-items:center;justify-content:center;text-align:center;color:white}
+.absence-reported{background:#78909C;color:white}
+.absence-shortterm{background:#FF8F00;color:white}
+.absence-unexcused{background:#C62828;color:white}
+.absence-drop{min-height:120px}
+@media(max-width:600px){
+  #absence-zone{grid-template-columns:1fr}
+  
+}
+
+/* NOTION SYNC BTN */
+#notion-sync-btn{background:#DCDCDC;color:#666;border:none;padding:10px 16px;border-radius:6px;font-size:13px;cursor:not-allowed;opacity:0.6;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;margin-top:16px}
+#notion-sync-btn:hover{background:#DCDCDC}
+
+/* SUMMARY SECTION */
+#summary-section{display:none;margin-top:20px;padding:16px;background:#F5F7FA;border-radius:8px;border-left:4px solid var(--blue)}
+
+#copy-summary-btn{background:var(--blue);color:white;border:none;padding:12px 20px;border-radius:6px;font-size:14px;font-weight:600;cursor:pointer;margin-top:12px;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif}
+#copy-summary-btn:active{opacity:0.9}
+
+/* PRINT */
+@media print{
+  body{background:white}
+  .page{box-shadow:none;margin:0;padding:30px 40px}
+  #login-screen{display:none!important}
+  #app-content{display:block!important}
+  
+  #absence-zone{display:none!important}
+  #summary-section{display:none!important}
+}
+
+</style>
+</head>
+<body
+  data-worker-url="https://germania-notion-sync.example.workers.dev"
+  data-sync-secret="germania-sync-2026"
+  data-notion-page-id="395a0ef6-1300-8197-813a-c69c842cd90f"
+  data-training-date="06.07.2026">
+
+<div id="login-screen">
+  <div class="inner">
+    <div class="badge">SV Germania Bietigheim</div>
+    <div class="logo">🦁⚽</div>
+    <h1>Bambini · JG 2019</h1>
+    <p class="sub">Trainingsplan · Login zum Öffnen</p>
+    <form id="pw-form" onsubmit="return checkPw()" action="javascript:void(0)" method="post">
+      <input type="text" name="username" value="germania" autocomplete="username" style="position:absolute;opacity:0;height:0;width:0;pointer-events:none" tabindex="-1">
+      <input id="pw-input" name="password" type="password" placeholder="Passwort" autocomplete="current-password">
+      <br>
+      <button type="submit">Öffnen</button>
+    </form>
+    <p id="pw-error">Falsches Passwort</p>
+  </div>
+</div>
+
+<div id="app-content" style="display:none">
+
+<section class="block">
+  <div class="hdr">
+    <div class="hdr-left">
+      <img src="data:image/png;base64,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" alt="G">
+      <span>SV GERMANIA BIETIGHEIM</span>
+    </div>
+    <div class="hdr-right">
+      <h1>TRAININGSPLAN</h1>
+      <div class="datum">06.07.2026</div>
+    </div>
+  </div>
+
+            <div class="meta">
+    <b>Trainer:</b> Andi, Marc, Marcus, Toni, Mike<br>
+    <b>Anwesend:</b> 19 Kinder → 4 Gruppen (4+5+5+5) · 4 Runden
+  </div>
+
+  <div class="stitle">Teamaufstellung</div>
+  <div class="team-grid">
+    <div class="team-box" data-team="Blau"><div class="tb-hdr tb-blau">Gruppe 1</div><div class="tb-list">
+      <div class="tb-player" data-name="Emil Roßbach" data-rating="🔵"><span class="dot dot-b"></span>Emil R.</div>
+      <div class="tb-player" data-name="Azariah Liel Moses" data-rating="🔵"><span class="dot dot-b"></span>Azariah</div>
+      <div class="tb-player" data-name="Luca Scherz" data-rating="🔵"><span class="dot dot-b"></span>Luca</div>
+      <div class="tb-player" data-name="Rafael Schmitz" data-rating="🔵"><span class="dot dot-b"></span>Rafael</div>
+    </div></div>
+    <div class="team-box" data-team="Rot"><div class="tb-hdr tb-rot">Gruppe 2</div><div class="tb-list">
+      <div class="tb-player" data-name="Unik Demiri" data-rating="🟡"><span class="dot dot-y"></span>Unik</div>
+      <div class="tb-player" data-name="Damiano Rughöft" data-rating="🔵"><span class="dot dot-b"></span>Damiano</div>
+      <div class="tb-player" data-name="Ejdin Beganovic" data-rating="🟡"><span class="dot dot-y"></span>Ejdin</div>
+      <div class="tb-player" data-name="Linus Würth" data-rating="🔵"><span class="dot dot-b"></span>Linus</div>
+      <div class="tb-player" data-name="Adam Abdelaal" data-rating="🟡"><span class="dot dot-y"></span>Adam</div>
+    </div></div>
+    <div class="team-box" data-team="Orange"><div class="tb-hdr tb-orange">Gruppe 3</div><div class="tb-list">
+      <div class="tb-player" data-name="Taio Fees" data-rating="🔵"><span class="dot dot-b"></span>Taio</div>
+      <div class="tb-player" data-name="Jesaja Cello" data-rating="🟡"><span class="dot dot-y"></span>Jesaja</div>
+      <div class="tb-player" data-name="Emil Wachtler" data-rating="🟡"><span class="dot dot-y"></span>Emil W.</div>
+      <div class="tb-player" data-name="Dimitrios Matlis" data-rating="🟢"><span class="dot dot-g"></span>Dimitrios</div>
+      <div class="tb-player" data-name="Ioannis Papanikolaou" data-rating="🟢"><span class="dot dot-g"></span>Ioannis</div>
+    </div></div>
+    <div class="team-box" data-team="Grün"><div class="tb-hdr tb-gruen">Gruppe 4</div><div class="tb-list">
+      <div class="tb-player" data-name="Dejvi Paja" data-rating="🟡"><span class="dot dot-y"></span>Dejvi</div>
+      <div class="tb-player" data-name="Mattheo Lowaßer" data-rating="🟡"><span class="dot dot-y"></span>Mattheo</div>
+      <div class="tb-player" data-name="Joaquin" data-rating="🟡"><span class="dot dot-y"></span>Joaquin</div>
+      <div class="tb-player" data-name="Lorik Pllana" data-rating="🔵"><span class="dot dot-b"></span>Lorik</div>
+      <div class="tb-player" data-name="Samuel Salvatore Da Silva" data-rating="🟢"><span class="dot dot-g"></span>Samuel D.</div>
+    </div></div>
+  </div>
+
+  <div class="stitle">Rotationsplan · 4 × 17 Min · 3 Min Trinkpause</div>
+  <table class="rot-tbl">
+    <thead><tr><th></th><th>Station 1<br>4vs4</th><th>Station 2<br>Parcours</th><th>Station 3<br>Slalom &amp; Passen</th></tr></thead>
+    <tbody>
+      <tr><td class="rnum"><span class="rnum-pill">R1</span></td><td class="team-col"><span style="color:#1565C0">G1</span><span class="vs">vs</span><span style="color:#C62828">G2</span></td><td class="team-col"><span style="color:#FF8F00">G3</span></td><td class="team-col"><span style="color:#2E7D32">G4</span></td></tr>
+      <tr class="pause"><td></td><td colspan="3">■ Trinkpause · 3'</td></tr>
+      <tr><td class="rnum"><span class="rnum-pill">R2</span></td><td class="team-col"><span style="color:#1565C0">G1</span><span class="vs">vs</span><span style="color:#FF8F00">G3</span></td><td class="team-col"><span style="color:#2E7D32">G4</span></td><td class="team-col"><span style="color:#C62828">G2</span></td></tr>
+      <tr class="pause"><td></td><td colspan="3">■ Trinkpause · 3'</td></tr>
+      <tr><td class="rnum"><span class="rnum-pill">R3</span></td><td class="team-col"><span style="color:#C62828">G2</span><span class="vs">vs</span><span style="color:#2E7D32">G4</span></td><td class="team-col"><span style="color:#1565C0">G1</span></td><td class="team-col"><span style="color:#FF8F00">G3</span></td></tr>
+      <tr class="pause"><td></td><td colspan="3">■ Trinkpause · 3'</td></tr>
+      <tr><td class="rnum"><span class="rnum-pill">R4</span></td><td class="team-col"><span style="color:#FF8F00">G3</span><span class="vs">vs</span><span style="color:#2E7D32">G4</span></td><td class="team-col"><span style="color:#C62828">G2</span></td><td class="team-col"><span style="color:#1565C0">G1</span></td></tr>
+    </tbody>
+  </table>
+  <p class="hint">Gruppe 1 (Emil R., Azariah, Luca, Rafael) spielt heute nie gegen Gruppe 4 (Dejvi, Mattheo, Joaquin, Lorik, Samuel D.). Jede Gruppe: 2× Station 1 (4vs4), 1× Station 2 (Parcours), 1× Station 3 (Slalom &amp; Passen).</p>
+
+  <div class="stitle">Stationen</div>
+  <table class="stat-tbl">
+    <thead><tr><th>Station</th><th>Übung</th><th>Trainer</th><th>Ziel</th></tr></thead>
+    <tbody>
+      <tr><td class="snum"><span class="snum-inner">1</span></td><td>4vs4</td><td>Andi</td><td>Spielformen im kleinen Rahmen, viele Ballkontakte.</td></tr>
+      <tr><td class="snum"><span class="snum-inner">2</span></td><td>Parcours (Mitte)</td><td>Marc, Mike</td><td>Ballführung &amp; Koordination im Parcours.</td></tr>
+      <tr><td class="snum"><span class="snum-inner">3</span></td><td>Slalom &amp; Passen</td><td>Marcus, Toni</td><td>Dribbling im Slalom, Passgenauigkeit.</td></tr>
+    </tbody>
+  </table>
+
+</section>
+
+<section class="block">
+
+  <div class="scard">
+    <div class="scard-hdr">
+      <div><div class="lbl">STATION</div><div class="num">1</div><div class="sname">4vs4</div></div>
+      <div class="trainer">Trainer: Andi</div>
+    </div>
+    <div class="scard-body">
+      <div class="sec-label">AUFBAU</div>
+      <p class="sec-text">Kleines Feld, 2 Minitore. Je Runde spielen zwei Gruppen gegeneinander (siehe Rotation) – Gruppe 1 nie gegen Gruppe 4.</p>
+
+      <div class="sec-label">ABLAUF</div>
+      <p class="sec-text">4 gegen 4 auf zwei Tore, freies Spiel mit Fokus auf Zweikampf &amp; Abschluss.</p>
+
+      <div class="sec-label">ZIEL</div>
+      <p class="sec-text bold">Spielformen im kleinen Rahmen, viele Ballkontakte.</p>
+
+      <div class="tip"><b>Coaching-Tipp:</b> Kurze Wechsel, immer im Spiel bleiben – auch wenn's mal hin und her geht.</div>
+    </div>
+  </div>
+
+</section>
+
+
+<section class="block">
+
+  <div class="scard">
+    <div class="scard-hdr">
+      <div><div class="lbl">STATION</div><div class="num">2</div><div class="sname">Parcours</div></div>
+      <div class="trainer">Trainer: Marc, Mike</div>
+    </div>
+    <div class="scard-body">
+      <div class="sec-label">AUFBAU</div>
+      <p class="sec-text">Parcours in der Mitte des Platzes.</p>
+
+      <div class="sec-label">ABLAUF</div>
+      <p class="sec-text">Gruppe durchläuft den Parcours – Ballführung und Koordination im Wechsel.</p>
+
+      <div class="sec-label">ZIEL</div>
+      <p class="sec-text bold">Ballführung &amp; Koordination verbessern.</p>
+
+      <div class="tip"><b>Coaching-Tipp:</b> Auf Körperhaltung und Kopf hoch achten.</div>
+    </div>
+  </div>
+
+</section>
+
+
+<section class="block">
+
+  <div class="scard">
+    <div class="scard-hdr">
+      <div><div class="lbl">STATION</div><div class="num">3</div><div class="sname">Slalom &amp; Passen</div></div>
+      <div class="trainer">Trainer: Marcus, Toni</div>
+    </div>
+    <div class="scard-body">
+      <div class="sec-label">AUFBAU</div>
+      <p class="sec-text">Slalom-Stangen plus Passstation.</p>
+
+      <div class="sec-label">ABLAUF</div>
+      <p class="sec-text">Dribbling durch den Slalom, danach Passübung.</p>
+
+      <div class="sec-label">ZIEL</div>
+      <p class="sec-text bold">Dribbling im Slalom, Passgenauigkeit.</p>
+
+      <div class="tip"><b>Coaching-Tipp:</b> Locker durch die Stangen, sauberer Innenseitpass.</div>
+    </div>
+  </div>
+
+</section>
+
+
+<!-- LIVE-EDIT DOM -->
+
+
+<div id="absence-zone" style="max-width:800px;margin:20px auto;">
+  <div class="absence-box absence-reported absence-drop" data-absence="reported">✓ Rechtzeitig abgesagt</div>
+  <div class="absence-box absence-shortterm absence-drop" data-absence="shortterm">⚠️ Kurzfristig (&lt;1h)</div>
+  <div class="absence-box absence-unexcused absence-drop" data-absence="unexcused">🚫 Unentschuldigt</div>
+</div>
+
+<div id="summary-section" style="max-width:800px;margin:20px auto;">
+  <h3 style="font-size:14px;margin-bottom:8px;color:var(--navy)">Zusammenfassung</h3>
+  <pre id="summary-text" style="font-size:12px;line-height:1.5;white-space:pre-wrap;background:white;padding:12px;border-radius:4px;border:1px solid #E0E0E0"></pre>
+  <button id="copy-summary-btn">📋 Zusammenfassung kopieren</button>
+  <button id="notion-sync-btn">💾 Nach Notion speichern</button>
+</div>
+</div><!-- /app-content -->
+
+<script>
+function checkPw(){
+  document.getElementById('login-screen').style.display='none';
+  document.getElementById('app-content').style.display='block';
+  return false;
+}
+document.getElementById('pw-input').addEventListener('keydown',function(e){if(e.key==='Enter')checkPw()});
+</script>
+
+
+<script>
+/**
+ * Live-Edit + Notion Sync für Germania Trainingsplan
+ *
+ * Features:
+ * - FAB-Button (✏️) zum Toggling des Edit-Modus
+ * - SortableJS Drag & Drop für Teams + Abwesenheits-Zonen
+ * - Zusammenfassung kopieren (Clipboard)
+ * - Nach Notion speichern (via Cloudflare Worker)
+ *
+ * Benötigt im HTML:
+ * - .tb-list Elemente mit data-team Attribut
+ * - .tb-player Elemente mit data-name und data-rating Attributen
+ * - .absence-drop Elemente mit data-absence Attribut
+ * - );
+    sortables.push(sortable);
+  });
+
+  document.querySelectorAll('.absence-drop').forEach(box => {
+    const sortable = Sortable.create(box, {
+      animation: 150,
+      ghostClass: 'sortable-ghost',
+      group: 'teams',
+      delayOnTouchOnly: true,
+      delay: 100,
+      touchStartThreshold: 5,
+      disabled: !editMode,
+      onEnd: updateStats
+    });
+    sortables.push(sortable);
+  });
+}
+
+function toggleEditMode() {
+  editMode = !editMode;
+  document.body.classList.toggle('edit-mode');
+  const fab = document.getElementById('edit-fab');
+
+  if (editMode) {
+    fab.textContent = '✅';
+    fab.title = 'Fertig';
+  } else {
+    fab.textContent = '✏️';
+    fab.title = 'Bearbeiten';
+  }
+
+  sortables.forEach(s => s.option('disabled', !editMode));
+  updateStats();
+}
+
+function gatherState() {
+  const teams = {};
+  const absences = { rechtzeitig: [], kurzfristig: [], unentschuldigt: [] };
+
+  // Teams sammeln
+  document.querySelectorAll('.team-box').forEach(box => {
+    const teamName = box.dataset.team;
+    if (!teamName) return;
+    const players = [];
+    box.querySelectorAll('.tb-player').forEach(p => {
+      const name = p.dataset.name;
+      if (name) players.push(name);
+    });
+    teams[teamName] = players;
+  });
+
+  // Abwesenheiten sammeln
+  const absenceMap = { reported: 'rechtzeitig', shortterm: 'kurzfristig', unexcused: 'unentschuldigt' };
+  document.querySelectorAll('.absence-drop').forEach(box => {
+    const absKey = box.dataset.absence;
+    const notionKey = absenceMap[absKey] || absKey;
+    box.querySelectorAll('.tb-player').forEach(p => {
+      const name = p.dataset.name;
+      if (name) absences[notionKey].push(name);
+    });
+  });
+
+  const presentCount = Object.values(teams).reduce((sum, arr) => sum + arr.length, 0);
+
+  return { teams, absences, presentCount };
+}
+
+function updateStats() {
+  const { teams, absences, presentCount } = gatherState();
+
+  let summary = `Training ${TRAINING_DATE || '–'} – Finale Aufstellung
+`;
+  summary += `Anwesend: ${presentCount} Kinder
+
+`;
+
+  Object.entries(teams).forEach(([name, players]) => {
+    if (players.length > 0) {
+      summary += `Team ${name}: ${players.join(', ')}
+`;
+    }
+  });
+
+  summary += '
+Abwesenheiten:
+';
+  if (absences.rechtzeitig.length > 0) summary += `✓ Abgemeldet: ${absences.rechtzeitig.join(', ')}
+`;
+  if (absences.kurzfristig.length > 0) summary += `⚠️ Kurzfristig: ${absences.kurzfristig.join(', ')}
+`;
+  if (absences.unentschuldigt.length > 0) summary += `🚫 Unentschuldigt: ${absences.unentschuldigt.join(', ')}
+`;
+
+  document.getElementById('summary-text').textContent = summary;
+}
+
+// === Notion Sync ===
+async function syncToNotion() {
+  const btn = document.getElementById('notion-sync-btn');
+
+  if (!WORKER_URL || !NOTION_PAGE_ID) {
+    btn.textContent = '❌ Nicht konfiguriert';
+    setTimeout(() => { btn.textContent = '💾 Nach Notion speichern'; }, 3000);
+    return;
+  }
+
+  btn.textContent = '⏳ Speichere...';
+  btn.disabled = true;
+
+  const { teams, absences, presentCount } = gatherState();
+
+  try {
+    const response = await fetch(`${WORKER_URL}/sync-teams`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        secret: SYNC_SECRET,
+        pageId: NOTION_PAGE_ID,
+        teams: teams,
+        abwesend: absences,
+        anzahlKinder: presentCount
+      })
+    });
+
+    const result = await response.json();
+
+    if (result.success) {
+      btn.textContent = '✅ Gespeichert!';
+      setTimeout(() => { btn.textContent = '💾 Nach Notion speichern'; }, 3000);
+    } else {
+      btn.textContent = '❌ Fehler';
+      console.error('Notion sync error:', result);
+      setTimeout(() => { btn.textContent = '💾 Nach Notion speichern'; }, 3000);
+    }
+  } catch (e) {
+    btn.textContent = '❌ Netzwerk-Fehler';
+    console.error('Notion sync failed:', e);
+    setTimeout(() => { btn.textContent = '💾 Nach Notion speichern'; }, 3000);
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+// === Event Listeners ===
+document.getElementById('edit-fab').addEventListener('click', toggleEditMode);
+
+document.getElementById('copy-summary-btn').addEventListener('click', function() {
+  const text = document.getElementById('summary-text').textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = this;
+    const originalText = btn.textContent;
+    btn.textContent = '✓ Kopiert!';
+    setTimeout(() => { btn.textContent = originalText; }, 2000);
+  });
+});
+
+document.getElementById('notion-sync-btn').addEventListener('click', syncToNotion);
+
+// === Init ===
+initSortables();
+updateStats();
+
+</script>
+
+</body>
+</html>
