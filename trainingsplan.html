@@ -201,6 +201,20 @@ body{background:linear-gradient(135deg,#F8FAFD 0%,#F3F6FA 100%);min-height:100vh
 .rot-tbl td{padding:9px 8px}
 .rot-tbl th:first-child{width:56px}
 .emptycell{color:#B0BEC5;font-weight:700}
+/* MOBILE ROUND CARDS */
+.rot-cards{display:none}
+.rcard{border:1px solid #E3F2FD;border-radius:12px;margin-bottom:10px;overflow:hidden;background:#fff;box-shadow:0 2px 8px rgba(13,71,161,0.05)}
+.rcard-h{display:flex;align-items:center;gap:10px;background:linear-gradient(135deg,#0D47A1,#1565C0);color:#fff;padding:8px 12px;font-weight:800;font-size:15px}
+.rcard-h .rnum-pill{min-width:30px;height:30px;font-size:16px;background:rgba(255,255,255,0.18)}
+.rline{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;border-bottom:1px solid #F0F0F0}
+.rline:last-child{border-bottom:none}
+.rlabel{color:#607D8B;font-weight:800;font-size:11px;text-transform:uppercase;letter-spacing:.4px;flex-shrink:0}
+.rline .rval{text-align:right}
+.rpause{text-align:center;color:#90A4AE;font-size:11px;font-weight:700;margin:0 0 10px}
+@media(max-width:600px){
+  .rot-wrap{display:none}
+  .rot-cards{display:block}
+}
 </style>
 
 </head>
@@ -270,7 +284,7 @@ body{background:linear-gradient(135deg,#F8FAFD 0%,#F3F6FA 100%);min-height:100vh
   </div>
 
   <div class="stitle">Rotationsplan · 5 × 13 Min · 2 Min Pause</div>
-  <div class="table-scroll">
+  <div class="table-scroll rot-wrap">
   <table class="rot-tbl">
     <thead><tr><th>Runde</th><th>Station 1<br><small>4vs4</small></th><th>Station 2<br><small>Parcours</small></th><th>Station 3<br><small>Übung</small></th></tr></thead>
     <tbody>
@@ -285,6 +299,42 @@ body{background:linear-gradient(135deg,#F8FAFD 0%,#F3F6FA 100%);min-height:100vh
 <tr><td><span class="rnum-pill">5</span></td><td><span class="gp gp1">G1</span><span class="vsx">vs</span><span class="gp gp2">G2</span></td><td><span class="gp gp3">G3</span><span class="vsx">vs</span><span class="gp gp4">G4</span><span class="field2">2. Spielfeld</span></td><td><span class="emptycell">–</span></td></tr>
     </tbody>
   </table>
+  </div>
+  <div class="rot-cards">
+  <div class="rcard">
+    <div class="rcard-h"><span class="rnum-pill">1</span> Runde 1</div>
+      <div class="rline"><span class="rlabel">Station 1 · 4vs4</span><span class="rval"><span class="gp gp1">G1</span><span class="vsx">vs</span><span class="gp gp2">G2</span></span></div>
+      <div class="rline"><span class="rlabel">Station 2 · Parcours</span><span class="rval"><span class="gp gp3">G3</span></span></div>
+      <div class="rline"><span class="rlabel">Station 3 · Übung</span><span class="rval"><span class="gp gp4">G4</span></span></div>
+  </div>
+  <div class="rpause">■ 2 Min Trinkpause</div>
+  <div class="rcard">
+    <div class="rcard-h"><span class="rnum-pill">2</span> Runde 2</div>
+      <div class="rline"><span class="rlabel">Station 1 · 4vs4</span><span class="rval"><span class="gp gp3">G3</span><span class="vsx">vs</span><span class="gp gp4">G4</span></span></div>
+      <div class="rline"><span class="rlabel">Station 2 · Parcours</span><span class="rval"><span class="gp gp1">G1</span></span></div>
+      <div class="rline"><span class="rlabel">Station 3 · Übung</span><span class="rval"><span class="gp gp2">G2</span></span></div>
+  </div>
+  <div class="rpause">■ 2 Min Trinkpause</div>
+  <div class="rcard">
+    <div class="rcard-h"><span class="rnum-pill">3</span> Runde 3</div>
+      <div class="rline"><span class="rlabel">Station 1 · 4vs4</span><span class="rval"><span class="gp gp1">G1</span><span class="vsx">vs</span><span class="gp gp2">G2</span></span></div>
+      <div class="rline"><span class="rlabel">Station 2 · Parcours</span><span class="rval"><span class="gp gp4">G4</span></span></div>
+      <div class="rline"><span class="rlabel">Station 3 · Übung</span><span class="rval"><span class="gp gp3">G3</span></span></div>
+  </div>
+  <div class="rpause">■ 2 Min Trinkpause</div>
+  <div class="rcard">
+    <div class="rcard-h"><span class="rnum-pill">4</span> Runde 4</div>
+      <div class="rline"><span class="rlabel">Station 1 · 4vs4</span><span class="rval"><span class="gp gp3">G3</span><span class="vsx">vs</span><span class="gp gp4">G4</span></span></div>
+      <div class="rline"><span class="rlabel">Station 2 · Parcours</span><span class="rval"><span class="gp gp2">G2</span></span></div>
+      <div class="rline"><span class="rlabel">Station 3 · Übung</span><span class="rval"><span class="gp gp1">G1</span></span></div>
+  </div>
+  <div class="rpause">■ 2 Min Trinkpause</div>
+  <div class="rcard">
+    <div class="rcard-h"><span class="rnum-pill">5</span> Runde 5</div>
+      <div class="rline"><span class="rlabel">Station 1 · 4vs4</span><span class="rval"><span class="gp gp1">G1</span><span class="vsx">vs</span><span class="gp gp2">G2</span></span></div>
+      <div class="rline"><span class="rlabel">Station 2 · Parcours</span><span class="rval"><span class="gp gp3">G3</span><span class="vsx">vs</span><span class="gp gp4">G4</span> <small style="color:#90A4AE">(2. Spielfeld)</small></span></div>
+      <div class="rline"><span class="rlabel">Station 3 · Übung</span><span class="rval"><span class="emptycell">–</span></span></div>
+  </div>
   </div>
   <p class="hint">G1 spielt gegen G2, G3 gegen G4. Jede Gruppe kommt 1× zum Parcours und 1× zur Übung. In Runde 5 spielen alle: Station 2 wird zum 2. Spielfeld (G3 vs G4).</p>
 
