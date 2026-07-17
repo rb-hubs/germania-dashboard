@@ -192,29 +192,29 @@ body{background:linear-gradient(135deg,#F8FAFD 0%,#F3F6FA 100%);min-height:100vh
 #login-screen{background:#FFFFFF !important}
 #login-screen::before,#login-screen::after{display:none !important}
 .dot{display:none}
-.gp{display:inline-block;color:#fff;font-weight:800;font-size:12px;padding:3px 9px;border-radius:8px;letter-spacing:.3px;margin:1px}
+.gp{display:inline-block;color:#fff;font-weight:800;font-size:13px;padding:3px 10px;border-radius:8px;letter-spacing:.3px;margin:1px}
 .gp1{background:#1565C0}.gp2{background:#C62828}.gp3{background:#2E7D32}.gp4{background:#FF8F00}
-.vsx{color:#90A4AE;font-weight:700;font-size:11px;margin:0 3px}
-.field2{display:block;font-size:9px;color:#90A4AE;font-weight:700;text-transform:uppercase;letter-spacing:.4px;margin-top:2px}
-.rnum-pill{display:inline-flex;align-items:center;justify-content:center;min-width:38px;height:38px;background:linear-gradient(135deg,#0D47A1,#1565C0);color:#fff;font-weight:900;font-size:18px;border-radius:10px}
-.stat-tbl .snum-inner{width:38px;height:38px;font-size:19px;font-weight:900;display:inline-flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#0D47A1,#1565C0);color:#fff;border-radius:10px}
-.rot-tbl td{padding:9px 8px}
-.rot-tbl th:first-child{width:56px}
-.emptycell{color:#B0BEC5;font-weight:700}
-/* MOBILE ROUND CARDS */
-.rot-cards{display:none}
-.rcard{border:1px solid #E3F2FD;border-radius:12px;margin-bottom:10px;overflow:hidden;background:#fff;box-shadow:0 2px 8px rgba(13,71,161,0.05)}
-.rcard-h{display:flex;align-items:center;gap:10px;background:linear-gradient(135deg,#0D47A1,#1565C0);color:#fff;padding:8px 12px;font-weight:800;font-size:15px}
-.rcard-h .rnum-pill{min-width:30px;height:30px;font-size:16px;background:rgba(255,255,255,0.18)}
-.rline{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 12px;border-bottom:1px solid #F0F0F0}
+.vsx{color:#90A4AE;font-weight:700;font-size:12px;margin:0 4px}
+/* ROUND CARDS (immer) */
+.rot-cards{display:block;max-width:640px}
+.rcard{border:1px solid #E3F2FD;border-radius:14px;margin-bottom:12px;overflow:hidden;background:#fff;box-shadow:0 2px 8px rgba(13,71,161,0.06)}
+.rcard-h{display:flex;align-items:center;gap:10px;background:linear-gradient(135deg,#0D47A1,#1565C0);color:#fff;padding:10px 14px;font-weight:800;font-size:16px}
+.rcard-h .rnum-pill{display:inline-flex;align-items:center;justify-content:center;min-width:32px;height:32px;font-size:16px;font-weight:900;background:rgba(255,255,255,0.20);border-radius:9px}
+.rcard-h .rtime{margin-left:auto;font-size:13px;font-weight:700;opacity:.95;letter-spacing:.3px}
+.rline{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:11px 14px;border-bottom:1px solid #F0F0F0}
 .rline:last-child{border-bottom:none}
-.rlabel{color:#607D8B;font-weight:800;font-size:11px;text-transform:uppercase;letter-spacing:.4px;flex-shrink:0}
+.rlabel{color:#607D8B;font-weight:800;font-size:11.5px;text-transform:uppercase;letter-spacing:.4px;flex-shrink:0}
 .rline .rval{text-align:right}
-.rpause{text-align:center;color:#90A4AE;font-size:11px;font-weight:700;margin:0 0 10px}
-@media(max-width:600px){
-  .rot-wrap{display:none}
-  .rot-cards{display:block}
-}
+.rpause{text-align:center;color:#90A4AE;font-size:11.5px;font-weight:700;margin:0 0 12px}
+.field2{display:block;font-size:9.5px;color:#90A4AE;font-weight:700;text-transform:uppercase;letter-spacing:.4px;margin-top:2px}
+/* STATION CARDS */
+.scards{display:block;max-width:640px}
+.scard2{border:1px solid #E3F2FD;border-radius:14px;margin-bottom:12px;overflow:hidden;background:#fff;box-shadow:0 2px 8px rgba(13,71,161,0.06)}
+.scard2-h{display:flex;align-items:center;gap:12px;background:linear-gradient(135deg,#E3F2FD 0%,#FFFFFF 70%);padding:11px 14px;font-weight:800;font-size:16px;color:#0D47A1;border-bottom:1px solid rgba(21,101,192,.12)}
+.scard2-h .snum-inner{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;font-size:18px;font-weight:900;background:linear-gradient(135deg,#0D47A1,#1565C0);color:#fff;border-radius:10px;flex-shrink:0}
+.scard2-b{padding:10px 14px}
+.strainer{font-size:12.5px;color:#1565C0;font-weight:800;margin-bottom:5px}
+.sziel{font-size:13.5px;line-height:1.5;color:#37474F}
 </style>
 
 </head>
@@ -259,8 +259,8 @@ body{background:linear-gradient(135deg,#F8FAFD 0%,#F3F6FA 100%);min-height:100vh
   <div class="team-grid">
     <div class="team-box" data-team="G1"><div class="tb-hdr tb-blau">Gruppe 1</div><div class="tb-list">
       <div class="tb-player" data-name="Emil R."><span class="dot dot-b"></span>Emil R.</div>
-      <div class="tb-player" data-name="Fynn"><span class="dot dot-b"></span>Fynn</div>
-      <div class="tb-player" data-name="Aiden"><span class="dot dot-b"></span>Aiden</div>
+      <div class="tb-player" data-name="Finn"><span class="dot dot-b"></span>Finn</div>
+      <div class="tb-player" data-name="Ejdin"><span class="dot dot-b"></span>Ejdin</div>
       <div class="tb-player" data-name="Dimitrios"><span class="dot dot-b"></span>Dimitrios</div>
     </div></div>
     <div class="team-box" data-team="G2"><div class="tb-hdr tb-rot">Gruppe 2</div><div class="tb-list">
@@ -284,70 +284,58 @@ body{background:linear-gradient(135deg,#F8FAFD 0%,#F3F6FA 100%);min-height:100vh
   </div>
 
   <div class="stitle">Rotationsplan · 5 × 13 Min · 2 Min Pause</div>
-  <div class="table-scroll rot-wrap">
-  <table class="rot-tbl">
-    <thead><tr><th>Runde</th><th>Station 1<br><small>4vs4</small></th><th>Station 2<br><small>Parcours</small></th><th>Station 3<br><small>Übung</small></th></tr></thead>
-    <tbody>
-<tr><td><span class="rnum-pill">1</span></td><td><span class="gp gp1">G1</span><span class="vsx">vs</span><span class="gp gp2">G2</span></td><td><span class="gp gp3">G3</span></td><td><span class="gp gp4">G4</span></td></tr>
-<tr class="pause"><td colspan="4">■ 2 Min Trinkpause</td></tr>
-<tr><td><span class="rnum-pill">2</span></td><td><span class="gp gp3">G3</span><span class="vsx">vs</span><span class="gp gp4">G4</span></td><td><span class="gp gp1">G1</span></td><td><span class="gp gp2">G2</span></td></tr>
-<tr class="pause"><td colspan="4">■ 2 Min Trinkpause</td></tr>
-<tr><td><span class="rnum-pill">3</span></td><td><span class="gp gp1">G1</span><span class="vsx">vs</span><span class="gp gp2">G2</span></td><td><span class="gp gp4">G4</span></td><td><span class="gp gp3">G3</span></td></tr>
-<tr class="pause"><td colspan="4">■ 2 Min Trinkpause</td></tr>
-<tr><td><span class="rnum-pill">4</span></td><td><span class="gp gp3">G3</span><span class="vsx">vs</span><span class="gp gp4">G4</span></td><td><span class="gp gp2">G2</span></td><td><span class="gp gp1">G1</span></td></tr>
-<tr class="pause"><td colspan="4">■ 2 Min Trinkpause</td></tr>
-<tr><td><span class="rnum-pill">5</span></td><td><span class="gp gp1">G1</span><span class="vsx">vs</span><span class="gp gp2">G2</span></td><td><span class="gp gp3">G3</span><span class="vsx">vs</span><span class="gp gp4">G4</span><span class="field2">2. Spielfeld</span></td><td><span class="emptycell">–</span></td></tr>
-    </tbody>
-  </table>
-  </div>
   <div class="rot-cards">
   <div class="rcard">
-    <div class="rcard-h"><span class="rnum-pill">1</span> Runde 1</div>
+    <div class="rcard-h"><span class="rnum-pill">1</span> Runde 1 <span class="rtime">16:45–16:58</span></div>
       <div class="rline"><span class="rlabel">Station 1 · 4vs4</span><span class="rval"><span class="gp gp1">G1</span><span class="vsx">vs</span><span class="gp gp2">G2</span></span></div>
       <div class="rline"><span class="rlabel">Station 2 · Parcours</span><span class="rval"><span class="gp gp3">G3</span></span></div>
       <div class="rline"><span class="rlabel">Station 3 · Übung</span><span class="rval"><span class="gp gp4">G4</span></span></div>
   </div>
   <div class="rpause">■ 2 Min Trinkpause</div>
   <div class="rcard">
-    <div class="rcard-h"><span class="rnum-pill">2</span> Runde 2</div>
+    <div class="rcard-h"><span class="rnum-pill">2</span> Runde 2 <span class="rtime">17:00–17:13</span></div>
       <div class="rline"><span class="rlabel">Station 1 · 4vs4</span><span class="rval"><span class="gp gp3">G3</span><span class="vsx">vs</span><span class="gp gp4">G4</span></span></div>
       <div class="rline"><span class="rlabel">Station 2 · Parcours</span><span class="rval"><span class="gp gp1">G1</span></span></div>
       <div class="rline"><span class="rlabel">Station 3 · Übung</span><span class="rval"><span class="gp gp2">G2</span></span></div>
   </div>
   <div class="rpause">■ 2 Min Trinkpause</div>
   <div class="rcard">
-    <div class="rcard-h"><span class="rnum-pill">3</span> Runde 3</div>
+    <div class="rcard-h"><span class="rnum-pill">3</span> Runde 3 <span class="rtime">17:15–17:28</span></div>
       <div class="rline"><span class="rlabel">Station 1 · 4vs4</span><span class="rval"><span class="gp gp1">G1</span><span class="vsx">vs</span><span class="gp gp2">G2</span></span></div>
       <div class="rline"><span class="rlabel">Station 2 · Parcours</span><span class="rval"><span class="gp gp4">G4</span></span></div>
       <div class="rline"><span class="rlabel">Station 3 · Übung</span><span class="rval"><span class="gp gp3">G3</span></span></div>
   </div>
   <div class="rpause">■ 2 Min Trinkpause</div>
   <div class="rcard">
-    <div class="rcard-h"><span class="rnum-pill">4</span> Runde 4</div>
+    <div class="rcard-h"><span class="rnum-pill">4</span> Runde 4 <span class="rtime">17:30–17:43</span></div>
       <div class="rline"><span class="rlabel">Station 1 · 4vs4</span><span class="rval"><span class="gp gp3">G3</span><span class="vsx">vs</span><span class="gp gp4">G4</span></span></div>
       <div class="rline"><span class="rlabel">Station 2 · Parcours</span><span class="rval"><span class="gp gp2">G2</span></span></div>
       <div class="rline"><span class="rlabel">Station 3 · Übung</span><span class="rval"><span class="gp gp1">G1</span></span></div>
   </div>
   <div class="rpause">■ 2 Min Trinkpause</div>
   <div class="rcard">
-    <div class="rcard-h"><span class="rnum-pill">5</span> Runde 5</div>
+    <div class="rcard-h"><span class="rnum-pill">5</span> Runde 5 <span class="rtime">17:45–17:58</span></div>
       <div class="rline"><span class="rlabel">Station 1 · 4vs4</span><span class="rval"><span class="gp gp1">G1</span><span class="vsx">vs</span><span class="gp gp2">G2</span></span></div>
-      <div class="rline"><span class="rlabel">Station 2 · Parcours</span><span class="rval"><span class="gp gp3">G3</span><span class="vsx">vs</span><span class="gp gp4">G4</span> <small style="color:#90A4AE">(2. Spielfeld)</small></span></div>
-      <div class="rline"><span class="rlabel">Station 3 · Übung</span><span class="rval"><span class="emptycell">–</span></span></div>
+      <div class="rline"><span class="rlabel">Station 2 · Parcours</span><span class="rval"><span class="gp gp3">G3</span><span class="vsx">vs</span><span class="gp gp4">G4</span><span class="field2">2. Spielfeld</span></span></div>
+      <div class="rline"><span class="rlabel">Station 3 · Übung</span><span class="rval"><span style="color:#B0BEC5;font-weight:700">–</span></span></div>
   </div>
   </div>
   <p class="hint">G1 spielt gegen G2, G3 gegen G4. Jede Gruppe kommt 1× zum Parcours und 1× zur Übung. In Runde 5 spielen alle: Station 2 wird zum 2. Spielfeld (G3 vs G4).</p>
 
   <div class="stitle">Stationen</div>
-  <div class="table-scroll">
-  <table class="stat-tbl">
-    <thead><tr><th>Station</th><th>Übung</th><th>Trainer</th><th>Ziel</th></tr></thead>
-    <tbody>
-      <tr><td class="snum"><span class="snum-inner">1</span></td><td>4vs4</td><td>Andi</td><td>G1 vs G2 und G3 vs G4. Freies Spiel, viele Ballkontakte.</td></tr>
-      <tr><td class="snum"><span class="snum-inner">2</span></td><td>Parcours <small>(R5: 2. Spielfeld)</small></td><td>Marc</td><td>Ballführung in Bewegung mit Ball am Fuß.</td></tr>
-      <tr><td class="snum"><span class="snum-inner">3</span></td><td>Übung: Rondo / Handball</td><td>Mike</td><td>Rondo (Ballhalten im Kreis) bzw. Fußball-Handball.</td></tr>
-    </tbody>
-  </table>
+  <div class="scards">
+  <div class="scard2">
+    <div class="scard2-h"><span class="snum-inner">1</span><span>4vs4</span></div>
+    <div class="scard2-b"><div class="strainer">Trainer: Andi</div><div class="sziel">G1 vs G2 und G3 vs G4. Freies Spiel, viele Ballkontakte.</div></div>
+  </div>
+  <div class="scard2">
+    <div class="scard2-h"><span class="snum-inner">2</span><span>Parcours  <small style='color:#90A4AE'>(R5: 2. Spielfeld)</small></span></div>
+    <div class="scard2-b"><div class="strainer">Trainer: Marc</div><div class="sziel">Ballführung in Bewegung mit Ball am Fuß.</div></div>
+  </div>
+  <div class="scard2">
+    <div class="scard2-h"><span class="snum-inner">3</span><span>Übung: Rondo / Handball</span></div>
+    <div class="scard2-b"><div class="strainer">Trainer: Mike</div><div class="sziel">Rondo (Ballhalten im Kreis) bzw. Fußball-Handball.</div></div>
+  </div>
   </div>
 
   <div class="footer"><span>SV Germania Bietigheim e.V. · Bambini JG 2019 · 17.07.2026</span><span>Seite 1</span></div>
