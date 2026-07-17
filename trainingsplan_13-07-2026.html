@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Trainingsplan 17.07.2026 – Germania Bambini</title>
+<title>Trainingsplan 13.07.2026 – Germania Bambini</title>
 <style>
 :root{--navy:#0A1F3F;--blue:#1565C0;--light:#E3F2FD;--accent:#FF8F00;--green:#2E7D32;--red:#C62828;--white:#FFF;--gray:#78909C;--tip-bg:#EBF3FC}
 *{margin:0;padding:0;box-sizing:border-box}
@@ -188,22 +188,51 @@ body{background:linear-gradient(135deg,#F8FAFD 0%,#F3F6FA 100%);min-height:100vh
 }
 
 
-/* --- Plan Overrides --- */
+/* --- Plan 13.07.2026 Overrides --- */
 #login-screen{background:#FFFFFF !important}
 #login-screen::before,#login-screen::after{display:none !important}
 .dot{display:none}
-.gp{display:inline-block;color:#fff;font-weight:800;font-size:12px;padding:3px 9px;border-radius:8px;letter-spacing:.3px;margin:1px}
-.gp1{background:#1565C0}.gp2{background:#C62828}.gp3{background:#2E7D32}.gp4{background:#FF8F00}
-.vsx{color:#90A4AE;font-weight:700;font-size:11px;margin:0 3px}
+
+/* Leibchen-Farben: G1 blau · G2 rot · G3 gelb · G4 grün */
+.gp{display:inline-flex;align-items:center;color:#fff;font-weight:800;font-size:13px;padding:4px 11px;border-radius:9px;letter-spacing:.3px;line-height:1;box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.gp1{background:#1565C0}.gp2{background:#C62828}.gp3{background:#FDD835;color:#4E342E}.gp4{background:#2E7D32}
+.tb-gelb{background:linear-gradient(135deg,#FFEB3B,#FBC02D);color:#4E342E !important}
+.vsx{color:#90A4AE;font-weight:800;font-size:11px;margin:0 4px}
+
+/* --- Runden-Karten (mobil lesbar, kein Querscrollen) --- */
+.rounds{display:flex;flex-direction:column;gap:12px;margin-bottom:8px}
+.round{border:1px solid #E3F2FD;border-radius:16px;overflow:hidden;background:#fff;box-shadow:0 3px 14px rgba(13,71,161,.07)}
+.round.final{border-color:#FFCC80}
+.round-hdr{display:flex;align-items:center;gap:12px;padding:11px 15px;background:linear-gradient(135deg,#0D47A1,#1565C0);color:#fff}
+.round.final .round-hdr{background:linear-gradient(135deg,#E65100,#FB8C00)}
+.round-hdr .rn{flex-shrink:0;width:42px;height:42px;border-radius:12px;background:rgba(255,255,255,.18);display:inline-flex;flex-direction:column;align-items:center;justify-content:center;line-height:1}
+.round-hdr .rn b{font-size:20px;font-weight:900}
+.round-hdr .rn span{font-size:8px;font-weight:700;letter-spacing:.8px;opacity:.85;text-transform:uppercase}
+.round-hdr .rt{font-size:18px;font-weight:800;letter-spacing:.3px}
+.round-hdr .rt small{display:block;font-size:11.5px;font-weight:600;opacity:.9;letter-spacing:0}
+.round-body{padding:2px 14px 8px}
+.srow{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:11px 0;border-bottom:1px solid #F0F4F8}
+.srow:last-child{border-bottom:none}
+.sbadge{flex-shrink:0;width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,#E3F2FD,#BBDEFB);color:#0D47A1;border:1.5px solid rgba(21,101,192,.25);display:inline-flex;align-items:center;justify-content:center;font-weight:900;font-size:14px}
+.sinfo{display:flex;flex-direction:column;gap:1px;min-width:0}
+.sinfo .st{font-size:11px;font-weight:800;color:#1565C0;letter-spacing:.4px;text-transform:uppercase}
+.sinfo .su{font-size:13.5px;font-weight:700;color:var(--navy);line-height:1.25}
+.grp{margin-left:auto;display:flex;align-items:center;gap:5px;flex-wrap:wrap;justify-content:flex-end}
+.srow.free .sinfo .su{color:#90A4AE;font-weight:600}
+.srow.free .sbadge{background:#F5F7FA;color:#B0BEC5;border-color:#E0E0E0}
+.pausebar{display:flex;align-items:center;gap:8px;justify-content:center;font-size:12px;font-weight:700;color:#607D8B;background:#F3F6FA;border:1px dashed #CFD8DC;border-radius:10px;padding:7px 12px;margin:2px 0}
+.pausebar.build{color:#E65100;background:#FFF3E0;border-color:#FFCC80;text-align:left;justify-content:flex-start;line-height:1.4}
 .rnum-pill{display:inline-flex;align-items:center;justify-content:center;min-width:38px;height:38px;background:linear-gradient(135deg,#0D47A1,#1565C0);color:#fff;font-weight:900;font-size:18px;border-radius:10px}
 .stat-tbl .snum-inner{width:38px;height:38px;font-size:19px;font-weight:900;display:inline-flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#0D47A1,#1565C0);color:#fff;border-radius:10px}
-.rot-tbl td{padding:9px 8px}
-.rot-tbl th:first-child{width:56px}
-.emptycell{color:#B0BEC5;font-weight:700}
+@media(max-width:600px){
+  .round-hdr .rt{font-size:16px}
+  .sinfo .su{font-size:13px}
+  .gp{font-size:12px;padding:4px 9px}
+}
 </style>
 
 </head>
-<body data-training-date="17.07.2026">
+<body data-training-date="13.07.2026">
 
 <div id="login-screen">
   <div class="inner">
@@ -230,74 +259,110 @@ body{background:linear-gradient(135deg,#F8FAFD 0%,#F3F6FA 100%);min-height:100vh
     </div>
     <div class="hdr-right">
       <h1>TRAININGSPLAN</h1>
-      <div class="datum">17.07.2026</div>
+      <div class="datum">Montag · 13.07.2026</div>
     </div>
   </div>
 
   <div class="meta">
-    <b>Zeit:</b> 16:45–18:00 Uhr · 4 Runden × 15 Min + 2 Min Pause<br>
-    <b>Trainer:</b> Andi, Marc, Marcus, Toni, Mike<br>
-    <b>Gruppen:</b> 4 (16 Kinder)
+    <b>Zeit:</b> 17:00–18:30 Uhr durchgehend · 6 Runden je 13 Min + 2 Min Trinkpause (R6 volle 15 Min)<br>
+    <b>Ablauf:</b> kein Aufwärmen, kein Ausklang – direkt in die Runden<br>
+    <b>Trainer:</b> Andi, Marcus, Toni, Marc, Mike<br>
+    <b>Gruppen:</b> 4 × 4 Kinder (16)
   </div>
 
-  <div class="stitle">Gruppen</div>
+  <div class="stitle">Gruppen · Leibchen-Farben</div>
   <div class="team-grid">
-    <div class="team-box" data-team="G1"><div class="tb-hdr tb-blau">Gruppe 1</div><div class="tb-list">
-      <div class="tb-player" data-name="Luca"><span class="dot dot-b"></span>Luca</div>
-      <div class="tb-player" data-name="Raphael"><span class="dot dot-b"></span>Raphael</div>
-      <div class="tb-player" data-name="Linus"><span class="dot dot-b"></span>Linus</div>
-      <div class="tb-player" data-name="Damiano"><span class="dot dot-b"></span>Damiano</div>
+    <div class="team-box" data-team="G1"><div class="tb-hdr tb-blau">G1 · Blau</div><div class="tb-list">
+      <div class="tb-player" data-name="Dimitrios">Dimitrios</div>
+      <div class="tb-player" data-name="Rafael">Rafael</div>
+      <div class="tb-player" data-name="Damiano">Damiano</div>
+      <div class="tb-player" data-name="Ejdin">Ejdin</div>
     </div></div>
-    <div class="team-box" data-team="G2"><div class="tb-hdr tb-rot">Gruppe 2</div><div class="tb-list">
-      <div class="tb-player" data-name="Emil R."><span class="dot dot-b"></span>Emil R.</div>
-      <div class="tb-player" data-name="Fynn"><span class="dot dot-b"></span>Fynn</div>
-      <div class="tb-player" data-name="Aiden"><span class="dot dot-b"></span>Aiden</div>
-      <div class="tb-player" data-name="Dimitrios"><span class="dot dot-b"></span>Dimitrios</div>
+    <div class="team-box" data-team="G2"><div class="tb-hdr tb-rot">G2 · Rot</div><div class="tb-list">
+      <div class="tb-player" data-name="Jessaja">Jessaja</div>
+      <div class="tb-player" data-name="Emil R.">Emil R.</div>
+      <div class="tb-player" data-name="Luca">Luca</div>
+      <div class="tb-player" data-name="Finn">Finn</div>
     </div></div>
-    <div class="team-box" data-team="G3"><div class="tb-hdr tb-gruen">Gruppe 3</div><div class="tb-list">
-      <div class="tb-player" data-name="Samuel"><span class="dot dot-b"></span>Samuel</div>
-      <div class="tb-player" data-name="Mats"><span class="dot dot-b"></span>Mats</div>
-      <div class="tb-player" data-name="Carlos"><span class="dot dot-b"></span>Carlos</div>
-      <div class="tb-player" data-name="Matteo"><span class="dot dot-b"></span>Matteo</div>
+    <div class="team-box" data-team="G3"><div class="tb-hdr tb-gelb">G3 · Gelb</div><div class="tb-list">
+      <div class="tb-player" data-name="Unik">Unik</div>
+      <div class="tb-player" data-name="Taio">Taio</div>
+      <div class="tb-player" data-name="Linus">Linus</div>
+      <div class="tb-player" data-name="Carlos">Carlos</div>
     </div></div>
-    <div class="team-box" data-team="G4"><div class="tb-hdr tb-orange">Gruppe 4</div><div class="tb-list">
-      <div class="tb-player" data-name="Lorik"><span class="dot dot-b"></span>Lorik</div>
-      <div class="tb-player" data-name="Dejvi"><span class="dot dot-b"></span>Dejvi</div>
-      <div class="tb-player" data-name="Samuel da Silva"><span class="dot dot-b"></span>Samuel da Silva</div>
-      <div class="tb-player" data-name="Yuza"><span class="dot dot-b"></span>Yuza</div>
+    <div class="team-box" data-team="G4"><div class="tb-hdr tb-gruen">G4 · Grün</div><div class="tb-list">
+      <div class="tb-player" data-name="Mattheo">Mattheo</div>
+      <div class="tb-player" data-name="Ioannis">Ioannis</div>
+      <div class="tb-player" data-name="Adam Abdelaal">Adam Abdelaal</div>
+      <div class="tb-player" data-name="Emil W.">Emil W.</div>
     </div></div>
   </div>
 
-  <div class="stitle">Rotationsplan · 4 × 15 Min · 2 Min Pause</div>
-  <div class="table-scroll">
-  <table class="rot-tbl">
-    <thead><tr><th>Runde</th><th>Station 1<br><small>4vs4</small></th><th>Station 2<br><small>Parcours</small></th><th>Station 3<br><small>Übung</small></th></tr></thead>
-    <tbody>
-<tr><td><span class="rnum-pill">1</span></td><td><span class="gp gp1">G1</span><span class="vsx">vs</span><span class="gp gp2">G2</span></td><td><span class="gp gp3">G3</span></td><td><span class="gp gp4">G4</span></td></tr>
-<tr class="pause"><td colspan="4">■ 2 Min Trinkpause</td></tr>
-<tr><td><span class="rnum-pill">2</span></td><td><span class="gp gp3">G3</span><span class="vsx">vs</span><span class="gp gp4">G4</span></td><td><span class="gp gp1">G1</span></td><td><span class="gp gp2">G2</span></td></tr>
-<tr class="pause"><td colspan="4">■ 2 Min Trinkpause</td></tr>
-<tr><td><span class="rnum-pill">3</span></td><td><span class="gp gp1">G1</span><span class="vsx">vs</span><span class="gp gp2">G2</span></td><td><span class="gp gp4">G4</span></td><td><span class="gp gp3">G3</span></td></tr>
-<tr class="pause"><td colspan="4">■ 2 Min Trinkpause</td></tr>
-<tr><td><span class="rnum-pill">4</span></td><td><span class="gp gp3">G3</span><span class="vsx">vs</span><span class="gp gp4">G4</span></td><td><span class="gp gp2">G2</span></td><td><span class="gp gp1">G1</span></td></tr>
-    </tbody>
-  </table>
-  </div>
-  <p class="hint">G1 spielt gegen G2, G3 gegen G4. Jede Gruppe kommt 1× zum Parcours und 1× zur Übung. 4 Runden, alle Stationen durchgehend besetzt.</p>
+  <div class="stitle">Ablauf · 6 Runden</div>
+  <div class="rounds">
 
-  <div class="stitle">Stationen</div>
-  <div class="table-scroll">
-  <table class="stat-tbl">
-    <thead><tr><th>Station</th><th>Übung</th><th>Trainer</th><th>Ziel</th></tr></thead>
-    <tbody>
-      <tr><td class="snum"><span class="snum-inner">1</span></td><td>4vs4</td><td>Andi</td><td>G1 vs G2 und G3 vs G4. Freies Spiel, viele Ballkontakte.</td></tr>
-      <tr><td class="snum"><span class="snum-inner">2</span></td><td>Parcours</td><td>Marc, Mike</td><td>Ballführung in Bewegung mit Ball am Fuß.</td></tr>
-      <tr><td class="snum"><span class="snum-inner">3</span></td><td>Übung</td><td>Marcus, Toni</td><td>Wird vor Ort festgelegt.</td></tr>
-    </tbody>
-  </table>
-  </div>
+    <div class="round">
+      <div class="round-hdr"><span class="rn"><b>1</b><span>Runde</span></span><span class="rt">17:00–17:13<small>13 Min</small></span></div>
+      <div class="round-body">
+        <div class="srow"><span class="sbadge">S1</span><span class="sinfo"><span class="st">Andi</span><span class="su">4vs4 · 2 D-Jugend-Tore</span></span><span class="grp"><span class="gp gp3">G3</span><span class="vsx">vs</span><span class="gp gp4">G4</span></span></div>
+        <div class="srow"><span class="sbadge">S2</span><span class="sinfo"><span class="st">Marcus · Toni</span><span class="su">Technik · Dribbel-Tor</span></span><span class="grp"><span class="gp gp1">G1</span></span></div>
+        <div class="srow"><span class="sbadge">S3</span><span class="sinfo"><span class="st">Marc · Mike</span><span class="su">Parcours</span></span><span class="grp"><span class="gp gp2">G2</span></span></div>
+      </div>
+    </div>
+    <div class="pausebar">💧 2 Min Trinkpause</div>
 
-  <div class="footer"><span>SV Germania Bietigheim e.V. · Bambini JG 2019 · 17.07.2026</span><span>Seite 1</span></div>
+    <div class="round">
+      <div class="round-hdr"><span class="rn"><b>2</b><span>Runde</span></span><span class="rt">17:15–17:28<small>13 Min</small></span></div>
+      <div class="round-body">
+        <div class="srow"><span class="sbadge">S1</span><span class="sinfo"><span class="st">Andi</span><span class="su">4vs4 · 2 D-Jugend-Tore</span></span><span class="grp"><span class="gp gp2">G2</span><span class="vsx">vs</span><span class="gp gp4">G4</span></span></div>
+        <div class="srow"><span class="sbadge">S2</span><span class="sinfo"><span class="st">Marcus · Toni</span><span class="su">Technik · Dribbel-Tor</span></span><span class="grp"><span class="gp gp3">G3</span></span></div>
+        <div class="srow"><span class="sbadge">S3</span><span class="sinfo"><span class="st">Marc · Mike</span><span class="su">Parcours</span></span><span class="grp"><span class="gp gp1">G1</span></span></div>
+      </div>
+    </div>
+    <div class="pausebar">💧 2 Min Trinkpause</div>
+
+    <div class="round">
+      <div class="round-hdr"><span class="rn"><b>3</b><span>Runde</span></span><span class="rt">17:30–17:43<small>13 Min</small></span></div>
+      <div class="round-body">
+        <div class="srow"><span class="sbadge">S1</span><span class="sinfo"><span class="st">Andi</span><span class="su">4vs4 · 2 D-Jugend-Tore</span></span><span class="grp"><span class="gp gp1">G1</span><span class="vsx">vs</span><span class="gp gp2">G2</span></span></div>
+        <div class="srow"><span class="sbadge">S2</span><span class="sinfo"><span class="st">Marcus · Toni</span><span class="su">Technik · Dribbel-Tor</span></span><span class="grp"><span class="gp gp4">G4</span></span></div>
+        <div class="srow"><span class="sbadge">S3</span><span class="sinfo"><span class="st">Marc · Mike</span><span class="su">Parcours</span></span><span class="grp"><span class="gp gp3">G3</span></span></div>
+      </div>
+    </div>
+    <div class="pausebar">💧 2 Min Trinkpause</div>
+
+    <div class="round">
+      <div class="round-hdr"><span class="rn"><b>4</b><span>Runde</span></span><span class="rt">17:45–17:58<small>13 Min</small></span></div>
+      <div class="round-body">
+        <div class="srow"><span class="sbadge">S1</span><span class="sinfo"><span class="st">Andi</span><span class="su">4vs4 · 2 D-Jugend-Tore</span></span><span class="grp"><span class="gp gp1">G1</span><span class="vsx">vs</span><span class="gp gp3">G3</span></span></div>
+        <div class="srow"><span class="sbadge">S2</span><span class="sinfo"><span class="st">Marcus · Toni</span><span class="su">Technik · Dribbel-Tor</span></span><span class="grp"><span class="gp gp2">G2</span></span></div>
+        <div class="srow"><span class="sbadge">S3</span><span class="sinfo"><span class="st">Marc · Mike</span><span class="su">Parcours</span></span><span class="grp"><span class="gp gp4">G4</span></span></div>
+      </div>
+    </div>
+    <div class="pausebar">💧 2 Min Trinkpause</div>
+
+    <div class="round">
+      <div class="round-hdr"><span class="rn"><b>5</b><span>Runde</span></span><span class="rt">18:00–18:13<small>13 Min</small></span></div>
+      <div class="round-body">
+        <div class="srow"><span class="sbadge">S1</span><span class="sinfo"><span class="st">Andi · +Marc</span><span class="su">Spiel · 4vs4</span></span><span class="grp"><span class="gp gp3">G3</span><span class="vsx">vs</span><span class="gp gp4">G4</span></span></div>
+        <div class="srow"><span class="sbadge">S2</span><span class="sinfo"><span class="st">Marcus · Toni · +Mike</span><span class="su">Neue Übung · Dribbel-Reaktion <small style="font-weight:600;color:#607D8B">(8 Kids)</small></span></span><span class="grp"><span class="gp gp1">G1</span><span class="vsx">+</span><span class="gp gp2">G2</span></span></div>
+        <div class="srow free"><span class="sbadge">S3</span><span class="sinfo"><span class="st">—</span><span class="su">frei</span></span><span class="grp"></span></div>
+      </div>
+    </div>
+    <div class="pausebar build">🔧 <span><b>Umbau in der Trinkpause:</b> Feld B (Fläche Station 2) aufbauen — 2 Hütchentore + Feld am Rand abstecken. Das D-Jugend-Tor (Feld A) steht schon.</span></div>
+
+    <div class="round final">
+      <div class="round-hdr"><span class="rn"><b>6</b><span>Finale</span></span><span class="rt">18:15–18:30<small>volle 15 Min · Abschlussspiele</small></span></div>
+      <div class="round-body">
+        <div class="srow"><span class="sbadge">A</span><span class="sinfo"><span class="st">Feld A · Station 1 (D-Jugend-Tore)</span><span class="su">Abschlussspiel</span></span><span class="grp"><span class="gp gp1">G1</span><span class="vsx">vs</span><span class="gp gp2">G2</span></span></div>
+        <div class="srow"><span class="sbadge">B</span><span class="sinfo"><span class="st">Feld B · Station 2 (Hütchentore)</span><span class="su">Abschlussspiel</span></span><span class="grp"><span class="gp gp3">G3</span><span class="vsx">vs</span><span class="gp gp4">G4</span></span></div>
+      </div>
+    </div>
+
+  </div>
+  <p class="hint"><b>Logik-Check:</b> Jeder ist 2× im 4vs4 (R1–R4) · G1 &amp; G2 je 2× Technik (inkl. R5) · jeder 1× Parcours.</p>
+
+  <div class="footer"><span>SV Germania Bietigheim e.V. · Bambini JG 2019 · Montag 13.07.2026</span><span>Seite 1</span></div>
 </section>
 </div><!-- /app-content -->
 
