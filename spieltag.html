@@ -179,7 +179,7 @@ footer .wrap{padding-block:8px 28px;display:grid;gap:14px}
   <div class="rules">
     <div><b>Anpfiff nur um 09:00 und 10:25 Uhr.</b> Alle anderen Spiele starten selbstständig zur Uhrzeit, es wird nur abgepfiffen.</div>
     <div>10 Min Spielzeit · 2 Min Wechsel · Pause &amp; Feldwechsel 10:10–10:25 (Feld 1↔2, 3↔4, 5↔6)</div>
-    <div>„Spiel durch“ merkt sich nur dein Handy.</div>
+    <div><b>Nach dem Abpfiff „gespielt“ antippen</b> – das Spiel rutscht nach unten. Mit dem Pfeil holst du es zurück. Deine Haken und dein Team merkt sich nur dein Handy.</div>
   </div>
   <details class="sim" id="sim">
     <summary>Uhr testen (Vorschau)</summary>
@@ -292,13 +292,13 @@ const UNDO = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-
 const esc = s => String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 
 function gameCard(g, st, isNext){
-  const label = {live:"läuft jetzt", late:"Zeit um – durch?", cancel:"fällt aus", upcoming:isNext?"als Nächstes":""}[st] || "";
+  const label = {live:"läuft jetzt", late:"Zeit um – gespielt?", cancel:"fällt aus", upcoming:isNext?"als Nächstes":""}[st] || "";
   const my = me[g.g];
   const cls = (st==="upcoming" && isNext ? "next" : st) + (my && (g.a===my||g.b===my) ? " mine" : "");
   const outA = TURNIER.ausfall.includes(g.a), outB = TURNIER.ausfall.includes(g.b);
   const btn = st==="done"
     ? `<button class="btn" data-undo="${g.id}" aria-label="Wieder offen">${UNDO}</button>`
-    : st==="cancel" ? "" : `<button class="btn" data-done="${g.id}" aria-label="Spiel durch">${CHECK}<span>durch</span></button>`;
+    : st==="cancel" ? "" : `<button class="btn" data-done="${g.id}" aria-label="Spiel gespielt">${CHECK}<span>gespielt</span></button>`;
   return `<div class="game ${cls}">
     <div class="time num">${fmt(g.start)}<span>bis ${fmt(g.end)}</span></div>
     <div class="match">
@@ -317,7 +317,7 @@ function renderGroup(t){
   const open = gs.filter(x=>!done.has(x.id) && vis(x));
   const closed = gs.filter(x=>done.has(x.id) && vis(x));
   const firstUp = open.find(x=>statusOf(x,t)==="upcoming");
-  let h = `<div class="grouphead"><h2>Gruppe ${group}</h2><span class="progress num">${closed.length} von ${gs.length} durch</span>
+  let h = `<div class="grouphead"><h2>Gruppe ${group}</h2><span class="progress num">${closed.length} von ${gs.length} gespielt</span>
     </div>`;
   h += `<div class="whoami"><div class="wl"><span>Wer bin ich?</span>${my?`<button type="button" data-meclear="${group}">zurücksetzen</button>`:""}</div>
     <div class="who">${d.teams.map(t=>`<button type="button" data-me="${esc(t)}" aria-pressed="${t===my}">${esc(t)}</button>`).join("")}</div>
@@ -330,9 +330,9 @@ function renderGroup(t){
     list.forEach(x=>{ h += gameCard(x, statusOf(x,t), x===firstUp); });
     h += `</section>`;
   });
-  if(!open.length) h += `<p class="notice"><b>Alles durch.</b> ${onlyMine&&my?esc(my)+" hat":"Gruppe "+group+" hat"} fertig gespielt.</p>`;
+  if(!open.length) h += `<p class="notice"><b>Alles gespielt.</b> ${onlyMine&&my?esc(my)+" hat":"Gruppe "+group+" hat"} fertig gespielt.</p>`;
   if(closed.length){
-    h += `<section class="donebox"><h3>Durch <span class="num">(${closed.length})</span></h3>`;
+    h += `<section class="donebox"><h3>Gespielt <span class="num">(${closed.length})</span></h3>`;
     closed.sort((p,q)=>p.start-q.start).forEach(x=>{ h += gameCard(x,"done",false); });
     h += `</section>`;
   }
@@ -359,7 +359,7 @@ function renderAll(t){
       <div class="fh"><span class="fn">Feld ${f}</span><span class="fmt">${x.format}</span></div>
       <div class="grp">Gruppe ${x.g} · ${x.round}</div>
       <div class="ft"><span class="${x.a===me[x.g]?"me":""}">${esc(x.a)}</span><i>gegen</i><span class="${x.b===me[x.g]?"me":""}">${esc(x.b)}</span></div>
-      <div class="tag">${st==="done"?"durch ✓":st==="cancel"?"fällt aus":live?"läuft":"startet "+fmt(x.start)}</div></button></div>`;
+      <div class="tag">${st==="done"?"gespielt ✓":st==="cancel"?"fällt aus":live?"läuft":"startet "+fmt(x.start)}</div></button></div>`;
   }
   return h+`</div>`;
 }
