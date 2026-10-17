@@ -71,15 +71,15 @@ main .wrap{padding-block:16px 28px;display:grid;gap:14px}
 .roundlabel{display:flex;align-items:center;gap:8px;font-size:12px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:var(--muted);margin-top:4px}
 .roundlabel .fieldtag{margin-left:auto;letter-spacing:.02em;text-transform:none;font-size:13px;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:999px;padding:3px 10px}
 
-.game{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 12px 12px 14px;display:grid;grid-template-columns:62px 1fr auto;gap:12px;align-items:center;transition:opacity .25s}
+.game{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 12px 12px 14px;display:grid;grid-template-columns:60px 1fr auto;gap:10px;align-items:center;transition:opacity .25s}
 .game .time{font-family:var(--display);font-weight:700;font-size:20px;line-height:1}
-.game .time span{display:block;font-family:var(--body);font-size:12px;font-weight:500;color:var(--muted);margin-top:3px}
+.game .time span{display:block;white-space:nowrap;font-family:var(--body);font-size:12px;font-weight:500;color:var(--muted);margin-top:3px}
 .game .match{min-width:0;display:grid;gap:1px}
 .game .t{font-weight:600;font-size:16px;overflow-wrap:anywhere}
 .game .vs{font-size:11px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase}
 .game .meta{font-size:12px;color:var(--muted);margin-top:4px;font-weight:600}
 .game .state{font-size:12px;font-weight:700;border-radius:999px;padding:2px 8px;justify-self:start;margin-bottom:4px}
-.btn{appearance:none;border:1.5px solid var(--line);background:transparent;color:var(--ink);border-radius:12px;min-width:44px;min-height:44px;padding:0 12px;font:600 14px var(--body);cursor:pointer;display:flex;align-items:center;gap:6px}
+.btn{appearance:none;border:1.5px solid var(--line);background:transparent;color:var(--ink);border-radius:12px;width:44px;height:44px;padding:0;justify-content:center;flex:none;font:600 14px var(--body);cursor:pointer;display:flex;align-items:center;gap:6px}
 .btn svg{width:20px;height:20px}
 .game.live{border-color:var(--live);background:var(--live-soft);box-shadow:0 0 0 1px var(--live) inset}
 .game.live .state{background:var(--live);color:#fff}
@@ -103,9 +103,10 @@ main .wrap{padding-block:16px 28px;display:grid;gap:14px}
 .game.mine{border-left:5px solid var(--mine);padding-left:10px}
 .game.mine:not(.live):not(.done){background:var(--mine-soft)}
 .t.me{color:var(--mine);font-weight:800}
-.t.me::after{content:"WIR";font:800 10px var(--body);letter-spacing:.08em;background:var(--mine);color:#fff;border-radius:4px;padding:1px 5px;margin-left:6px;vertical-align:2px}
+.nw{white-space:nowrap}
+.wir{font:800 10px var(--body);letter-spacing:.08em;background:var(--mine);color:#fff;border-radius:4px;padding:1px 5px;margin-right:6px;vertical-align:2px}
 .game.done .t.me{color:var(--done)}
-.game.done .t.me::after{background:var(--done)}
+.game.done .wir{background:var(--done)}
 .mynext{display:flex;gap:10px;align-items:center;background:#fff;color:#0d1440;border-radius:12px;padding:8px 12px;font-size:14px}
 .mynext b{font-family:var(--display);font-size:20px;font-weight:800;line-height:1}
 .mynext .mt{min-width:0;flex:1;line-height:1.25}
@@ -113,7 +114,7 @@ main .wrap{padding-block:16px 28px;display:grid;gap:14px}
 .fcard .ft .me{color:var(--mine);font-weight:800}
 .donebox{display:grid;gap:8px;margin-top:6px}
 .donebox h3{margin:0;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);display:flex;gap:8px;align-items:center}
-.game.done{opacity:.55;background:transparent;grid-template-columns:62px 1fr auto;padding-block:8px}
+.game.done{opacity:.55;background:transparent;grid-template-columns:60px 1fr auto;padding-block:8px}
 .game.done .t{font-weight:500;color:var(--done);font-size:15px}
 .game.done .time{color:var(--done);font-size:17px}
 .game.done .btn{border-style:dashed;color:var(--muted)}
@@ -291,6 +292,11 @@ const CHECK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke
 const UNDO = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 14L4 9l5-5"/><path d="M4 9h10a6 6 0 010 12h-3"/></svg>';
 const esc = s => String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 
+function nameHtml(n, mine){
+  if(!mine) return esc(n);
+  const w = n.split(" "), tail = w.splice(-2).join(" ");
+  return `<span class="wir">WIR</span>` + esc(w.length ? w.join(" ")+" " : "") + `<span class="nw">${esc(tail)}</span>`;
+}
 function gameCard(g, st, isNext){
   const label = {live:"läuft jetzt", late:"Zeit um – gespielt?", cancel:"fällt aus", upcoming:isNext?"als Nächstes":""}[st] || "";
   const my = me[g.g];
@@ -298,12 +304,12 @@ function gameCard(g, st, isNext){
   const outA = TURNIER.ausfall.includes(g.a), outB = TURNIER.ausfall.includes(g.b);
   const btn = st==="done"
     ? `<button class="btn" data-undo="${g.id}" aria-label="Wieder offen">${UNDO}</button>`
-    : st==="cancel" ? "" : `<button class="btn" data-done="${g.id}" aria-label="Spiel gespielt">${CHECK}<span>gespielt</span></button>`;
+    : st==="cancel" ? "" : `<button class="btn" data-done="${g.id}" aria-label="gespielt" title="gespielt">${CHECK}</button>`;
   return `<div class="game ${cls}">
     <div class="time num">${fmt(g.start)}<span>bis ${fmt(g.end)}</span></div>
     <div class="match">
       ${label?`<span class="state">${label}</span>`:""}
-      <span class="t${outA?" out":""}${g.a===my?" me":""}">${esc(g.a)}</span><span class="vs">gegen</span><span class="t${outB?" out":""}${g.b===my?" me":""}">${esc(g.b)}</span>
+      <span class="t${outA?" out":""}${g.a===my?" me":""}">${nameHtml(g.a, g.a===my)}</span><span class="vs">gegen</span><span class="t${outB?" out":""}${g.b===my?" me":""}">${nameHtml(g.b, g.b===my)}</span>
       ${st==="done"?"":`<span class="meta">Feld ${g.field} · ${g.format}</span>`}
     </div>
     ${btn}</div>`;
