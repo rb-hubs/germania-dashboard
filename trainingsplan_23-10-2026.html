@@ -238,6 +238,83 @@ body{background:linear-gradient(135deg,#F8FAFD 0%,#F3F6FA 100%);min-height:100vh
 </div>
 
 <div id="app-content" style="display:none">
+<!-- TIMER START -->
+<style>
+#tbar{position:sticky;top:0;z-index:50;margin:0 0 14px;padding:10px 14px;border-radius:0 0 18px 18px;
+ background:linear-gradient(135deg,#0A1F3F,#143d7a);color:#fff;display:flex;align-items:center;gap:12px;
+ box-shadow:0 6px 18px rgba(10,31,63,.28);flex-wrap:wrap}
+#tbar .clock{font-size:13px;font-weight:700;opacity:.75;letter-spacing:.5px;min-width:46px}
+#tbar .cd{font-size:38px;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:1px;line-height:1;flex:1;text-align:center}
+#tbar .cd.warn{color:#FFD54F}
+#tbar .cd.over{color:#FF8A80}
+#tbar .lbl{font-size:11px;text-transform:uppercase;letter-spacing:1px;opacity:.8;width:100%;text-align:center;margin-top:-4px}
+#tbar button{border:0;border-radius:10px;padding:8px 12px;font-size:13px;font-weight:800;cursor:pointer;
+ background:rgba(255,255,255,.16);color:#fff}
+#tbar button:active{transform:scale(.96)}
+#tbar button.go{background:#2E7D32}
+#tbar button.go.pause{background:#FF8F00}
+@keyframes tflash{0%,100%{background:linear-gradient(135deg,#0A1F3F,#143d7a)}50%{background:#C62828}}
+#tbar.ring{animation:tflash .6s ease-in-out 6}
+.tstart{margin-left:auto;border:0;border-radius:999px;padding:5px 12px;font-size:12px;font-weight:800;
+ background:rgba(255,255,255,.22);color:#fff;cursor:pointer}
+.tstart:active{transform:scale(.95)}
+.rcard.running{outline:3px solid #2E7D32;outline-offset:2px}
+.rcard.running .tstart{background:#2E7D32}
+.rcard.now .rcard-h::after{content:"JETZT";margin-left:8px;font-size:10px;background:#FFD54F;color:#3E2723;
+ padding:2px 7px;border-radius:999px;font-weight:800;letter-spacing:.5px}
+</style>
+<div id="tbar">
+  <span class="clock" id="tclock">--:--</span>
+  <span class="cd" id="tcd">--:--</span>
+  <button class="go" id="tgo" type="button">Start</button>
+  <button id="tplus" type="button">+1</button>
+  <button id="treset" type="button">Reset</button>
+  <span class="lbl" id="tlbl">Runde wählen – auf „Start" in der Runde tippen</span>
+</div>
+<script>
+(function(){
+ var total=0,left=0,iv=null,run=false,card=null,lock=null;
+ var cd=document.getElementById('tcd'),go=document.getElementById('tgo'),bar=document.getElementById('tbar'),lbl=document.getElementById('tlbl');
+ function fmt(s){var n=Math.abs(s),m=Math.floor(n/60),x=n%60;return (s<0?'-':'')+m+':'+(x<10?'0':'')+x;}
+ function paint(){cd.textContent=fmt(left);cd.className='cd'+(left<0?' over':(left<=60?' warn':''));}
+ function clock(){var d=new Date();document.getElementById('tclock').textContent=d.getHours()+':'+('0'+d.getMinutes()).slice(-2);}
+ clock();setInterval(clock,10000);
+ function beep(){try{var a=new (window.AudioContext||window.webkitAudioContext)();[0,.35,.7].forEach(function(t){
+   var o=a.createOscillator(),g=a.createGain();o.connect(g);g.connect(a.destination);o.frequency.value=880;
+   g.gain.setValueAtTime(.001,a.currentTime+t);g.gain.exponentialRampToValueAtTime(.4,a.currentTime+t+.02);
+   g.gain.exponentialRampToValueAtTime(.001,a.currentTime+t+.25);o.start(a.currentTime+t);o.stop(a.currentTime+t+.3);});}catch(e){}
+   if(navigator.vibrate)navigator.vibrate([250,120,250,120,400]);}
+ async function wake(on){try{if(on&&'wakeLock'in navigator){lock=await navigator.wakeLock.request('screen');}
+   else if(lock){lock.release();lock=null;}}catch(e){}}
+ function tick(){left--;paint();if(left===0){beep();bar.classList.add('ring');setTimeout(function(){bar.classList.remove('ring');},4000);}}
+ function start(){if(iv)clearInterval(iv);iv=setInterval(tick,1000);run=true;go.textContent='Pause';go.classList.add('pause');wake(true);}
+ function pause(){clearInterval(iv);iv=null;run=false;go.textContent='Weiter';go.classList.remove('pause');wake(false);}
+ go.onclick=function(){if(!total){return;}run?pause():start();};
+ document.getElementById('tplus').onclick=function(){left+=60;total+=60;paint();};
+ document.getElementById('treset').onclick=function(){left=total;paint();if(run)start();};
+ document.getElementById('tcd').onclick=function(){if(total)run?pause():start();};
+ function pick(btn){
+   var rc=btn.closest('.rcard');
+   if(card)card.classList.remove('running');
+   card=rc;rc.classList.add('running');
+   total=left=parseInt(btn.dataset.min,10)*60;paint();
+   lbl.textContent='Runde '+btn.dataset.round+' · '+btn.dataset.min+' Min';
+   go.textContent='Pause';go.classList.add('pause');start();
+   window.scrollTo({top:0,behavior:'smooth'});
+ }
+ document.addEventListener('click',function(e){var b=e.target.closest('.tstart');if(b){e.preventDefault();pick(b);}});
+ // aktuelle Runde markieren
+ function nowMark(){var d=new Date(),m=d.getHours()*60+d.getMinutes();
+   document.querySelectorAll('.rcard').forEach(function(c){
+     var t=(c.querySelector('.rtime')||{}).textContent||'',p=t.match(/(\d{1,2}):(\d{2})/g);
+     if(!p||p.length<2)return;
+     function mm(x){var a=x.split(':');return +a[0]*60+ +a[1];}
+     c.classList.toggle('now',m>=mm(p[0])&&m<mm(p[1]));});}
+ nowMark();setInterval(nowMark,30000);
+})();
+</script>
+<!-- TIMER END -->
+
 <section class="block">
   <div class="hdr">
     <div class="hdr-left">
@@ -292,32 +369,32 @@ body{background:linear-gradient(135deg,#F8FAFD 0%,#F3F6FA 100%);min-height:100vh
 
   <div class="stitle">Rotationsplan · 5 × 15 Min inkl. Wechsel</div>
   <div class="rot-cards">
-  <div class="rcard">
-    <div class="rcard-h"><span class="rnum-pill">1</span> Runde 1 <span class="rtime">16:45–17:00</span></div>
+  <div class="rcard" data-round="1" data-min="15">
+    <div class="rcard-h"><span class="rnum-pill">1</span> Runde 1 <span class="rtime">16:45–17:00</span><button class="tstart" type="button" data-min="15" data-round="1">▶ Start</button></div>
       <div class="rline"><span class="rlabel">Feld 1 · Spiel 4vs4</span><span class="rval"><span class="gp gp1">Blau</span><span class="vsx">vs</span><span class="gp gp2">Rot</span></span></div>
       <div class="rline"><span class="rlabel">Feld 2 · Übung</span><span class="rval"><span class="gp gp4">Grün</span><span class="vsx">vs</span><span class="gp gp5">Gelb</span></span></div>
       <div class="rline"><span class="rlabel">Feld 3 · Parcours</span><span class="rval"><span class="gp gp3">Orange</span></span></div>
   </div>
-  <div class="rcard">
-    <div class="rcard-h"><span class="rnum-pill">2</span> Runde 2 <span class="rtime">17:00–17:15</span></div>
+  <div class="rcard" data-round="2" data-min="15">
+    <div class="rcard-h"><span class="rnum-pill">2</span> Runde 2 <span class="rtime">17:00–17:15</span><button class="tstart" type="button" data-min="15" data-round="2">▶ Start</button></div>
       <div class="rline"><span class="rlabel">Feld 1 · Spiel 4vs4</span><span class="rval"><span class="gp gp3">Orange</span><span class="vsx">vs</span><span class="gp gp4">Grün</span></span></div>
       <div class="rline"><span class="rlabel">Feld 2 · Übung</span><span class="rval"><span class="gp gp1">Blau</span><span class="vsx">vs</span><span class="gp gp2">Rot</span></span></div>
       <div class="rline"><span class="rlabel">Feld 3 · Parcours</span><span class="rval"><span class="gp gp5">Gelb</span></span></div>
   </div>
-  <div class="rcard">
-    <div class="rcard-h"><span class="rnum-pill">3</span> Runde 3 <span class="rtime">17:15–17:30</span></div>
+  <div class="rcard" data-round="3" data-min="15">
+    <div class="rcard-h"><span class="rnum-pill">3</span> Runde 3 <span class="rtime">17:15–17:30</span><button class="tstart" type="button" data-min="15" data-round="3">▶ Start</button></div>
       <div class="rline"><span class="rlabel">Feld 1 · Spiel 4vs4</span><span class="rval"><span class="gp gp4">Grün</span><span class="vsx">vs</span><span class="gp gp5">Gelb</span></span></div>
       <div class="rline"><span class="rlabel">Feld 2 · Übung</span><span class="rval"><span class="gp gp2">Rot</span><span class="vsx">vs</span><span class="gp gp3">Orange</span></span></div>
       <div class="rline"><span class="rlabel">Feld 3 · Parcours</span><span class="rval"><span class="gp gp1">Blau</span></span></div>
   </div>
-  <div class="rcard">
-    <div class="rcard-h"><span class="rnum-pill">4</span> Runde 4 <span class="rtime">17:30–17:45</span></div>
+  <div class="rcard" data-round="4" data-min="15">
+    <div class="rcard-h"><span class="rnum-pill">4</span> Runde 4 <span class="rtime">17:30–17:45</span><button class="tstart" type="button" data-min="15" data-round="4">▶ Start</button></div>
       <div class="rline"><span class="rlabel">Feld 1 · Spiel 4vs4</span><span class="rval"><span class="gp gp3">Orange</span><span class="vsx">vs</span><span class="gp gp5">Gelb</span></span></div>
       <div class="rline"><span class="rlabel">Feld 2 · Übung</span><span class="rval"><span class="gp gp1">Blau</span><span class="vsx">vs</span><span class="gp gp4">Grün</span></span></div>
       <div class="rline"><span class="rlabel">Feld 3 · Parcours</span><span class="rval"><span class="gp gp2">Rot</span></span></div>
   </div>
-  <div class="rcard">
-    <div class="rcard-h"><span class="rnum-pill">5</span> Runde 5 <span class="rtime">17:45–18:00</span></div>
+  <div class="rcard" data-round="5" data-min="15">
+    <div class="rcard-h"><span class="rnum-pill">5</span> Runde 5 <span class="rtime">17:45–18:00</span><button class="tstart" type="button" data-min="15" data-round="5">▶ Start</button></div>
       <div class="rline"><span class="rlabel">Feld 1 · Spiel 4vs4</span><span class="rval"><span class="gp gp1">Blau</span><span class="vsx">vs</span><span class="gp gp2">Rot</span></span></div>
       <div class="rline"><span class="rlabel">Feld 2 · Übung</span><span class="rval"><span class="gp gp3">Orange</span><span class="vsx">vs</span><span class="gp gp5">Gelb</span></span></div>
       <div class="rline"><span class="rlabel">Feld 3 · Parcours</span><span class="rval"><span class="gp gp4">Grün</span></span></div>
