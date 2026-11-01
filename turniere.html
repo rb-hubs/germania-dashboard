@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Turnierplan 2026/27 – F-Junioren 2019</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --blue:#1845A6; --blue-d:#11337d; --blue-l:#e8eefb; --bg:#f2f5fa; --line:#d6e0f2;
+  --ink:#14213d; --muted:#5a6b8c; --white:#fff;
+  --green:#1f9d55; --green-l:#e3f6ea; --red:#d33a3a; --red-l:#fdeaea;
+  --amber:#d98b00; --amber-l:#fff4dc; --slate:#6b7a99; --slate-l:#eef1f6;
+  --r:18px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:Barlow,system-ui,sans-serif;font-size:16px}
+button,input,select,textarea{font:inherit;color:inherit}
+header{background:var(--blue);color:#fff;padding:22px 20px 26px}
+.wrap{max-width:1100px;margin:0 auto}
+.club{font-size:12px;letter-spacing:.22em;font-weight:700;opacity:.85}
+.hrow{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:6px}
+h1{font-family:"Barlow Condensed",sans-serif;font-weight:800;font-size:44px;line-height:1;margin:0;letter-spacing:.01em}
+.plakette{background:#fff;color:var(--blue);border-radius:999px;padding:6px 14px;font-weight:700;font-size:14px}
+.hsub{margin-top:10px;font-size:14px;opacity:.85}
+main{padding:18px 14px 60px}
+.stats{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 14px}
+.stat{background:#fff;border:1px solid var(--line);border-radius:14px;padding:8px 12px;font-size:14px;color:var(--muted);display:flex;gap:8px;align-items:center}
+.stat b{font-size:18px;color:var(--ink)}
+.card{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:16px}
+.calhead{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+.calhead h2{font-family:"Barlow Condensed",sans-serif;font-size:28px;margin:0}
+.navbtn{border:1px solid var(--line);background:#fff;border-radius:12px;width:42px;height:42px;font-size:20px;cursor:pointer;color:var(--blue)}
+.navbtn:hover{background:var(--blue-l)}
+.grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.dow{font-size:12px;font-weight:700;color:var(--muted);text-align:center;padding:4px 0}
+.day{min-height:92px;border-radius:12px;background:#f8faff;border:1px solid #edf1fa;padding:4px;display:flex;flex-direction:column;gap:3px;overflow:hidden}
+.day.out{background:transparent;border-color:transparent}
+.day.today{border-color:var(--blue)}
+.dnum{font-size:12px;font-weight:700;color:var(--muted)}
+.ev{border:0;text-align:left;cursor:pointer;border-radius:8px;padding:3px 6px;font-size:12px;font-weight:600;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width:100%}
+.ev.t{color:#fff}
+.ev.t.zusage{background:var(--green)} .ev.t.absage{background:var(--red)} .ev.t.warteliste,.ev.t.klaerung{background:var(--amber)}
+.ev.t.angefragt{background:var(--blue)} .ev.t.entwurf{background:var(--slate)}
+.ev.t.unsicher{outline:2px dashed var(--amber);outline-offset:-2px}
+.ev.a{background:var(--blue-l);color:var(--blue)}
+.ev.r{background:#f1f3f8;color:var(--ink);border:1px solid var(--line)}
+.legend{display:flex;flex-wrap:wrap;gap:12px;margin-top:12px;font-size:13px;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.sw{width:14px;height:14px;border-radius:4px;display:inline-block}
+.toolbar{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin:22px 0 12px}
+.tabs{display:flex;gap:6px;flex-wrap:wrap}
+.tab{border:1px solid var(--line);background:#fff;border-radius:999px;padding:7px 14px;cursor:pointer;font-weight:600;color:var(--muted)}
+.tab.on{background:var(--blue);border-color:var(--blue);color:#fff}
+.btn{border:0;background:var(--blue);color:#fff;border-radius:12px;padding:10px 16px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:6px;text-decoration:none}
+.btn:hover{background:var(--blue-d)}
+.btn2{border:1px solid var(--line);background:#fff;color:var(--blue);border-radius:12px;padding:9px 14px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:6px;text-decoration:none}
+.btn2:hover{background:var(--blue-l)}
+.btn.sm,.btn2.sm{padding:7px 11px;font-size:14px;border-radius:10px}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:14px}
+.tc{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:16px;display:flex;flex-direction:column;gap:10px;scroll-margin-top:16px;transition:box-shadow .3s}
+.tc.flash{box-shadow:0 0 0 4px rgba(24,69,166,.35)}
+.tc .top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.tc h3{margin:0;font-size:20px;font-weight:700;line-height:1.15}
+.when{font-family:"Barlow Condensed",sans-serif;font-size:22px;font-weight:700;color:var(--blue)}
+.badge{border-radius:999px;padding:4px 10px;font-size:12px;font-weight:700;white-space:nowrap}
+.b-zusage{background:var(--green-l);color:var(--green)} .b-absage{background:var(--red-l);color:var(--red)}
+.b-warteliste,.b-klaerung{background:var(--amber-l);color:#9a6200} .b-angefragt{background:var(--blue-l);color:var(--blue)}
+.b-entwurf{background:var(--slate-l);color:var(--slate)}
+.meta{display:grid;grid-template-columns:auto 1fr;gap:3px 10px;font-size:14px}
+.meta dt{color:var(--muted)} .meta dd{margin:0;font-weight:500}
+.warn{background:var(--amber-l);color:#7a4d00;border-radius:12px;padding:8px 10px;font-size:14px;font-weight:600}
+.next{background:var(--blue-l);border-radius:12px;padding:9px 11px;font-size:14px}
+.next b{color:var(--blue)}
+.dates{display:flex;gap:6px;flex-wrap:wrap;font-size:13px}
+.dates span{background:#f4f6fb;border:1px solid var(--line);border-radius:8px;padding:3px 8px;color:var(--muted)}
+.dates b{color:var(--ink)}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+details{border-top:1px solid #edf1fa;padding-top:8px}
+summary{cursor:pointer;font-weight:600;color:var(--blue);font-size:14px}
+pre.msg{white-space:pre-wrap;font-family:inherit;font-size:14px;background:#f8faff;border:1px solid #edf1fa;border-radius:12px;padding:10px;margin:8px 0}
+.hist{list-style:none;margin:8px 0 0;padding:0;font-size:13px}
+.hist li{padding:5px 0;border-bottom:1px dashed #e3e9f5;display:flex;gap:8px}
+.hist time{color:var(--muted);min-width:78px;font-variant-numeric:tabular-nums}
+textarea,input[type=text],input[type=date],input[type=number],input[type=email],select{width:100%;border:1px solid var(--line);border-radius:10px;padding:8px 10px;background:#fff}
+textarea{min-height:64px;resize:vertical}
+.note{font-size:14px}
+dialog{border:0;border-radius:20px;padding:0;max-width:560px;width:calc(100% - 24px)}
+dialog::backdrop{background:rgba(20,33,61,.45)}
+.dlg{padding:18px}
+.dlg h3{margin:0 0 12px;font-family:"Barlow Condensed",sans-serif;font-size:26px}
+.f{display:grid;gap:10px}
+.f2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+label{font-size:13px;color:var(--muted);font-weight:600;display:grid;gap:4px}
+.chk{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--ink)}
+.chk input{width:auto}
+.dfoot{display:flex;justify-content:flex-end;gap:8px;margin-top:14px}
+.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 16px;border-radius:12px;font-weight:600;opacity:0;transition:opacity .2s;pointer-events:none;z-index:9}
+.toast.on{opacity:1}
+.state{padding:30px;text-align:center;color:var(--muted)}
+.contact{font-weight:700;font-size:16px;word-break:break-all}
+.todo{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:0 0 16px}
+.col{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:14px;border-top:6px solid var(--slate)}
+.col.c-send{border-top-color:var(--amber)} .col.c-wait{border-top-color:var(--blue)} .col.c-done{border-top-color:var(--green)}
+.col h2{font-family:"Barlow Condensed",sans-serif;font-size:22px;margin:0 0 2px;display:flex;justify-content:space-between;align-items:center}
+.col h2 .n{background:var(--bg);border-radius:999px;padding:1px 10px;font-size:16px}
+.col .sub{font-size:13px;color:var(--muted);margin-bottom:8px}
+.ti{display:flex;align-items:center;gap:8px;padding:8px 0;border-top:1px solid #edf1fa}
+.ti:first-of-type{border-top:0}
+.ti .go{flex:1;min-width:0;text-align:left;border:0;background:none;cursor:pointer;padding:0}
+.ti .go b{display:block;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ti .go small{color:var(--muted);font-size:13px}
+.ti .ch{font-size:12px;font-weight:700;border-radius:8px;padding:2px 7px;background:var(--bg);color:var(--muted);white-space:nowrap}
+.empty{font-size:14px;color:var(--muted);padding:6px 0}
+.tc.akut{border:3px solid var(--red);box-shadow:0 0 0 4px var(--red-l)}
+.akutbox{border:2px solid var(--red);background:var(--red-l);color:#8f1f1f;border-radius:12px;padding:9px 11px;font-size:14px;font-weight:700}
+.ti.akut{border:2px solid var(--red);background:var(--red-l);border-radius:12px;padding:8px;margin:6px 0}
+.ti.akut .go small{color:#8f1f1f}
+.km{white-space:nowrap}
+.stat.alarm{border:2px solid var(--red);background:var(--red-l);color:#8f1f1f}
+.stat.alarm b{color:var(--red)}
+@media (max-width:860px){.todo{grid-template-columns:1fr}}
+@media (max-width:640px){
+  h1{font-size:36px}
+  .day{min-height:62px;padding:3px}
+  .ev{font-size:10px;padding:2px 4px}
+  .cards{grid-template-columns:1fr}
+  .f2{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="club">SV GERMANIA BIETIGHEIM</div>
+    <div class="hrow"><h1>Turnierplan 2026/27</h1><span class="plakette">F-Junioren 2019</span></div>
+    <div class="hsub">Hallenturniere · Anmeldungen · Antworten</div>
+  </div>
+</header>
+<main class="wrap">
+  <div class="stats" id="stats"></div>
+  <section class="todo" id="todo"></section>
+
+  <section class="card">
+    <div class="calhead">
+      <button class="navbtn" id="prev" aria-label="Vorheriger Monat">‹</button>
+      <h2 id="mtitle"></h2>
+      <button class="navbtn" id="next" aria-label="Nächster Monat">›</button>
+    </div>
+    <div class="grid" id="cal"></div>
+    <div class="legend">
+      <span><i class="sw" style="background:var(--blue)"></i>Turnier angefragt</span>
+      <span><i class="sw" style="background:var(--green)"></i>Zusage</span>
+      <span><i class="sw" style="background:var(--red)"></i>Absage</span>
+      <span><i class="sw" style="background:var(--amber)"></i>Warteliste / Klärung</span>
+      <span><i class="sw" style="background:var(--slate)"></i>Noch nicht verschickt</span>
+      <span><i class="sw" style="background:var(--blue-l)"></i>↗ Anfrage verschickt</span>
+      <span><i class="sw" style="background:#f1f3f8;border:1px solid var(--line)"></i>↩ Antwort erhalten</span>
+      <span><i class="sw" style="outline:2px dashed var(--amber);outline-offset:-2px;background:var(--slate)"></i>Datum unbestätigt</span>
+    </div>
+  </section>
+
+  <div class="toolbar">
+    <div class="tabs" id="tabs"></div>
+    <button class="btn" id="addBtn">+ Turnier</button>
+  </div>
+  <div id="cards"><div class="state">Lade Turniere …</div></div>
+  <p style="font-size:13px;color:var(--muted);margin-top:22px">Stand 01.11.2026 · Klicks auf der Seite merkt sich nur dieses Gerät. Verbindlich ist der Stand, den du AVA im Chat meldest – dann wird die Seite aktualisiert.</p>
+</main>
+<script type="application/json" id="seed">
+{"stand": "2026-11-01d", "items": [{"id": "buckenberg", "name": "Heilige Drei Könige Budenzauber", "kurz": "Buckenberg", "veranstalter": "FSV 1921 Pforzheim-Buckenberg", "datum": "2027-01-06", "zeit": "Uhrzeit auf Flyer nicht angegeben", "kategorie": "F-Junioren", "ort": "Konrad-Adenauer-Sporthalle, Kaulbachstraße 30, 75175 Pforzheim", "teamsAngefragt": 2, "teamsBestaetigt": 0, "modus": "auf Flyer nicht angegeben", "startgeld": "35 € („pro Team“ nicht ausdrücklich)", "kontakt": {"typ": "online", "wert": "https://forms.cloud.microsoft/pages/responsepage.aspx?id=DQSIkWdsW0yxEjajBLZtrQAAAAAAAAAAAAMAABzcziBUNlFCWE5RVjQ2R0VPMzdRM1hMWUZVVldDRy4u&origin=QRCode&qrcodeorigin=presentation&route=shorturl"}, "status": "entwurf", "anfrageDatum": null, "antwortDatum": null, "naechsterSchritt": "Formular ausfüllen (Daten unten kopieren), dann hier als verschickt markieren. Jahrgang 2019 auswählen.", "notizen": "Flyer nennt keinen Jahrgang für F-Junioren – im Formular auf 2019 achten. Bambini-Tag ist der 04.01. (nicht unser Jahrgang).", "nachricht": "Verein: SV Germania Bietigheim\nAltersklasse: F-Junioren, Jahrgang 2019\nAnzahl Mannschaften: 2\nTurnier: 06.01.2027\nAnsprechpartner: Andreas Roßbach\nE-Mail: andreas.rossbach@sv-germania-bietigheim.de\nTelefon: 0173 / 230 978 3", "verlauf": [{"d": "2026-11-01", "k": "notiz", "t": "Flyer erfasst, Anmeldung über QR-Code-Formular (Microsoft Forms) – Versand noch nicht bestätigt"}], "km": 49, "fahrzeit": 40, "akut": "Formular noch nicht ausgefüllt – Feiertagsturnier, Plätze oft schnell weg."}, {"id": "schmiden", "name": "Hallenspieltag TSV Schmiden", "kurz": "Schmiden", "veranstalter": "TSV Schmiden", "datum": "2027-01-16", "zeit": "nachmittags (genaue Zeit offen)", "kategorie": "F-Jugend 2019/2018", "ort": "1-2-3 Halle, Schmiden", "teamsAngefragt": 2, "teamsBestaetigt": 0, "modus": "auf Flyer nicht angegeben", "startgeld": "35 € („pro Team“ nicht ausdrücklich)", "kontakt": {"typ": "email", "wert": "Turniere_fussball@tsv-schmiden.de"}, "status": "entwurf", "anfrageDatum": null, "antwortDatum": null, "naechsterSchritt": "Mail aus dem Germania-Konto verschicken und hier als verschickt markieren.", "betreff": "Anmeldung Hallenspieltag am 16.01.2027 – F-Jugend Jahrgang 2019 – SV Germania Bietigheim", "nachricht": "Hallo liebes Schmiden-Team,\n\nwir würden gerne am 16.01.2027 mit zwei Mannschaften zu Eurem Hallenspieltag am Nachmittag kommen.\nF-Jugend (Jahrgang 2019) – SV Germania Bietigheim\n\nName: Andreas Roßbach\nTelefon: 0173 / 230 978 3\n\nHoffe, ihr habt noch zwei Plätze frei! :)\n\nSportliche Grüße\nAndreas", "verlauf": [{"d": "2026-11-01", "k": "notiz", "t": "Flyer erfasst, Mailtext vorbereitet – Versand noch nicht bestätigt"}], "km": 20, "fahrzeit": 30, "kmHinweis": "bis Ortsmitte Schmiden, Halle nicht exakt gefunden", "akut": "Anmelde-Mail noch nicht verschickt."}, {"id": "altbach", "name": "Neujahrscup Altbach", "kurz": "Altbach", "veranstalter": "SC Altbach", "datum": "2027-01-10", "zeit": "10:00–13:00 Uhr", "kategorie": "F2", "ort": "Sporthalle, Esslingerstraße 106, 73776 Altbach", "teamsAngefragt": 2, "teamsBestaetigt": 0, "modus": "4 Feldspieler + 1 Torwart", "startgeld": "35 € pro Team", "kontakt": {"typ": "email", "wert": "Fioss@web.de"}, "status": "angefragt", "anfrageDatum": "2026-11-01", "antwortDatum": null, "naechsterSchritt": "Auf E-Mail-Antwort warten.", "betreff": "Anmeldung Neujahrscup am 10.01.2027 – F2 Jahrgang 2019 – SV Germania Bietigheim", "nachricht": "Hallo liebes Altbach-Team,\n\nwir würden gerne am 10.01.2027 mit zwei Mannschaften zu Eurem Neujahrscup am Vormittag (10:00–13:00 Uhr) kommen.\nF2-Jugend (Jahrgang 2019) – SV Germania Bietigheim\n\nName: Andreas Roßbach\nTelefon: 0173 / 230 978 3\n\nHoffe, ihr habt noch zwei Plätze frei! :)\n\nSportliche Grüße\nAndreas", "verlauf": [{"d": "2026-11-01", "k": "anfrage", "t": "Anmeldung per E-Mail aus dem Germania-Konto verschickt (2 Teams) – von Andi bestätigt"}], "km": 41, "fahrzeit": 45}, {"id": "fellbach", "name": "Valentinstags Cup Fellbach", "kurz": "Fellbach", "veranstalter": "SV Fellbach 1890", "datum": "2027-02-14", "zeit": "09:00–14:00 Uhr", "ort": "Zeppelinsporthalle, 70734 Fellbach", "teamsAngefragt": 2, "teamsBestaetigt": 0, "modus": "4+1", "startgeld": "40 € pro Mannschaft", "kontakt": {"typ": "email", "wert": "turnierkoordinator@svf-fussball.de"}, "status": "angefragt", "anfrageDatum": "2026-11-01", "antwortDatum": null, "naechsterSchritt": "Auf E-Mail-Antwort warten.", "notizen": "Keine Leistungsgruppen auf dem Flyer.", "betreff": "Anmeldung Valentinstags Cup am 14.02.2027 – Jahrgang 2019 – SV Germania Bietigheim", "nachricht": "Hallo liebes Fellbach-Team,\n\nwir würden gerne am 14.02.2027 mit zwei Mannschaften zu Eurem Valentinstags Cup am Vormittag (09:00–14:00 Uhr) kommen.\nJahrgang 2019 – SV Germania Bietigheim\n\nName: Andreas Roßbach\nTelefon: 0173 / 230 978 3\n\nHoffe, ihr habt noch zwei Plätze frei! :)\n\nSportliche Grüße\nAndreas", "verlauf": [{"d": "2026-11-01", "k": "anfrage", "t": "Anmeldung per E-Mail aus dem Germania-Konto verschickt (2 Teams) – von Andi bestätigt"}], "km": 32, "fahrzeit": 35}, {"id": "hemmingen", "name": "Nikolausturnier Hemmingen", "kurz": "Hemmingen", "veranstalter": "GSV Hemmingen", "datum": "2026-12-06", "zeit": "vormittags (genaue Zeit offen)", "kategorie": "F-Jugend 2019/2018", "ort": "Strohgäuhalle, Eberdingerstraße 36, Hemmingen", "teamsAngefragt": 2, "teamsBestaetigt": 0, "startgeld": "auf Flyer nicht angegeben", "modus": "auf Flyer nicht angegeben", "kontakt": {"typ": "whatsapp", "wert": "0176 30583163"}, "status": "entwurf", "anfrageDatum": null, "antwortDatum": null, "naechsterSchritt": "WhatsApp verschicken und hier als verschickt markieren.", "nachricht": "Hallo liebes Hemmingen-Team,\n\nwir würden gerne am 06.12.2026 mit zwei Mannschaften zu Eurem Nikolausturnier am Vormittag kommen.\nF-Jugend (Jahrgang 2019) – SV Germania Bietigheim\n\nName: Andreas Roßbach\nTelefon: 0173 / 230 978 3\n\nHoffe, ihr habt noch zwei Plätze frei! :)\n\nSportliche Grüße\nAndreas", "verlauf": [{"d": "2026-11-01", "k": "notiz", "t": "WhatsApp-Text vorbereitet – Versand noch nicht bestätigt"}], "km": 20, "fahrzeit": 20, "akut": "WhatsApp noch nicht verschickt – Turnier ist schon am 06.12."}, {"id": "laemmle", "name": "Getränke Lämmle HallenCup", "kurz": "Lämmle", "veranstalter": "", "datum": "2027-01-24", "zeit": "13:30–17:00 Uhr", "ort": "Rote Halle Obertürkheim, Augsburger Str. 581, 70329 Stuttgart", "teamsAngefragt": 2, "teamsBestaetigt": 0, "modus": "erst 3× 4 gegen 4, danach 3× 3 gegen 3 – nacheinander, max. 8 Spieler/Team", "startgeld": "auf Flyer nicht angegeben", "kontakt": {"typ": "unbekannt", "wert": "", "hinweis": "WhatsApp-Nummer und Online-Link liegen dir vor, mir nicht"}, "status": "klaerung", "anfrageDatum": null, "antwortDatum": null, "naechsterSchritt": "Per WhatsApp klären: ausgebucht oder Anmeldung noch nicht freigeschaltet? Ggf. Warteliste.", "notizen": "Online-Link zeigt „Turnier noch nicht gestartet“. Weder freier Platz noch Warteliste bestätigt.", "nachricht": "Hallo liebes Turnier-Team,\n\nwir würden gerne am 24.01.2027 mit zwei Mannschaften vom SV Germania Bietigheim, Jahrgang 2019, zu Eurem Getränke Lämmle HallenCup kommen.\n\nÜber den Online-Link klappt die Anmeldung gerade leider nicht – dort steht, dass das Turnier noch nicht gestartet wurde. Seid ihr schon ausgebucht oder ist die Anmeldung noch nicht freigeschaltet?\n\nFalls ihr schon voll seid, würden wir uns freuen, wenn ihr uns auf die Warteliste setzen könntet! :)\n\nName: Andreas Roßbach\nTelefon: 0173 / 230 978 3\n\nSportliche Grüße\nAndreas", "verlauf": [{"d": "2026-11-01", "k": "notiz", "t": "Nachfrage vorbereitet – Versand noch nicht bestätigt"}], "km": 29, "fahrzeit": 30, "akut": "WhatsApp-Nummer fehlt mir – Nachfrage (voll oder noch nicht freigeschaltet?) noch nicht verschickt."}, {"id": "reutlingen", "name": "Hallenturnier Reutlinger Juniors", "kurz": "Reutlingen", "veranstalter": "SGM Reutlinger Juniors", "datum": "2027-02-20", "datumUnsicher": true, "datumHinweis": "Flyer nennt „20. Februar“ ohne Jahr – 2027 nur angenommen, beim Veranstalter bestätigen lassen.", "zeit": "ab 13:30 Uhr", "ort": "BZN-Halle, Rommelsbach", "teamsAngefragt": 2, "teamsBestaetigt": 0, "modus": "4 gegen 4 und 3 gegen 3 parallel", "kinderBedarf": "18 Kinder (9 pro Team, eigene Planung)", "startgeld": "30 € laut Flyer („pro Mannschaft“ nicht ausdrücklich)", "kontakt": {"typ": "whatsapp", "wert": "0176 30598716"}, "status": "entwurf", "anfrageDatum": null, "antwortDatum": null, "naechsterSchritt": "WhatsApp verschicken und Jahr bestätigen lassen.", "nachricht": "Hallo liebes Reutlinger-Juniors-Team,\n\nwir würden gerne am 20. Februar mit zwei Mannschaften zu Eurem Hallenturnier um 13:30 Uhr kommen.\nJahrgang 2019 – SV Germania Bietigheim\n\nIst der Termin am 20.02.2027?\n\nName: Andreas Roßbach\nTelefon: 0173 / 230 978 3\n\nHoffe, ihr habt noch zwei Plätze frei! :)\n\nSportliche Grüße\nAndreas", "verlauf": [{"d": "2026-11-01", "k": "notiz", "t": "WhatsApp-Text vorbereitet – Versand noch nicht bestätigt"}], "km": 65, "fahrzeit": 50, "akut": "WhatsApp noch nicht verschickt – dabei Jahr 2027 bestätigen lassen."}, {"id": "weilheim", "name": "REWE Seper Winter Cup Weilheim", "kurz": "Weilheim", "veranstalter": "TSV Weilheim/Teck", "datum": "2026-12-19", "zeit": "F-Jugend 13:00–18:00 Uhr", "ort": "Lindachsporthalle, Egelsbergstraße 1, 73235 Weilheim", "teamsAngefragt": 1, "teamsBestaetigt": 0, "staerke": "stark", "modus": "3 gegen 3 und 4 gegen 4 parallel", "startgeld": "30 € pro Team", "anmeldeschluss": "2026-11-30", "kontakt": {"typ": "email", "wert": "tsvweilheim-turniere@web.de", "person": "Paolo Torregrossa"}, "status": "absage", "anfrageDatum": "2026-10-21", "antwortDatum": "2026-11-01", "naechsterSchritt": "Keine weitere Aktion – nicht erneut anmelden.", "notizen": "Keine Wartelistenanfrage verschickt.", "nachricht": "Hallo liebes Weilheim Team,\n\nwir würden gerne am 19.12. mit einer Mannschaft zu Euch kommen.\nF-Jugend (2019 - stark) SV Germania Bietigheim\n\nName: Andreas Roßbach\nTelefon: 0173 / 230 978 3\n\nHoffe, ihr habt noch einen Platz frei! :)\n\nSportliche Grüße\nAndreas", "verlauf": [{"d": "2026-10-21", "k": "anfrage", "t": "Anmeldung per E-Mail: 1 Team, Jahrgang 2019, stark"}, {"d": "2026-11-01", "k": "antwort", "t": "Absage vom Veranstalter – Turnier bereits voll"}], "km": 71, "fahrzeit": 55}]}
+</script>
+
+<dialog id="dlg"><form class="dlg" id="dlgForm" method="dialog"></form></dialog>
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+const STATUS = {
+  entwurf:{l:"Noch nicht verschickt"}, angefragt:{l:"Angefragt"}, klaerung:{l:"Klärung offen"},
+  warteliste:{l:"Warteliste"}, zusage:{l:"Zusage"}, absage:{l:"Absage"}
+};
+const MONTHS=["Januar","Februar","März","April","Mai","Juni","Juli","August","September","Oktober","November","Dezember"];
+const WD=["So","Mo","Di","Mi","Do","Fr","Sa"];
+let db=null, col=null, items=[], loaded=false, filter="alle";
+const now=new Date(); let view={y:now.getFullYear(), m:now.getMonth()};
+const $=s=>document.querySelector(s);
+const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const todayISO=()=>{const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")};
+const fmt=iso=>{if(!iso)return"";const [y,m,d]=iso.split("-");return d+"."+m+"."+y};
+const fmtLong=iso=>{if(!iso)return"";const d=new Date(iso+"T12:00:00");return WD[d.getDay()]+", "+fmt(iso)};
+function toast(t){const e=$("#toast");e.textContent=t;e.classList.add("on");clearTimeout(toast._t);toast._t=setTimeout(()=>e.classList.remove("on"),2200)}
+async function copy(text,label){
+  try{await navigator.clipboard.writeText(text);toast((label||"Text")+" kopiert")}
+  catch(e){const ta=document.createElement("textarea");ta.value=text;document.body.appendChild(ta);ta.select();
+    try{document.execCommand("copy");toast((label||"Text")+" kopiert")}catch(_){toast("Kopieren nicht möglich – bitte manuell markieren")}ta.remove()}
+}
+function waLink(num,text){
+  let n=String(num||"").replace(/[^\d+]/g,"");if(!n)return null;
+  if(n.startsWith("+"))n=n.slice(1);else if(n.startsWith("00"))n=n.slice(2);else if(n.startsWith("0"))n="49"+n.slice(1);
+  return "https://wa.me/"+n+"?text="+encodeURIComponent(text||"");
+}
+
+/* ---------- Stats ---------- */
+function renderStats(){
+  const c={};items.forEach(t=>c[t.status]=(c[t.status]||0)+1);
+  const z=items.filter(t=>t.status==="zusage").reduce((s,t)=>s+(+t.teamsBestaetigt||0),0);
+  const ak=items.filter(isAkut).length;
+  $("#stats").innerHTML=(ak?`<div class="stat alarm"><b>${ak}</b>⚠️ Handlungsbedarf</div>`:"")+[
+    ["Turniere",items.length],["Angefragt",c.angefragt||0],["Noch verschicken",c.entwurf||0],
+    ["Warteliste/Klärung",(c.warteliste||0)+(c.klaerung||0)],["Zusagen",(c.zusage||0)+(z?" ("+z+" Teams)":"")],["Absagen",c.absage||0]
+  ].map(([l,v])=>`<div class="stat"><b>${v}</b>${l}</div>`).join("");
+}
+
+/* ---------- Calendar ---------- */
+function eventsByDay(){
+  const m={};const add=(iso,e)=>{if(!iso)return;(m[iso]=m[iso]||[]).push(e)};
+  items.forEach(t=>{
+    add(t.datum,{k:"t",t});
+    (t.verlauf||[]).forEach(v=>{ if(v.k==="anfrage") add(v.d,{k:"a",t}); if(v.k==="antwort") add(v.d,{k:"r",t}); });
+  });
+  Object.values(m).forEach(arr=>{const seen=new Set();for(let i=arr.length-1;i>=0;i--){const key=arr[i].k+arr[i].t.id;if(seen.has(key))arr.splice(i,1);else seen.add(key)}});
+  return m;
+}
+function renderCal(){
+  $("#mtitle").textContent=MONTHS[view.m]+" "+view.y;
+  const first=new Date(view.y,view.m,1);const start=(first.getDay()+6)%7;
+  const days=new Date(view.y,view.m+1,0).getDate();const ev=eventsByDay();const tIso=todayISO();
+  let h=["Mo","Di","Mi","Do","Fr","Sa","So"].map(d=>`<div class="dow">${d}</div>`).join("");
+  for(let i=0;i<start;i++)h+=`<div class="day out"></div>`;
+  for(let d=1;d<=days;d++){
+    const iso=view.y+"-"+String(view.m+1).padStart(2,"0")+"-"+String(d).padStart(2,"0");
+    const list=(ev[iso]||[]).sort((a,b)=>(a.k==="t"?0:1)-(b.k==="t"?0:1));
+    h+=`<div class="day${iso===tIso?" today":""}"><div class="dnum">${d}</div>`+list.map(e=>{
+      const n=esc(e.t.kurz||e.t.name);
+      if(e.k==="t")return `<button class="ev t ${e.t.status}${e.t.datumUnsicher?" unsicher":""}" data-go="${e.t.id}" title="Turnier: ${esc(e.t.name)} – ${STATUS[e.t.status].l}${e.t.datumUnsicher?" (Datum unbestätigt)":""}">${e.t.datumUnsicher?"? ":""}${n}</button>`;
+      if(e.k==="a")return `<button class="ev a" data-go="${e.t.id}" title="Anfrage verschickt: ${esc(e.t.name)}">↗ ${n}</button>`;
+      return `<button class="ev r" data-go="${e.t.id}" title="Antwort erhalten: ${esc(e.t.name)}">↩ ${n}</button>`;
+    }).join("")+`</div>`;
+  }
+  $("#cal").innerHTML=h;
+}
+
+/* ---------- Cards ---------- */
+function isAkut(t){return !!t.akut&&(t.status==="entwurf"||t.status==="klaerung")}
+const kmTxt=t=>t.km?`ca. ${t.km} km`:"";
+const GROUPS={
+  verschicken:t=>t.status==="entwurf"||t.status==="klaerung",
+  warten:t=>t.status==="angefragt"||t.status==="warteliste",
+  erledigt:t=>t.status==="zusage"||t.status==="absage"
+};
+function renderTodo(){
+  const byDate=(a,b)=>(a.datum||"9999").localeCompare(b.datum||"9999");
+  const ch=t=>{const k=(t.kontakt||{}).typ;return k==="email"?"✉️ Mail":k==="whatsapp"?"💬 WhatsApp":k==="online"?"🌐 Formular":"❓ Kontakt fehlt"};
+  const row=(t,extra,btn)=>`<div class="ti${isAkut(t)?" akut":""}"><button class="go" data-go="${t.id}"><b>${isAkut(t)?"⚠️ ":""}${esc(t.kurz||t.name)}${t.datumUnsicher?" ?":""}</b><small>${t.datum?fmt(t.datum):"Datum offen"} · <span class="km">${kmTxt(t)}</span> · ${extra}${isAkut(t)?"<br>"+esc(t.akut):""}</small></button>${btn||""}</div>`;
+  const send=items.filter(GROUPS.verschicken).sort(byDate);
+  const wait=items.filter(GROUPS.warten).sort(byDate);
+  const done=items.filter(GROUPS.erledigt).sort(byDate);
+  $("#todo").innerHTML=`
+  <div class="col c-send"><h2>Noch verschicken <span class="n">${send.length}</span></h2><div class="sub">Text liegt bereit – du entscheidest, wie</div>
+    ${send.map(t=>row(t,(t.teamsAngefragt||"?")+" Teams"+(t.status==="klaerung"?" · Klärung":""),`<span class="ch">${ch(t)}</span>${t.nachricht?`<button class="btn sm" data-copy="text" data-id="${t.id}" title="Nachricht kopieren">📋</button>`:""}`)).join("")||`<div class="empty">Alles raus 👍</div>`}</div>
+  <div class="col c-wait"><h2>Warte auf Antwort <span class="n">${wait.length}</span></h2><div class="sub">Verschickt, Antwort offen</div>
+    ${wait.map(t=>row(t,(t.status==="warteliste"?"Warteliste":"angefragt "+fmt(t.anfrageDatum)),`<span class="ch">${ch(t)}</span>`)).join("")||`<div class="empty">Nichts offen</div>`}</div>
+  <div class="col c-done"><h2>Erledigt <span class="n">${done.length}</span></h2><div class="sub">Zusage oder Absage erhalten</div>
+    ${done.map(t=>row(t,`<span style="color:${t.status==="zusage"?"var(--green)":"var(--red)"};font-weight:700">${STATUS[t.status].l}</span>${t.status==="zusage"&&t.teamsBestaetigt?" · "+t.teamsBestaetigt+" Teams":""} · ${fmt(t.antwortDatum)}`)).join("")||`<div class="empty">Noch keine Antworten</div>`}</div>`;
+}
+function overlaps(t){return t.datum?items.filter(o=>o.id!==t.id&&o.datum===t.datum&&o.status!=="absage"):[]}
+const FILTERS={alle:()=>true,verschicken:GROUPS.verschicken,warten:GROUPS.warten,zusage:t=>t.status==="zusage",absage:t=>t.status==="absage"};
+function filtered(){
+  return items.filter(FILTERS[filter]).sort((a,b)=>(a.datum||"9999").localeCompare(b.datum||"9999"));
+}
+function renderTabs(){
+  const n=k=>items.filter(FILTERS[k]).length;
+  $("#tabs").innerHTML=[["alle","Alle"],["verschicken","Noch verschicken"],["warten","Warte auf Antwort"],["zusage","Zusagen"],["absage","Absagen"]].map(([k,l])=>`<button class="tab${filter===k?" on":""}" data-tab="${k}">${l} (${n(k)})</button>`).join("");
+}
+function card(t){
+  const st=STATUS[t.status]||STATUS.entwurf;
+  const ov=overlaps(t);
+  const k=t.kontakt||{};
+  let contact="";
+  if(k.typ==="email"&&k.wert){
+    const mail="mailto:"+encodeURIComponent(k.wert)+"?subject="+encodeURIComponent(t.betreff||"")+"&body="+encodeURIComponent(t.nachricht||"");
+    contact=`<div><div class="contact">✉️ ${esc(k.wert)}</div><div class="row" style="margin-top:6px">
+      <button class="btn2 sm" data-copy="mail" data-id="${t.id}">Adresse kopieren</button>
+      ${t.betreff?`<button class="btn2 sm" data-copy="betreff" data-id="${t.id}">Betreff kopieren</button>`:""}
+      <a class="btn2 sm" href="${mail}">In Mail-App öffnen</a></div></div>`;
+  }else if(k.typ==="whatsapp"&&k.wert){
+    const wl=waLink(k.wert,t.nachricht);
+    contact=`<div><div class="contact">💬 ${esc(k.wert)}</div><div class="row" style="margin-top:6px">
+      <button class="btn2 sm" data-copy="nummer" data-id="${t.id}">Nummer kopieren</button>
+      ${wl?`<a class="btn2 sm" href="${wl}" target="_blank" rel="noopener">In WhatsApp öffnen</a>`:""}</div></div>`;
+  }else if(k.typ==="online"&&k.wert){
+    contact=`<div><div class="contact">🌐 Online-Formular</div><div class="row" style="margin-top:6px">
+      <a class="btn2 sm" href="${esc(k.wert)}" target="_blank" rel="noopener">Formular öffnen</a>
+      <button class="btn2 sm" data-copy="mail" data-id="${t.id}">Link kopieren</button></div></div>`;
+  }else{
+    contact=`<div class="warn">Kontakt fehlt${k.hinweis?": "+esc(k.hinweis):""} – über „Bearbeiten“ ergänzen.</div>`;
+  }
+  const teams=(t.teamsAngefragt||0)+" angefragt"+(t.teamsBestaetigt?" · "+t.teamsBestaetigt+" bestätigt":"")+(t.staerke?" ("+esc(t.staerke)+")":"");
+  const hist=(t.verlauf||[]).slice().sort((a,b)=>(b.d||"").localeCompare(a.d||"")).map(v=>`<li><time>${fmt(v.d)}</time><span>${esc(v.t)}</span></li>`).join("");
+  const isOpen=["entwurf","angefragt","klaerung","warteliste"].includes(t.status);
+  return `<article class="tc${isAkut(t)?" akut":""}" id="t-${t.id}">
+    <div class="top"><div>
+      <div class="when">${t.datum?fmtLong(t.datum):"Datum offen"}${t.datumUnsicher?" ?":""}${t.zeit?" · "+esc(t.zeit):""}</div>
+      <h3>${esc(t.name)}</h3></div>
+      <span class="badge b-${t.status}">${st.l}</span></div>
+    ${isAkut(t)?`<div class="akutbox">⚠️ Handlungsbedarf: ${esc(t.akut)}</div>`:""}
+    ${t.datumUnsicher?`<div class="warn">⚠️ ${esc(t.datumHinweis||"Datum noch nicht bestätigt")}</div>`:""}
+    ${ov.length?`<div class="warn">⚠️ Terminüberschneidung mit: ${ov.map(o=>esc(o.name)).join(", ")}</div>`:""}
+    <dl class="meta">
+      ${t.veranstalter?`<dt>Veranstalter</dt><dd>${esc(t.veranstalter)}</dd>`:""}
+      ${t.ort?`<dt>Ort</dt><dd>${esc(t.ort)}</dd>`:""}
+      ${t.km?`<dt>Anfahrt</dt><dd>ca. ${t.km} km · ~${t.fahrzeit} min ab Bietigheim-Bissingen${t.kmHinweis?" ("+esc(t.kmHinweis)+")":""}</dd>`:""}
+      <dt>Jahrgang</dt><dd>2019${t.kategorie?" · "+esc(t.kategorie):""}</dd>
+      <dt>Teams</dt><dd>${teams}</dd>
+      ${t.modus?`<dt>Modus</dt><dd>${esc(t.modus)}</dd>`:""}
+      ${t.kinderBedarf?`<dt>Kinder</dt><dd>${esc(t.kinderBedarf)}</dd>`:""}
+      ${t.startgeld?`<dt>Startgeld</dt><dd>${esc(t.startgeld)}</dd>`:""}
+      ${t.anmeldeschluss?`<dt>Meldeschluss</dt><dd>${fmt(t.anmeldeschluss)}</dd>`:""}
+      <dt>Kanal</dt><dd>${k.typ==="email"?"E-Mail (Germania-Konto)":k.typ==="whatsapp"?"WhatsApp":k.typ==="online"?"Online-Formular":"–"}${k.person?" · "+esc(k.person):""}</dd>
+    </dl>
+    <div class="dates">
+      <span>Turnier <b>${t.datum?fmt(t.datum)+(t.datumUnsicher?" ?":""):"–"}</b></span>
+      <span>Angefragt <b>${t.anfrageDatum?fmt(t.anfrageDatum):"–"}</b></span>
+      <span>Antwort <b>${t.antwortDatum?fmt(t.antwortDatum):"–"}</b></span>
+    </div>
+    ${contact}
+    ${t.naechsterSchritt?`<div class="next"><b>Nächster Schritt:</b> ${esc(t.naechsterSchritt)}</div>`:""}
+    <div class="row">
+      ${t.nachricht?`<button class="btn sm" data-copy="text" data-id="${t.id}">📋 ${k.typ==="online"?"Formulardaten":"Nachricht"} kopieren</button>`:""}
+      ${t.status==="entwurf"||t.status==="klaerung"?`<button class="btn2 sm" data-act="sent" data-id="${t.id}">✓ Verschickt</button>`:""}
+      ${isOpen||t.status==="warteliste"?`<button class="btn2 sm" data-act="answer" data-id="${t.id}">Antwort erfassen</button>`:""}
+      <button class="btn2 sm" data-act="note" data-id="${t.id}">Notiz</button>
+      <button class="btn2 sm" data-act="edit" data-id="${t.id}">Bearbeiten</button>
+    </div>
+    ${t.notizen?`<div class="note"><b>Notiz:</b> ${esc(t.notizen)}</div>`:""}
+    ${t.nachricht?`<details><summary>Nachrichtentext ansehen</summary>${t.betreff?`<div style="font-size:13px;margin-top:6px"><b>Betreff:</b> ${esc(t.betreff)}</div>`:""}<pre class="msg">${esc(t.nachricht)}</pre></details>`:""}
+    <details${hist?"":" hidden"}><summary>Verlauf (${(t.verlauf||[]).length})</summary><ul class="hist">${hist}</ul></details>
+  </article>`;
+}
+function renderCards(){
+  if(!loaded)return;
+  const list=filtered();
+  $("#cards").innerHTML=list.length?`<div class="cards">${list.map(card).join("")}</div>`:`<div class="state">${items.length?"Keine Turniere in diesem Filter.":"Noch keine Turniere erfasst."}</div>`;
+}
+function renderAll(){renderStats();renderTodo();renderCal();renderTabs();renderCards()}
+const byId=id=>items.find(t=>t.id===id);
+
+/* ---------- Writes ---------- */
+async function save(id,patch,msg){
+  if(!col){toast("Speichern nicht möglich – keine Verbindung zur Datenbank");return false}
+  try{await col.doc(id).update(patch);toast(msg||"Gespeichert");return true}
+  catch(e){toast(e&&e.code==="invalid_argument"?"Keine Schreibrechte oder ungültige Daten":"Speichern fehlgeschlagen – bitte nochmal");console.error(e);return false}
+}
+const addHist=(t,entry)=>[...(t.verlauf||[]),entry];
+
+/* ---------- Dialogs ---------- */
+const dlg=$("#dlg"), form=$("#dlgForm");
+function openDlg(html,onOk){
+  form.innerHTML=html+`<div class="dfoot"><button type="button" class="btn2" data-x>Abbrechen</button><button type="submit" class="btn">Speichern</button></div>`;
+  form.querySelector("[data-x]").onclick=()=>dlg.close();
+  form.onsubmit=async ev=>{ev.preventDefault();const ok=await onOk(new FormData(form));if(ok!==false)dlg.close()};
+  dlg.showModal();
+}
+function dlgSent(t){
+  openDlg(`<h3>Verschickt: ${esc(t.name)}</h3><div class="f">
+    <label>Versanddatum<input type="date" name="d" value="${todayISO()}" required></label>
+    <label>Kanal<select name="kanal"><option value="E-Mail"${t.kontakt&&t.kontakt.typ==="email"?" selected":""}>E-Mail</option><option value="WhatsApp"${t.kontakt&&t.kontakt.typ==="whatsapp"?" selected":""}>WhatsApp</option><option value="Online-Formular">Online-Formular</option><option value="Telefon">Telefon</option></select></label>
+    <label>Notiz (optional)<input type="text" name="n"></label></div>`,
+  fd=>{const d=fd.get("d"),n=fd.get("n");
+    return save(t.id,{status:"angefragt",anfrageDatum:d,naechsterSchritt:"Auf Antwort warten.",
+      verlauf:addHist(t,{d,k:"anfrage",t:"Anfrage per "+fd.get("kanal")+" verschickt ("+(t.teamsAngefragt||"?")+" Teams)"+(n?" – "+n:"")})},"Als verschickt markiert")});
+}
+function dlgAnswer(t){
+  openDlg(`<h3>Antwort: ${esc(t.name)}</h3><div class="f">
+    <label>Ergebnis<select name="s"><option value="zusage">Zusage</option><option value="absage">Absage</option><option value="warteliste">Warteliste</option></select></label>
+    <div class="f2"><label>Antwortdatum<input type="date" name="d" value="${todayISO()}" required></label>
+    <label>Bestätigte Teams<input type="number" name="b" min="0" max="5" value="${t.teamsAngefragt||2}"></label></div>
+    <label>Von wem / Rückmeldung<input type="text" name="n" placeholder="z. B. Name, Startzeit, Gruppen …"></label></div>`,
+  fd=>{const s=fd.get("s"),d=fd.get("d"),n=fd.get("n"),b=+fd.get("b")||0;
+    const next={zusage:"Startgeld/Ablauf klären, Kader planen.",absage:"Keine weitere Aktion.",warteliste:"Auf Nachrücker-Info warten."}[s];
+    const patch={status:s,antwortDatum:d,naechsterSchritt:next,
+      verlauf:addHist(t,{d,k:"antwort",t:STATUS[s].l+(s==="zusage"?" ("+b+" Teams)":"")+(n?" – "+n:"")})};
+    if(s==="zusage")patch.teamsBestaetigt=b; else patch.teamsBestaetigt=0;
+    return save(t.id,patch,STATUS[s].l+" gespeichert")});
+}
+function dlgNote(t){
+  openDlg(`<h3>Notiz: ${esc(t.name)}</h3><div class="f">
+    <label>Notiz (bleibt auf der Karte stehen)<textarea name="n">${esc(t.notizen||"")}</textarea></label>
+    <label class="chk"><input type="checkbox" name="h" checked> Zusätzlich in den Verlauf schreiben</label></div>`,
+  fd=>{const n=String(fd.get("n")||"").trim();const patch={notizen:n};
+    if(fd.get("h")&&n&&n!==(t.notizen||""))patch.verlauf=addHist(t,{d:todayISO(),k:"notiz",t:"Notiz: "+n});
+    return save(t.id,patch,"Notiz gespeichert")});
+}
+function dlgEdit(t){
+  const isNew=!t; t=t||{teamsAngefragt:2,kontakt:{typ:"email"},status:"entwurf"};
+  const k=t.kontakt||{};
+  openDlg(`<h3>${isNew?"Neues Turnier":"Bearbeiten: "+esc(t.name)}</h3><div class="f">
+    <label>Turniername<input type="text" name="name" value="${esc(t.name)}" required></label>
+    <div class="f2"><label>Kurzname (Kalender)<input type="text" name="kurz" value="${esc(t.kurz)}"></label>
+    <label>Veranstalter<input type="text" name="veranstalter" value="${esc(t.veranstalter)}"></label></div>
+    <div class="f2"><label>Datum<input type="date" name="datum" value="${esc(t.datum)}"></label>
+    <label>Uhrzeit<input type="text" name="zeit" value="${esc(t.zeit)}"></label></div>
+    <label class="chk"><input type="checkbox" name="datumUnsicher"${t.datumUnsicher?" checked":""}> Datum/Jahr noch unbestätigt</label>
+    <label>Ort<input type="text" name="ort" value="${esc(t.ort)}"></label>
+    <div class="f2"><label>Teams angefragt<input type="number" name="teamsAngefragt" min="1" max="5" value="${esc(t.teamsAngefragt)}"></label>
+    <label>Spielstärke (optional)<input type="text" name="staerke" value="${esc(t.staerke)}"></label></div>
+    <div class="f2"><label>Modus<input type="text" name="modus" value="${esc(t.modus)}"></label>
+    <label>Startgeld<input type="text" name="startgeld" value="${esc(t.startgeld)}"></label></div>
+    <div class="f2"><label>Kontakt-Kanal<select name="ktyp"><option value="email"${k.typ==="email"?" selected":""}>E-Mail</option><option value="whatsapp"${k.typ==="whatsapp"?" selected":""}>WhatsApp</option><option value="online"${k.typ==="online"?" selected":""}>Online-Formular</option><option value="unbekannt"${k.typ==="unbekannt"?" selected":""}>Unbekannt</option></select></label>
+    <label>E-Mail / Nummer<input type="text" name="kwert" value="${esc(k.wert)}"></label></div>
+    <label>Kontaktperson<input type="text" name="kperson" value="${esc(k.person)}"></label>
+    <label>Betreff (bei E-Mail)<input type="text" name="betreff" value="${esc(t.betreff)}"></label>
+    <label>Nachrichtentext<textarea name="nachricht" style="min-height:140px">${esc(t.nachricht)}</textarea></label>
+    <label>Nächster Schritt<input type="text" name="naechsterSchritt" value="${esc(t.naechsterSchritt)}"></label></div>`,
+  async fd=>{
+    const g=n=>String(fd.get(n)||"").trim();
+    const data={name:g("name"),kurz:g("kurz")||g("name").split(/\s|–/)[0],veranstalter:g("veranstalter"),datum:g("datum")||null,zeit:g("zeit"),
+      datumUnsicher:!!fd.get("datumUnsicher"),ort:g("ort"),teamsAngefragt:+g("teamsAngefragt")||2,staerke:g("staerke"),modus:g("modus"),startgeld:g("startgeld"),
+      kontakt:{typ:g("ktyp"),wert:g("kwert"),person:g("kperson")},betreff:g("betreff"),nachricht:g("nachricht"),naechsterSchritt:g("naechsterSchritt")};
+    if(isNew){
+      if(!col){toast("Keine Verbindung zur Datenbank");return false}
+      const id=(data.kurz||"turnier").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")+"-"+Date.now().toString(36);
+      try{await col.doc(id).set({...data,id,jahrgang:2019,status:"entwurf",teamsBestaetigt:0,verlauf:[{d:todayISO(),k:"erfasst",t:"Turnier erfasst"}]});toast("Turnier angelegt");return true}
+      catch(e){toast("Anlegen fehlgeschlagen");console.error(e);return false}
+    }
+    return save(t.id,data,"Änderungen gespeichert");
+  });
+}
+
+/* ---------- Events ---------- */
+document.addEventListener("click",e=>{
+  const go=e.target.closest("[data-go]");
+  if(go){const id=go.dataset.go;if(filter!=="alle"&&!filtered().some(t=>t.id===id)){filter="alle";renderTabs();renderCards()}
+    const el=document.getElementById("t-"+id);if(el){el.scrollIntoView({behavior:"smooth",block:"start"});el.classList.add("flash");setTimeout(()=>el.classList.remove("flash"),1600)}return}
+  const tab=e.target.closest("[data-tab]");if(tab){filter=tab.dataset.tab;renderTabs();renderCards();return}
+  const cp=e.target.closest("[data-copy]");
+  if(cp){const t=byId(cp.dataset.id);if(!t)return;const k=t.kontakt||{};
+    ({text:()=>copy(t.nachricht,"Nachricht"),betreff:()=>copy(t.betreff,"Betreff"),mail:()=>copy(k.wert,"Adresse"),nummer:()=>copy(k.wert,"Nummer")})[cp.dataset.copy]();return}
+  const act=e.target.closest("[data-act]");
+  if(act){const t=byId(act.dataset.id);if(!t)return;({sent:dlgSent,answer:dlgAnswer,note:dlgNote,edit:dlgEdit})[act.dataset.act](t)}
+});
+$("#prev").onclick=()=>{view.m--;if(view.m<0){view.m=11;view.y--}renderCal()};
+$("#next").onclick=()=>{view.m++;if(view.m>11){view.m=0;view.y++}renderCal()};
+$("#addBtn").onclick=()=>dlgEdit(null);
+
+/* ---------- Data (in die Seite eingebettet; Klicks werden zusätzlich lokal gemerkt) ---------- */
+const SEED=JSON.parse(document.getElementById("seed").textContent);
+const LS="germania-turniere-v1";
+function persist(){try{localStorage.setItem(LS,JSON.stringify({stand:STAND,items}))}catch(e){}}
+let STAND=SEED.stand;
+function load(src){STAND=src.stand;try{const s=JSON.parse(localStorage.getItem(LS)||"null");items=(s&&s.stand===src.stand)?s.items:src.items}catch(e){items=src.items}}
+load(SEED);
+loaded=true;
+// Auf GitHub Pages: aktuellen Stand aus turniere.json im Repo laden (Single Source of Truth)
+fetch("turniere.json",{cache:"no-store"}).then(r=>r.ok?r.json():null).then(d=>{if(d&&d.items){load(d);renderAll()}}).catch(()=>{});
+// Mini-Store mit gleicher Schnittstelle wie vorher
+col={doc:id=>({
+  update:async p=>{items=items.map(t=>t.id===id?{...t,...p}:t);persist();renderAll()},
+  set:async d=>{items=[...items.filter(t=>t.id!==id),{...d,id}];persist();renderAll()}
+})};
+renderAll();
+})();
+</script>
+</body>
+</html>
