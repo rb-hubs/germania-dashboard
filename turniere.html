@@ -246,7 +246,7 @@ function renderCal(){
 }
 
 /* ---------- Cards ---------- */
-function isAkut(t){return !!t.akut&&(t.status==="entwurf"||t.status==="klaerung")}
+function isAkut(t){return !!t.akut&&(t.status==="entwurf"||t.status==="klaerung"||(t.status==="verzichtet"&&!!t.abmeldung))}
 const mapsUrl=t=>"https://www.google.com/maps/dir/?api=1&origin="+encodeURIComponent("Bietigheim-Bissingen")+"&destination="+encodeURIComponent(t.ort);
 const kmTxt=t=>t.km?`ca. ${t.km} km`:"";
 const GROUPS={
@@ -336,6 +336,10 @@ function card(t){
       ${t.nachricht?`<button class="btn sm" data-copy="text" data-id="${t.id}">📋 ${k.typ==="online"?"Formulardaten":"Nachricht"} kopieren</button>`:""}
       ${t.status==="entwurf"||t.status==="klaerung"?`<button class="btn2 sm" data-act="sent" data-id="${t.id}">✓ Verschickt</button>`:""}
       ${isOpen||t.status==="warteliste"?`<button class="btn2 sm" data-act="answer" data-id="${t.id}">Antwort erfassen</button>`:""}
+      <button class="btn2 sm" data-act="follow" data-id="${t.id}">+ Folgetermin</button>
+      ${t.status!=="absage"&&t.status!=="verzichtet"?`<button class="btn2 sm" style="color:var(--red)" data-act="cancel" data-id="${t.id}">✕ Absagen</button>`:""}
+      ${t.abmeldung?`<button class="btn sm" data-copy="abmeldung" data-id="${t.id}">📋 Abmeldung kopieren</button>`:""}
+      ${t.abmeldung&&t.akut?`<button class="btn2 sm" data-act="abgemeldet" data-id="${t.id}">✓ Abmeldung verschickt</button>`:""}
       <button class="btn2 sm" data-act="note" data-id="${t.id}">Notiz</button>
       <button class="btn2 sm" data-act="edit" data-id="${t.id}">Bearbeiten</button>
     </div>
@@ -398,6 +402,49 @@ function dlgNote(t){
     if(fd.get("h")&&n&&n!==(t.notizen||""))patch.verlauf=addHist(t,{d:todayISO(),k:"notiz",t:"Notiz: "+n});
     return save(t.id,patch,"Notiz gespeichert")});
 }
+function abmeldeText(t,grund){
+  const ort=(t.kurz||t.veranstalter||"Turnier");
+  return `Hallo liebes ${ort}-Team,\n\nleider müssen wir unsere Anmeldung für ${t.name} am ${t.datum?fmt(t.datum):"geplanten Termin"} (${t.teamsAngefragt||2} Mannschaften, Jahrgang 2019, SV Germania Bietigheim) wieder absagen${grund?" – "+grund:""}.\n\nSorry für die Umstände und danke Euch!\n\nSportliche Grüße\nAndreas Roßbach\n0173 / 230 978 3`;
+}
+function dlgCancel(t){
+  const gemeldet=["angefragt","warteliste","zusage"].includes(t.status);
+  openDlg(`<h3>Absagen: ${esc(t.name)}</h3><div class="f">
+    <div class="note">${gemeldet?"Ihr seid dort schon angefragt/gemeldet – ich erstelle dir einen Abmeldetext zum Kopieren.":"Noch nicht angemeldet – wird nur als „Verzichtet“ abgelegt, nichts zu verschicken."}</div>
+    <label>Datum<input type="date" name="d" value="${todayISO()}" required></label>
+    <label>Grund<select name="g"><option value="">(ohne Grund)</option><option>zu weit weg</option><option>Termin passt nicht</option><option>zu wenige Kinder verfügbar</option><option>anderes Turnier am selben Tag</option></select></label>
+    <label>Oder eigener Grund<input type="text" name="g2"></label></div>`,
+  fd=>{const d=fd.get("d"),g=String(fd.get("g2")||"").trim()||fd.get("g");
+    const patch={status:"verzichtet",teamsBestaetigt:0,akut:"",
+      naechsterSchritt:gemeldet?"Abmeldung an Veranstalter schicken (Text kopieren).":"Keine Aktion.",
+      verlauf:addHist(t,{d,k:"notiz",t:(gemeldet?"Wir sagen ab":"Verzichtet")+(g?" – "+g:"")})};
+    if(gemeldet){patch.abmeldung=abmeldeText(t,g);patch.akut="Abmeldung an Veranstalter noch schicken."}
+    return save(t.id,patch,gemeldet?"Abgesagt – Abmeldetext bereit":"Als verzichtet markiert")});
+}
+function dlgFollow(t){
+  openDlg(`<h3>Folgetermine: ${esc(t.name)}</h3><div class="f">
+    <div class="note">Nur Datum eintragen – Veranstalter, Ort, Kontakt, Startgeld und Nachricht werden übernommen. Leere Felder werden ignoriert.</div>
+    <div class="f2">${[1,2,3,4,5].map(i=>`<label>Termin ${i}<input type="date" name="d${i}"></label>`).join("")}<label>Uhrzeit (optional)<input type="text" name="zeit" placeholder="offen"></label></div>
+    <label>Status der neuen Termine<select name="s"><option value="entwurf">Noch anfragen</option><option value="warteliste">Auf Warteliste</option><option value="angefragt">Schon angefragt</option></select></label></div>`,
+  async fd=>{
+    const ds=[1,2,3,4,5].map(i=>fd.get("d"+i)).filter(Boolean);
+    if(!ds.length){toast("Mindestens ein Datum eintragen");return false}
+    const s=fd.get("s"),zeit=String(fd.get("zeit")||"").trim()||"offen",heute=todayISO();
+    const base=(t.baseId||t.id);
+    for(const d of ds){
+      const id=base+"-"+d;
+      if(byId(id)){toast("Termin "+fmt(d)+" gibt es schon");continue}
+      const msg=(t.nachricht||"").split(fmt(t.datum||"")).join(fmt(d));
+      const n={...t,id,baseId:base,datum:d,zeit,datumUnsicher:false,datumHinweis:"",status:s,teamsBestaetigt:0,
+        anfrageDatum:s==="entwurf"?null:heute,antwortDatum:s==="warteliste"?heute:null,abmeldung:"",notizen:"",
+        akut:s==="entwurf"?"Folgetermin – noch nicht angefragt.":"",
+        naechsterSchritt:s==="entwurf"?"Anfragen (Text kopieren).":s==="warteliste"?"Auf Nachrücker-Info warten.":"Auf Antwort warten.",
+        nachricht:msg,betreff:(t.betreff||"").split(fmt(t.datum||"")).join(fmt(d)),
+        verlauf:[{d:heute,k:s==="angefragt"?"anfrage":s==="warteliste"?"antwort":"erfasst",t:"Folgetermin von „"+t.name+"“ ("+(t.datum?fmt(t.datum):"–")+") angelegt"+(s==="warteliste"?" – Warteliste":"")}]};
+      await col.doc(id).set(n);
+    }
+    toast(ds.length+" Folgetermin(e) angelegt");return true;
+  });
+}
 function dlgEdit(t){
   const isNew=!t; t=t||{teamsAngefragt:2,kontakt:{typ:"email"},status:"entwurf"};
   const k=t.kontakt||{};
@@ -442,9 +489,9 @@ document.addEventListener("click",e=>{
   const tab=e.target.closest("[data-tab]");if(tab){filter=tab.dataset.tab;renderTabs();renderCards();return}
   const cp=e.target.closest("[data-copy]");
   if(cp){const t=byId(cp.dataset.id);if(!t)return;const k=t.kontakt||{};
-    ({text:()=>copy(t.nachricht,"Nachricht"),betreff:()=>copy(t.betreff,"Betreff"),mail:()=>copy(k.wert,"Adresse"),nummer:()=>copy(k.wert,"Nummer")})[cp.dataset.copy]();return}
+    ({abmeldung:()=>copy(t.abmeldung,"Abmeldung"),text:()=>copy(t.nachricht,"Nachricht"),betreff:()=>copy(t.betreff,"Betreff"),mail:()=>copy(k.wert,"Adresse"),nummer:()=>copy(k.wert,"Nummer")})[cp.dataset.copy]();return}
   const act=e.target.closest("[data-act]");
-  if(act){const t=byId(act.dataset.id);if(!t)return;({sent:dlgSent,answer:dlgAnswer,note:dlgNote,edit:dlgEdit})[act.dataset.act](t)}
+  if(act){const t=byId(act.dataset.id);if(!t)return;({sent:dlgSent,answer:dlgAnswer,note:dlgNote,edit:dlgEdit,cancel:dlgCancel,follow:dlgFollow,abgemeldet:t=>save(t.id,{akut:"",naechsterSchritt:"Keine Aktion.",verlauf:addHist(t,{d:todayISO(),k:"notiz",t:"Abmeldung an Veranstalter verschickt"})},"Abmeldung vermerkt")})[act.dataset.act](t)}
 });
 $("#prev").onclick=()=>{view.m--;if(view.m<0){view.m=11;view.y--}renderCal()};
 $("#next").onclick=()=>{view.m++;if(view.m>11){view.m=0;view.y++}renderCal()};
