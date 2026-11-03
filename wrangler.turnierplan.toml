@@ -1,0 +1,8 @@
+name = "germania-turnierplan"
+main = "turnierplan-worker.js"
+compatibility_date = "2024-09-01"
+
+# TURNIER_PASSWORT und TURNIER_AGENT_TOKEN liegen als Secrets im Worker (setup-turnierplan.sh).
+[[kv_namespaces]]
+binding = "TURNIERPLAN"
+id = "KV_ID_EINTRAGEN"
