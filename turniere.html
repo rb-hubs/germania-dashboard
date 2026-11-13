@@ -117,6 +117,21 @@ label{font-size:13px;color:var(--muted);font-weight:600;display:grid;gap:4px}
 .ti .ch{font-size:12px;font-weight:700;border-radius:8px;padding:2px 7px;background:var(--bg);color:var(--muted);white-space:nowrap}
 .empty{font-size:14px;color:var(--muted);padding:6px 0}
 .tc.akut{border:3px solid var(--red);box-shadow:0 0 0 4px var(--red-l)}
+.ovw{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;margin:0 0 16px}
+.ovw h2{font-family:"Barlow Condensed",sans-serif;font-size:26px;margin:0 0 6px}
+.ovm{font-size:12px;letter-spacing:.14em;font-weight:700;color:var(--muted);text-transform:uppercase;margin:12px 0 4px}
+.ovr{display:grid;grid-template-columns:92px minmax(0,1fr) auto;gap:4px 12px;align-items:center;width:100%;border:0;background:none;text-align:left;cursor:pointer;padding:8px 0;border-top:1px solid #edf1fa}
+.ovr:hover{background:#f8faff}
+.ovd{white-space:nowrap;font-family:"Barlow Condensed",sans-serif;font-size:20px;font-weight:700;color:var(--blue);line-height:1}
+.ovd small{display:block;font-family:Barlow,sans-serif;font-size:12px;font-weight:600;color:var(--muted)}
+.ovn b{display:block;font-size:16px;line-height:1.2}
+.ovn small{color:var(--muted);font-size:13px}
+.ovs{text-align:right;display:grid;gap:3px;justify-items:end}
+.ovs small{font-size:12px;color:var(--muted);font-weight:600}
+.ovr.past{opacity:.45}
+.ovdone{margin-top:10px;font-size:13px;color:var(--muted)}
+.ovdone b{color:var(--ink)}
+@media(max-width:560px){.ovr{grid-template-columns:84px minmax(0,1fr)}.ovd{font-size:18px}.ovd small{white-space:normal}.ovs{grid-column:2;justify-items:start;text-align:left;grid-auto-flow:column;justify-content:start;gap:8px}}
 .akutbox{border:2px solid var(--red);background:var(--red-l);color:#8f1f1f;border-radius:12px;padding:9px 11px;font-size:14px;font-weight:700}
 .ti.akut{border:2px solid var(--red);background:var(--red-l);border-radius:12px;padding:8px;margin:6px 0}
 .ti.akut .go small{color:#8f1f1f}
@@ -142,6 +157,7 @@ label{font-size:13px;color:var(--muted);font-weight:600;display:grid;gap:4px}
   </div>
 </header>
 <main class="wrap">
+  <section class="ovw" id="ovw"></section>
   <div class="stats" id="stats"></div>
   <section class="todo" id="todo"></section>
 
@@ -353,7 +369,28 @@ function renderCards(){
   const list=filtered();
   $("#cards").innerHTML=list.length?`<div class="cards">${list.map(card).join("")}</div>`:`<div class="state">${items.length?"Keine Turniere in diesem Filter.":"Noch keine Turniere erfasst."}</div>`;
 }
-function renderAll(){renderStats();renderTodo();renderCal();renderTabs();renderCards()}
+/* ---------- Überblick ---------- */
+function renderOverview(){
+  const tIso=todayISO();
+  const aktiv=items.filter(t=>t.status!=="absage"&&t.status!=="verzichtet").sort((a,b)=>(a.datum||"9999").localeCompare(b.datum||"9999"));
+  const raus=items.filter(t=>t.status==="absage"||t.status==="verzichtet").sort((a,b)=>(a.datum||"").localeCompare(b.datum||""));
+  const sicher=items.filter(t=>t.status==="zusage").reduce((s,t)=>s+(+t.teamsBestaetigt||0),0);
+  let lastM="",html="";
+  aktiv.forEach(t=>{
+    const m=t.datum?MONTHS[+t.datum.slice(5,7)-1]+" "+t.datum.slice(0,4):"Datum offen";
+    if(m!==lastM){html+=`<div class="ovm">${m}</div>`;lastM=m}
+    const d=t.datum?new Date(t.datum+"T12:00:00"):null;
+    const teams=t.status==="zusage"?`${t.teamsBestaetigt||"?"} von ${t.teamsAngefragt||"?"} Teams sicher`:`${t.teamsAngefragt||"?"} Team${(+t.teamsAngefragt===1)?"":"s"} angefragt`;
+    const ort=(t.ort||"").split(",")[0];
+    html+=`<button class="ovr${t.datum&&t.datum<tIso?" past":""}" data-go="${t.id}">
+      <span class="ovd">${d?WD[d.getDay()]+" "+t.datum.slice(8,10)+"."+t.datum.slice(5,7)+".":"?"}${t.datumUnsicher?" ?":""}<small>${esc(/nicht angegeben|^offen/i.test(t.zeit||"")?"Zeit offen":(t.zeit||"").replace(/ ?\(.*\)/,"").replace(/^F-Jugend /,""))}</small></span>
+      <span class="ovn"><b>${esc(t.name)}</b><small>${esc(ort)}${t.km?" · ca. "+t.km+" km":""}</small></span>
+      <span class="ovs"><span class="badge b-${t.status}">${STATUS[t.status].l}</span><small>${teams}</small></span></button>`;
+  });
+  $("#ovw").innerHTML=`<h2>Wo wir dabei sind</h2><div style="font-size:14px;color:var(--muted)">${sicher?`<b style="color:var(--green)">${sicher} Team${sicher===1?"":"s"} fest zugesagt</b> · `:""}${aktiv.length} Turniere offen oder zugesagt</div>`+(html||`<div class="empty">Keine offenen Turniere</div>`)+
+    (raus.length?`<div class="ovdone"><b>Raus:</b> ${raus.map(t=>`${esc(t.kurz||t.name)} ${t.datum?fmt(t.datum).slice(0,6):""} (${t.status==="absage"?"Absage":"verzichtet"})`).join(" · ")}</div>`:"");
+}
+function renderAll(){renderOverview();renderStats();renderTodo();renderCal();renderTabs();renderCards()}
 const byId=id=>items.find(t=>t.id===id);
 
 /* ---------- Writes ---------- */
